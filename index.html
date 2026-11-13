@@ -23,7 +23,7 @@
   --bin-fg:#111611; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;word-break:keep-all;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
 .wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,7vw,2.6rem);line-height:1.15;margin:0;text-wrap:balance}
@@ -70,18 +70,33 @@ ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px;color:
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
 .err{color:var(--warn);margin:0}
 .foot{font-size:.8rem;color:var(--muted);margin:0}
+header{display:flex;flex-direction:column;gap:6px}
+.eyebrow{margin:0;font-size:.82rem;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.lead{margin:0}
+.badge{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--surface)}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.try{display:flex;flex-direction:column;gap:2px;margin-top:-6px}
+.hint{margin:0 0 -8px;font-size:.88rem;font-weight:700;color:var(--accent)}
+.verdict{margin:-6px 0 0;font-size:1.05rem;font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.verdict .arrow{color:var(--muted)}
+.verdict .v{color:var(--c)}
+.verdict .plus{color:var(--muted);font-weight:500}
+.warn{margin:0;padding:10px 14px;border-radius:8px;border:1px dashed var(--warn);color:var(--fg);font-size:.9rem}
+.warn b{color:var(--warn)}
 </style>
 
 <div class="wrap">
   <header>
+    <p class="eyebrow">분리수거 도우미</p>
     <h1>이거 어디에 버려?</h1>
-    <p class="lead">물건 이름을 쓰면 안에 든 꼬마 AI가 바로 알려줘. 인터넷 없어도 돼.</p>
+    <p class="lead">헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게.</p>
+    <span class="badge"><i></i>인터넷 없어도 돼</span>
   </header>
 
   <div>
     <form id="f">
       <label for="q" hidden>버릴 물건</label>
-      <input type="text" id="q" placeholder="예: 컵라면 용기, 치킨 뼈, 아이스팩" autocomplete="off" maxlength="80">
+      <input type="text" id="q" value="투명 페트병" placeholder="버릴 물건 이름 (예: 치킨 뼈)" autocomplete="off" maxlength="80">
       <input type="file" id="photo" accept="image/*" capture="environment" hidden>
       <label for="photo" class="cam" id="camBtn" hidden title="사진으로 물어보기">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
@@ -95,15 +110,17 @@ ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px;color:
     <button type="button" id="clearPhoto">빼기</button>
   </div>
 
+  <div class="try">
+    <p class="label">이런 거 눌러봐</p>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <p class="hint" id="hint">예를 들어 '투명 페트병'을 치면 ↓</p>
   <section class="result" id="out" aria-live="polite"></section>
 
   <div id="recentBox" hidden>
     <p class="label">최근에 찾은 것</p>
     <div class="chips" id="recent"></div>
-  </div>
-  <div>
-    <p class="label">헷갈리는 것들</p>
-    <div class="chips" id="chips"></div>
   </div>
 
   <p class="foot">한국 환경부 분리배출 기준이야. 배출 요일이나 세부 규칙은 사는 구·아파트마다 다를 수 있어.</p>
@@ -391,12 +408,14 @@ function miniAI(text){
   for(const e of INDEX) for(const k of e.keys){const s=sim(q,k);if(s>score){score=s;best=e.d}}
   if(score>=.8) return {...best,conf:"high"};
   if(score>=.5) return {...best,conf:"mid"};
-  for(const [re,bin,steps] of GUESS) if(re.test(text)) return {item:text.trim(),parts:[{name:"",bin,steps}],tip:"사전에 없는 물건이라 이름만 보고 추측했어. 확실하지 않으면 구청에 확인해 봐.",conf:"guess"};
+  for(const [re,bin,steps] of GUESS) if(re.test(text)) return {item:text.trim(),parts:[{name:"",bin,steps}],tip:"",conf:"guess"};
   return null;
 }
 
 /* ================================================================ */
-const EXAMPLES=["치킨 먹고 남은 거","컵라면 용기","택배 상자","깨진 유리컵","보조배터리","우유팩","영수증","아이스팩","계란 껍데기","마라탕 용기","남은 약","티백"];
+const SEASON={winter:["택배 상자","아이스팩","핫팩","귤껍질"],spring:["화분","우산","택배 상자"],summer:["수박껍질","아이스크림 막대","아이스팩","모기향"],fall:["밤 껍질","낙엽","택배 상자"]};
+const COMMON=["치킨 뼈","컵라면 용기","깨진 유리컵","보조배터리","우유팩","영수증","계란 껍데기","남은 약","티백","마라탕 용기","페트병"];
+const EXAMPLES=(()=>{const m=new Date().getMonth()+1;const s=m>=11||m<=2?"winter":m<=5?"spring":m<=8?"summer":"fall";return[...new Set([...SEASON[s],...COMMON])].slice(0,11)})();
 const $=s=>document.querySelector(s), out=$("#out"), btn=$("#go"), q=$("#q"), photo=$("#photo");
 let sample=null, picked=null, ctl=null;
 
@@ -422,9 +441,13 @@ function render(r,src,query){
   top.append(el("p","item",r.item||"물건"));
   const bins=new Set(parts.map(p=>p.bin));
   if(parts.length>1) top.append(el("span","count",bins.size>1?`${bins.size}군데로 나눠서 버려`:"한 곳에 버려도 돼"));
-  const [label,color]=SRC[src]||SRC.high;
-  const s=el("span","src");const dot=el("i");dot.style.setProperty("--c",`var(${color})`);s.append(dot,document.createTextNode(label));top.append(s);
+  if(src!=="example"){const [label,color]=SRC[src]||SRC.high;
+  const s=el("span","src");const dot=el("i");dot.style.setProperty("--c",`var(${color})`);s.append(dot,document.createTextNode(label));top.append(s);}
   out.append(top);
+  const v=el("p","verdict");v.append(el("span","arrow","→"));
+  [...bins].forEach((b,i)=>{if(i)v.append(el("span","plus","+"));const t=el("span","v",b||"일반쓰레기");t.style.setProperty("--c",`var(${BINS[b]||"--general"})`);v.append(t)});
+  out.append(v);
+  if(src==="mid"||src==="guess"){const w=el("p","warn");w.append(el("b",null,"정확하지 않을 수 있어. "),document.createTextNode(src==="mid"?`'${query}'를 '${r.item}'(으)로 알아들었어. 다른 물건이면 이름을 더 자세히 써줘. 확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐.`:"목록에 없는 물건이라 이름만 보고 추측했어. 사는 구청 홈페이지나 관리사무소에서 꼭 확인해 봐."));out.append(w)}
   const list=el("div","parts");
   parts.forEach(p=>{
     const c=`var(${BINS[p.bin]||"--general"})`;
@@ -446,8 +469,11 @@ function status(t){out.innerHTML="";const p=el("p","status");p.append(el("span",
 function msg(t){out.innerHTML="";out.append(el("p","err",t))}
 
 /* ---------- 순서: 꼬마 AI 먼저 → 모르면 Claude ---------- */
+let firstTouch=true;
+q.addEventListener("focus",()=>{if(firstTouch){q.select();firstTouch=false}});
 function ask(){
   const item=q.value.trim();
+  $("#hint").hidden=true;
   if(picked){askBig(item);return}
   if(!item){q.focus();return}
   const r=miniAI(item);
@@ -498,7 +524,7 @@ $("#clearPhoto").onclick=clearPhoto;
 $("#f").addEventListener("submit",e=>{e.preventDefault();ask()});
 EXAMPLES.forEach(x=>$("#chips").append(chip(x)));
 drawRecent();
-render(miniAI("페트병"),"example");
+render(miniAI("투명 페트병"),"example");
 (async()=>{
   sample=await window.claude?.use?.("sample");
   if(!sample) return;
