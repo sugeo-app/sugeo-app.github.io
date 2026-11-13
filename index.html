@@ -1,5 +1,19 @@
-<title>분리배출 도우미</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>분리수거 도우미</title>
+<meta name="description" content="헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게. 치킨 뼈, 아이스팩, 깨진 유리까지.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이거 어디에 버려? · 분리수거 도우미">
+<meta property="og:description" content="헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게. 치킨 뼈, 아이스팩, 깨진 유리까지.">
+<meta property="og:url" content="https://sugeo-app.github.io/">
+<meta name="theme-color" content="#f3f5f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141a17" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%BB%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
 /* Layout: 한 칸짜리 검색 도구. 입력(글/사진) → 부품별 결과 카드 → 최근·자주 묻는 물건 */
@@ -26,11 +40,11 @@
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;word-break:keep-all;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
 .wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,7vw,2.6rem);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,9vw,3rem);line-height:1.15;margin:0;text-wrap:balance}
 .lead{margin:4px 0 0;color:var(--muted)}
 form{display:flex;gap:8px}
-input[type=text]{flex:1;min-width:0;font:inherit;padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
-input[type=text]:focus{outline:none;border-color:var(--accent)}
+#q{flex:1;-webkit-appearance:none;appearance:none;min-width:0;font:inherit;padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
+#q:focus{outline:none;border-color:var(--accent)}
 button,.cam{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:10px;padding:0 18px;background:var(--accent);color:var(--accent-fg);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:52px}
 .cam{background:var(--surface);color:var(--fg);border:2px solid var(--line);padding:0 14px}
 .cam:hover{border-color:var(--accent)}
@@ -45,6 +59,7 @@ button:disabled{opacity:.55;cursor:wait}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{min-height:34px;font-weight:500;font-size:.9rem;padding:0 12px;border-radius:999px;background:transparent;border:1px solid var(--line);color:var(--fg)}
 .chip:hover{border-color:var(--accent)}
+.result:empty{display:none}
 .result{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px}
 .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .item{font-size:1.35rem;font-weight:700;margin:0}
@@ -56,6 +71,7 @@ button:disabled{opacity:.55;cursor:wait}
 .part{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:14px 0;border-top:1px dashed var(--line)}
 .part:first-child{border-top:0;padding-top:0}
 .part:last-child{padding-bottom:0}
+.part.solo{grid-template-columns:1fr}
 .dot{grid-row:span 2;width:12px;height:12px;border-radius:50%;margin-top:8px;background:var(--c)}
 .ph{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
 .pname{font-weight:700}
@@ -83,22 +99,81 @@ header{display:flex;flex-direction:column;gap:6px}
 .verdict .plus{color:var(--muted);font-weight:500}
 .warn{margin:0;padding:10px 14px;border-radius:8px;border:1px dashed var(--warn);color:var(--fg);font-size:.9rem}
 .warn b{color:var(--warn)}
+/* ---- 소개 페이지 ---- */
+.intro{gap:28px}
+.intro-hero{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.intro h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.12}
+.intro h1 em{font-style:normal;color:var(--accent)}
+.intro .lead{font-size:1.05rem;max-width:30ch}
+.cta{min-height:56px;font-size:1.05rem;border-radius:12px;width:100%;max-width:360px}
+.cta:hover{filter:brightness(1.08)}
+.sec-title{margin:0 0 10px;font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:st}
+.steps li{counter-increment:st;display:grid;grid-template-columns:32px 1fr;gap:2px 12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.steps li::before{content:counter(st);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.steps b{font-size:1rem}
+.steps span{color:var(--muted);font-size:.92rem}
+.demo-cap{margin:0 0 8px;font-size:.88rem;font-weight:700;color:var(--accent)}
+.feats{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.feats li{display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:12px;border:1px solid var(--line);min-width:0}
+.feats b{font-size:1.15rem;font-variant-numeric:tabular-nums}
+.feats span{font-size:.82rem;color:var(--muted)}
+@media (max-width:420px){.feats{grid-template-columns:1fr}.feats li{flex-direction:row;align-items:baseline;gap:10px}}
+.intro-end{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:-12px}
+.link{background:none;border:0;min-height:36px;padding:0;color:var(--muted);font-weight:500;font-size:.88rem;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--fg)}
 </style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
+</head>
+<body>
+<div class="wrap intro" id="intro">
+  <section class="intro-hero">
+    <p class="eyebrow">분리수거 도우미</p>
+    <h1>헷갈리는 쓰레기,<br><em>3초면 끝.</em></h1>
+    <p class="lead">치킨 뼈는 음식물일까? 아이스팩은? 버릴 물건 이름만 치면 어디에, 어떻게 버리는지 바로 알려줘.</p>
+  </section>
 
-<div class="wrap">
+  <section>
+    <p class="sec-title">이렇게 써</p>
+    <ol class="steps">
+      <li><b>버릴 물건 이름을 쳐</b><span>"컵라면 용기", "깨진 접시"처럼 부르는 대로 쓰면 돼. 오타도 웬만큼 알아들어.</span></li>
+      <li><b>어디에 버리는지 확인해</b><span>플라스틱, 비닐, 음식물처럼 수거함이 색깔로 바로 보여.</span></li>
+      <li><b>부품별로 나눠서 버려</b><span>뚜껑, 라벨, 몸통이 따로 버려야 하면 하나씩 알려줘.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="demo-cap">예를 들어 '투명 페트병'을 치면 ↓</p>
+    <div class="result" id="demo"></div>
+  </section>
+
+  <ul class="feats">
+    <li><b>220개+</b><span>아는 물건</span></li>
+    <li><b>부품별</b><span>나눠서 안내</span></li>
+    <li><b>오프라인</b><span>인터넷 없어도 돼</span></li>
+  </ul>
+
+  <section class="intro-end">
+    <button type="button" class="cta" data-start>시작하기</button>
+    <p class="foot">환경부 분리배출 기준이야. 동네마다 세부 규칙은 다를 수 있어.</p>
+  </section>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <div class="topbar"><button type="button" class="link" id="toIntro">이게 뭐야?</button></div>
   <header>
     <p class="eyebrow">분리수거 도우미</p>
     <h1>이거 어디에 버려?</h1>
     <p class="lead">헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게.</p>
-    <span class="badge"><i></i>인터넷 없어도 돼</span>
   </header>
 
   <div>
     <form id="f">
       <label for="q" hidden>버릴 물건</label>
-      <input type="text" id="q" value="투명 페트병" placeholder="버릴 물건 이름 (예: 치킨 뼈)" autocomplete="off" maxlength="80">
+      <input type="search" id="q" placeholder="예: 치킨 뼈, 아이스팩" aria-label="버릴 물건 이름" enterkeyhint="search" autocomplete="off" maxlength="80">
       <input type="file" id="photo" accept="image/*" capture="environment" hidden>
-      <label for="photo" class="cam" id="camBtn" hidden title="사진으로 물어보기">
+      <label for="photo" class="cam" id="camBtn" hidden title="사진으로 물어보기" aria-label="사진으로 물어보기">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
       </label>
       <button id="go" type="submit">찾기</button>
@@ -111,11 +186,10 @@ header{display:flex;flex-direction:column;gap:6px}
   </div>
 
   <div class="try">
-    <p class="label">이런 거 눌러봐</p>
+    <p class="label">많이 찾는 것</p>
     <div class="chips" id="chips"></div>
   </div>
 
-  <p class="hint" id="hint">예를 들어 '투명 페트병'을 치면 ↓</p>
   <section class="result" id="out" aria-live="polite"></section>
 
   <div id="recentBox" hidden>
@@ -123,7 +197,7 @@ header{display:flex;flex-direction:column;gap:6px}
     <div class="chips" id="recent"></div>
   </div>
 
-  <p class="foot">한국 환경부 분리배출 기준이야. 배출 요일이나 세부 규칙은 사는 구·아파트마다 다를 수 있어.</p>
+  <p class="foot">환경부 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어</p>
 </div>
 
 <script>
@@ -136,6 +210,7 @@ const P=(name,bin,...steps)=>({name,bin,steps});
 const DB=[
 // ---- 플라스틱 ----
 {n:["페트병","생수병","음료수병","콜라병","사이다병","투명페트병","물병"],item:"투명 페트병",parts:[P("몸통","플라스틱","내용물 비우고 헹구기","찌그러뜨린 뒤 뚜껑 닫기"),P("라벨","비닐","뜯어서 비닐류로")],tip:"투명 페트병은 유색 플라스틱이랑 따로 모으는 곳이 많아."},
+{n:["플라스틱","플라스틱 용기","플라스틱 통","플라스틱통"],item:"플라스틱 용기",parts:[P("용기","플라스틱","내용물 비우고 헹구기","스티커·다른 재질 떼고 플라스틱으로")],tip:"음식이 안 지워지거나 여러 재질이 붙어 있으면 일반쓰레기야."},
 {n:["유색페트병","음료 페트","이온음료병","녹색페트병"],item:"색깔 있는 페트병",parts:[P("몸통","플라스틱","비우고 헹구기","찌그러뜨리기"),P("라벨","비닐","뜯어서 비닐류로")],tip:""},
 {n:["배달음식용기","배달용기","플라스틱 반찬통","반찬용기","포장용기","떡볶이 용기","마라탕 용기","짜장면 용기"],item:"배달 음식 용기",parts:[P("용기","플라스틱","남은 음식 비우기","세제로 기름기 헹구기")],tip:"빨간 양념 자국이 안 지워지면 일반쓰레기로 버려."},
 {n:["테이크아웃컵","플라스틱컵","아이스커피컵","카페컵","음료컵"],item:"테이크아웃 플라스틱 컵",parts:[P("컵·뚜껑","플라스틱","헹궈서 배출"),P("빨대","일반쓰레기","종량제 봉투로"),P("컵홀더","종이","종이류로")],tip:""},
@@ -143,7 +218,7 @@ const DB=[
 {n:["즉석밥용기","햇반","즉석밥"],item:"즉석밥 용기",parts:[P("용기","플라스틱","밥알 떼고 헹구기"),P("뚜껑 필름","일반쓰레기","떼서 종량제 봉투로")],tip:""},
 {n:["샴푸통","린스통","바디워시","세제통","샴푸"],item:"샴푸·세제 통",parts:[P("통","플라스틱","내용물 비우고 헹구기"),P("펌프","일반쓰레기","스프링이 있어서 종량제 봉투로")],tip:""},
 {n:["플라스틱 뚜껑","병뚜껑"],item:"플라스틱 뚜껑",parts:[P("뚜껑","플라스틱","깨끗하면 플라스틱으로")],tip:"페트병 뚜껑은 병에 닫아서 같이 버려도 돼."},
-{n:["스티로폼","스티로폼 박스","아이스박스"],item:"스티로폼",parts:[P("스티로폼","플라스틱","테이프·송장 떼기","깨끗한 것만 스티로폼으로 따로")],tip:"음식물이 묻었거나 색이 있는 스티로폼은 일반쓰레기야."},
+{n:["스티로폼","스티로폼 박스","스티로폼 상자","스티로폼상자","아이스박스"],item:"스티로폼",parts:[P("스티로폼","플라스틱","테이프·송장 떼기","깨끗한 것만 스티로폼으로 따로")],tip:"음식물이 묻었거나 색이 있는 스티로폼은 일반쓰레기야."},
 {n:["컵라면","컵라면 용기","컵라면용기","용기면"],item:"컵라면 용기",parts:[P("용기","플라스틱","국물 비우고 헹구기","종이 재질이면 종이로"),P("뚜껑","일반쓰레기","종량제 봉투로")],tip:"빨간 국물 자국이 안 지워지면 일반쓰레기로 버려."},
 {n:["두부용기","두부곽"],item:"두부 용기",parts:[P("용기","플라스틱","헹궈서 배출"),P("필름","일반쓰레기","떼서 종량제 봉투로")],tip:""},
 {n:["계란판 플라스틱","계란 플라스틱 판"],item:"플라스틱 계란판",parts:[P("판","플라스틱","깨끗하면 플라스틱으로")],tip:"종이 계란판은 종이류야."},
@@ -195,10 +270,10 @@ const DB=[
 {n:["유리병","소주병","맥주병","음료 유리병","잼병","소스병"],item:"유리병",parts:[P("병","유리병","비우고 헹구기"),P("뚜껑","캔·고철","금속이면 고철, 플라스틱이면 플라스틱")],tip:"소주·맥주병은 마트에 가져가면 보증금을 돌려줘."},
 {n:["깨진유리","깨진 유리","유리컵","꽃병","화병","유리 꽃병","깨진유리컵","깨진 유리컵","유리잔","유리그릇"],item:"깨진 유리·유리컵",parts:[P("유리","일반쓰레기","신문지로 여러 번 싸기","'깨진 유리'라고 써서 종량제 봉투로")],tip:"유리컵·유리그릇은 유리병이랑 성분이 달라서 유리병으로 내면 안 돼. 양이 많으면 불연성 마대에."},
 {n:["거울"],item:"거울",parts:[P("거울","일반쓰레기","신문지로 싸서 종량제 봉투로")],tip:"크면 대형폐기물로 신고해."},
-{n:["도자기","사기그릇","접시","밥그릇","머그컵","뚝배기","깨진 접시","깨진접시"],item:"도자기·사기그릇",parts:[P("그릇","일반쓰레기","깨졌으면 신문지로 싸기","불연성 마대나 종량제 봉투로")],tip:"구마다 불연성 마대(특수마대)를 따로 팔아."},
+{n:["도자기","사기그릇","그릇","깨진 그릇","깨진그릇","도자기 그릇","접시","밥그릇","머그컵","뚝배기","깨진 접시","깨진접시"],item:"도자기·사기그릇",parts:[P("그릇","일반쓰레기","깨졌으면 신문지로 싸기","불연성 마대나 종량제 봉투로")],tip:"구마다 불연성 마대(특수마대)를 따로 팔아."},
 {n:["내열유리","강화유리","냄비뚜껑 유리"],item:"내열·강화유리",parts:[P("유리","일반쓰레기","신문지로 싸서 불연성 마대에")],tip:"유리병이랑 녹는 온도가 달라서 섞으면 안 돼."},
 // ---- 음식물 ----
-{n:["과일껍질","사과껍질","바나나껍질","귤껍질","수박껍질","배껍질","참외껍질"],item:"과일 껍질",parts:[P("껍질","음식물","물기 빼고 음식물로")],tip:"수박 껍질은 잘게 잘라야 수거가 잘 돼."},
+{n:["과일껍질","귤","사과","바나나","참외","딸기","수박","사과껍질","바나나껍질","귤껍질","수박껍질","배껍질","참외껍질"],item:"과일 껍질",parts:[P("껍질","음식물","물기 빼고 음식물로")],tip:"수박 껍질은 잘게 잘라야 수거가 잘 돼."},
 {n:["남은음식","남은 음식","밥","반찬","국","찌개","김치"],item:"남은 음식",parts:[P("음식","음식물","국물은 따라 버리고 건더기만","물기 꼭 짜기")],tip:"김치·찌개는 물에 한 번 헹구면 염분이 줄어서 더 좋아."},
 {n:["채소","야채","상한 채소","시든 채소"],item:"채소 찌꺼기",parts:[P("채소","음식물","물기 빼고 음식물로")],tip:"양파·마늘 껍질, 파 뿌리, 옥수수 껍질은 일반쓰레기야."},
 {n:["빵","떡","과자 부스러기","라면 면"],item:"빵·떡·면",parts:[P("음식","음식물","포장 비닐 벗기고 음식물로")],tip:""},
@@ -228,10 +303,10 @@ const DB=[
 {n:["형광등","LED등","LED전구","LED 형광등"],item:"형광등·LED등",parts:[P("등","대형·특수","깨지지 않게 형광등 수거함에")],tip:"형광등엔 수은이 들어 있어."},
 {n:["약","남은 약","안 먹는 약","약봉지","약통","폐의약품","알약","감기약","물약","연고","시럽"],item:"남은 약",parts:[P("알약","대형·특수","포장 벗겨서 한 봉투에 모으기","약국·보건소·주민센터 수거함에"),P("물약","대형·특수","한 병에 모아서 새지 않게 수거함에")],tip:"변기나 하수구에 버리면 물이 오염돼."},
 {n:["휴대폰","핸드폰","스마트폰","태블릿","노트북"],item:"휴대폰·노트북",parts:[P("기기","대형·특수","개인정보 초기화하기","주민센터·대리점 수거함이나 폐가전 무상수거")],tip:""},
-{n:["충전기","이어폰","블루투스 스피커","스피커","키보드","마우스","게임기","케이블","전선","드라이기","선풍기","전기밥솥","믹서기","전자레인지","청소기"],item:"소형 가전",parts:[P("가전","대형·특수","소형가전 수거함이나 폐가전 무상수거(15903434.or.kr) 신청")],tip:"작은 것 여러 개면 5개 이상 모아서 무상수거 신청할 수 있어."},
+{n:["충전기","이어폰","블루투스 스피커","스피커","키보드","마우스","게임기","케이블","전선","드라이기","선풍기","전기밥솥","믹서기","전자레인지","청소기"],item:"소형 가전",parts:[P("가전","대형·특수","소형가전 수거함이나 폐가전 무상방문수거(1599-0903) 신청")],tip:"작은 것 여러 개면 5개 이상 모아서 무상수거 신청할 수 있어."},
 {n:["냉장고","세탁기","TV","티비","에어컨","김치냉장고"],item:"대형 가전",parts:[P("가전","대형·특수","폐가전 무상방문수거 신청(전화 1599-0903)")],tip:"새 제품 살 때 판매점에서 가져가 주기도 해."},
 {n:["가구","책상","의자","침대","매트리스","소파","옷장","서랍장"],item:"가구",parts:[P("가구","대형·특수","구청 홈페이지·앱에서 대형폐기물 신고","스티커 붙여서 내놓기")],tip:""},
-{n:["옷","헌옷","신발","운동화","가방","이불","담요","커튼"],item:"옷·신발·가방",parts:[P("옷·신발","대형·특수","깨끗하면 의류수거함에")],tip:"이불·베개는 의류수거함에서 안 받는 곳이 많아. 젖거나 찢어진 건 일반쓰레기야."},
+{n:["옷","헌옷","신발","운동화","가방","커튼"],item:"옷·신발·가방",parts:[P("옷·신발","대형·특수","깨끗하면 의류수거함에")],tip:"젖거나 찢어진 건 일반쓰레기야."},
 {n:["페인트","신나","시너","락스","농약"],item:"페인트·화학약품",parts:[P("약품","대형·특수","남은 양이 많으면 구청에 문의","굳힌 페인트통은 종량제 봉투로")],tip:"하수구에 버리면 안 돼."},
 {n:["자전거","킥보드","유모차"],item:"자전거·킥보드",parts:[P("본체","대형·특수","대형폐기물 신고")],tip:"전동 킥보드 배터리는 따로 분리해."},
 // ---- 추가 학습: 플라스틱 ----
@@ -334,7 +409,7 @@ const DB=[
 {n:["노끈","끈","리본","포장끈","케이블타이"],item:"끈·리본",parts:[P("끈","일반쓰레기","종량제 봉투로")],tip:""},
 {n:["마우스패드","장패드"],item:"마우스패드",parts:[P("패드","일반쓰레기","종량제 봉투로")],tip:""},
 {n:["우비","비옷","돗자리"],item:"우비·돗자리",parts:[P("물건","일반쓰레기","접어서 종량제 봉투로")],tip:""},
-{n:["베개","쿠션","방석"],item:"베개·쿠션",parts:[P("물건","일반쓰레기","종량제 봉투에 들어가면 종량제로"),P("큰 것","대형·특수","안 들어가면 대형폐기물 신고")],tip:"의류수거함엔 넣으면 안 돼."},
+{n:["베개","쿠션","방석","이불","담요","솜이불"],item:"이불·베개·쿠션",parts:[P("물건","일반쓰레기","종량제 봉투에 들어가면 종량제로"),P("큰 것","대형·특수","안 들어가면 대형폐기물 신고")],tip:"이불·베개는 의류수거함에서 안 받는 곳이 많아."},
 {n:["요가매트","매트","놀이매트"],item:"매트",parts:[P("매트","일반쓰레기","잘라서 종량제 봉투로"),P("큰 매트","대형·특수","자르기 힘들면 대형폐기물 신고")],tip:""},
 {n:["헬멧","축구공","농구공","공","배드민턴공","테니스공"],item:"공·헬멧",parts:[P("물건","일반쓰레기","종량제 봉투로")],tip:""},
 {n:["물감","크레파스","크레용","파스텔","점토","슬라임","클레이"],item:"미술용품",parts:[P("물건","일반쓰레기","종량제 봉투로")],tip:"물감은 하수구에 짜 버리지 마."},
@@ -398,24 +473,46 @@ function dice(a,b){const A=grams(a),B=grams(b).slice(),total=A.length+B.length;l
 function sim(q,a){
   let s=dice(q,a);
   if(a.length>=2&&q.includes(a)) s=Math.max(s,.62+.38*a.length/q.length);
-  if(q.length>=2&&a.includes(q)) s=Math.max(s,.62+.38*q.length/a.length);
+  if(q.length>=2&&a.includes(q)) s=Math.max(s,.55+.35*q.length/a.length);
   return s;
 }
-const INDEX=DB.map(d=>({d,keys:d.n.map(norm)}));
+// 오타 잡기: 한글을 자음·모음으로 쪼개서 한 번 더 비교 (칫숄 → 칫솔)
+const CHO="ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",JUNG="ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",JONG=" ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ";
+const jamo=s=>[...s].map(c=>{const k=c.charCodeAt(0)-0xAC00;if(k<0||k>11171)return c;return CHO[Math.floor(k/588)]+JUNG[Math.floor(k%588/28)]+(k%28?JONG[k%28]:"")}).join("");
+// "다 쓴 건전지", "고장난 이어폰" 같은 앞말은 떼고 찾기
+const PREFIX=/^(다\s*쓴|고장\s*난|망가진|낡은|오래된|찢어진|더러운|쓰던|안\s*쓰는|헌\s+|빈\s+)\s*/;
+// "고양이 사료 캔"처럼 끝에 담는 그릇 이름이 붙으면 그걸 보고 판단
+const CONT={"캔":["캔·고철",["비우고 헹구기","찌그러뜨려서 캔류로"]],"봉지":["비닐",["털고 헹궈서 비닐류로"]],"봉투":["비닐",["비닐이면 비닐류, 종이면 종이류로"]],"상자":["종이",["테이프 떼고 펼쳐서 종이류로"]],"박스":["종이",["테이프 떼고 펼쳐서 종이류로"]],"팩":["종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]]};
+const MATERIAL=/^(스티로폼|플라스틱|유리|종이|비닐|알루미늄|스텐|철)$/;
+const INDEX=DB.map(d=>({d,keys:d.n.map(norm).map(k=>({k,j:jamo(k)}))}));
+function rank(raw){
+  const q=norm(raw), qj=jamo(q), list=[];
+  for(const e of INDEX){let best=0,key="";for(const {k,j} of e.keys){let s=sim(q,k);if(q.length>=2&&Math.abs(q.length-k.length)<=1)s=Math.max(s,Math.min(.78,dice(qj,j)*.92));if(s>best){best=s;key=k}}list.push({d:e.d,s:best,key})}
+  return list.sort((a,b)=>b.s-a.s);
+}
 function miniAI(text){
-  const q=norm(text); if(!q) return null;
-  let best=null,score=0;
-  for(const e of INDEX) for(const k of e.keys){const s=sim(q,k);if(s>score){score=s;best=e.d}}
-  if(score>=.8) return {...best,conf:"high"};
-  if(score>=.5) return {...best,conf:"mid"};
-  for(const [re,bin,steps] of GUESS) if(re.test(text)) return {item:text.trim(),parts:[{name:"",bin,steps}],tip:"",conf:"guess"};
+  const raw=text.trim().replace(PREFIX,"").trim()||text.trim();
+  if(!norm(raw)) return null;
+  const [top]=rank(raw);
+  if(top&&top.s>=.5){
+    const conf=top.s>=.8?"high":"mid";
+    const words=raw.split(/\s+/), last=words.length>1?words[words.length-1]:null;
+    if(last&&!top.key.includes(norm(last))&&!MATERIAL.test(top.key)){
+      const part=top.d.parts.find(p=>p.name&&p.name.includes(last));
+      if(part) return {item:`${top.d.item} · ${part.name}`,parts:[part],tip:"",conf};
+      if(CONT[last]) return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
+    }
+    return {...top.d,conf};
+  }
+  for(const [re,bin,steps] of GUESS) if(re.test(raw)) return {item:raw,parts:[{name:"",bin,steps}],tip:"",conf:"guess"};
   return null;
 }
+function suggest(text){return rank(text.trim()).filter(x=>x.s>=.4).slice(0,3).map(x=>x.d.item)}
 
 /* ================================================================ */
 const SEASON={winter:["택배 상자","아이스팩","핫팩","귤껍질"],spring:["화분","우산","택배 상자"],summer:["수박껍질","아이스크림 막대","아이스팩","모기향"],fall:["밤 껍질","낙엽","택배 상자"]};
 const COMMON=["치킨 뼈","컵라면 용기","깨진 유리컵","보조배터리","우유팩","영수증","계란 껍데기","남은 약","티백","마라탕 용기","페트병"];
-const EXAMPLES=(()=>{const m=new Date().getMonth()+1;const s=m>=11||m<=2?"winter":m<=5?"spring":m<=8?"summer":"fall";return[...new Set([...SEASON[s],...COMMON])].slice(0,11)})();
+const EXAMPLES=(()=>{const m=new Date().getMonth()+1;const s=m>=11||m<=2?"winter":m<=5?"spring":m<=8?"summer":"fall";return[...new Set([...SEASON[s],...COMMON])].slice(0,6)})();
 const $=s=>document.querySelector(s), out=$("#out"), btn=$("#go"), q=$("#q"), photo=$("#photo");
 let sample=null, picked=null, ctl=null;
 
@@ -434,20 +531,19 @@ function chip(x){const c=document.createElement("button");c.type="button";c.clas
 
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 const SRC={high:["꼬마 AI","--accent"],mid:["꼬마 AI · 아마 이거야","--pack"],guess:["꼬마 AI · 추측","--warn"],big:["Claude","--plastic"],example:["예시","--line"]};
-function render(r,src,query){
-  out.innerHTML="";
+function render(r,src,query,o=out){
+  o.innerHTML="";
   const parts=Array.isArray(r.parts)?r.parts:[];
   const top=el("div","top");
   top.append(el("p","item",r.item||"물건"));
   const bins=new Set(parts.map(p=>p.bin));
-  if(parts.length>1) top.append(el("span","count",bins.size>1?`${bins.size}군데로 나눠서 버려`:"한 곳에 버려도 돼"));
-  if(src!=="example"){const [label,color]=SRC[src]||SRC.high;
+  if(src!=="example"&&src!=="high"){const [label,color]=SRC[src]||SRC.high;
   const s=el("span","src");const dot=el("i");dot.style.setProperty("--c",`var(${color})`);s.append(dot,document.createTextNode(label));top.append(s);}
-  out.append(top);
+  o.append(top);
   const v=el("p","verdict");v.append(el("span","arrow","→"));
   [...bins].forEach((b,i)=>{if(i)v.append(el("span","plus","+"));const t=el("span","v",b||"일반쓰레기");t.style.setProperty("--c",`var(${BINS[b]||"--general"})`);v.append(t)});
-  out.append(v);
-  if(src==="mid"||src==="guess"){const w=el("p","warn");w.append(el("b",null,"정확하지 않을 수 있어. "),document.createTextNode(src==="mid"?`'${query}'를 '${r.item}'(으)로 알아들었어. 다른 물건이면 이름을 더 자세히 써줘. 확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐.`:"목록에 없는 물건이라 이름만 보고 추측했어. 사는 구청 홈페이지나 관리사무소에서 꼭 확인해 봐."));out.append(w)}
+  o.append(v);
+  if(src==="mid"||src==="guess"){const w=el("p","warn");w.append(el("b",null,"정확하지 않을 수 있어. "),document.createTextNode((r.note?r.note+" ":src==="mid"?`'${r.item}'(으)로 찾았어. 찾던 게 아니면 이름을 더 자세히 써줘. `:"목록에 없는 물건이라 이름만 보고 추측했어. ")+"확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐."));o.append(w)}
   const list=el("div","parts");
   parts.forEach(p=>{
     const c=`var(${BINS[p.bin]||"--general"})`;
@@ -455,14 +551,14 @@ function render(r,src,query){
     const d=el("span","dot"); d.style.setProperty("--c",c);
     const ph=el("div","ph");
     if(parts.length>1&&p.name) ph.append(el("span","pname",p.name));
-    const b=el("span","bin",p.bin||"일반쓰레기"); b.style.setProperty("--c",c); ph.append(b);
+    if(parts.length>1){const b=el("span","bin",p.bin||"일반쓰레기"); b.style.setProperty("--c",c); ph.append(b);}
     const ol=el("ol"); (p.steps||[]).forEach(x=>ol.append(el("li",null,x)));
-    row.append(d,ph,ol); list.append(row);
+    if(parts.length>1) row.append(d,ph,ol); else {row.classList.add("solo");row.append(ol);} list.append(row);
   });
-  out.append(list);
-  if(r.tip){const t=el("p","tip");t.append(el("b",null,"알아두기 "),document.createTextNode(r.tip));out.append(t)}
+  o.append(list);
+  if(r.tip){const t=el("p","tip");t.append(el("b",null,"알아두기 "),document.createTextNode(r.tip));o.append(t)}
   if(sample&&query&&src!=="big"&&src!=="example"){
-    const m=el("button","more","Claude한테 더 자세히 물어보기");m.type="button";m.onclick=()=>askBig(query);out.append(m);
+    const m=el("button","more","Claude한테 더 자세히 물어보기");m.type="button";m.onclick=()=>askBig(query);o.append(m);
   }
 }
 function status(t){out.innerHTML="";const p=el("p","status");p.append(el("span","spin"),document.createTextNode(t));out.append(p)}
@@ -473,14 +569,24 @@ let firstTouch=true;
 q.addEventListener("focus",()=>{if(firstTouch){q.select();firstTouch=false}});
 function ask(){
   const item=q.value.trim();
-  $("#hint").hidden=true;
   if(picked){askBig(item);return}
   if(!item){q.focus();return}
+  if(matchMedia("(pointer:coarse)").matches) q.blur();
   const r=miniAI(item);
-  if(r&&r.conf!=="guess"){render(r,r.conf,item);saveRecent(r.item);return}
+  if(r&&r.conf!=="guess"){render(r,r.conf,item);saveRecent(r.item);show();return}
   if(sample){askBig(item,r);return}
-  if(r){render(r,"guess",item);return}
-  msg("꼬마 AI가 모르는 물건이야. 다르게 불러보거나(예: '플라스틱 통') 구청에 확인해 봐.");
+  if(r){render(r,"guess",item);show();return}
+  unknown(item);
+}
+function show(){const t=out.getBoundingClientRect();if(t.top<0||t.top>innerHeight*.6)out.scrollIntoView({behavior:"smooth",block:"start"})}
+function unknown(item){
+  out.innerHTML="";
+  out.append(el("p","item",`'${item}'은(는) 아직 몰라`));
+  out.append(el("p","lead","물건 이름을 더 흔한 말로 바꿔서 쳐 봐. 예: '플라스틱 통', '유리병', '비닐 봉지'"));
+  const sg=suggest(item);
+  if(sg.length){out.append(el("p","label","혹시 이거야?"));const c=el("div","chips");sg.forEach(x=>c.append(chip(x)));out.append(c)}
+  out.append(el("p","warn","그래도 모르겠으면 사는 구청 홈페이지나 관리사무소에 물어보는 게 제일 정확해."));
+  show();
 }
 
 const PROMPT=item=>`너는 한국 분리배출 도우미야. ${item?`물건: "${item}"`:"사진 속 물건을 보고 판단해."}
@@ -524,7 +630,22 @@ $("#clearPhoto").onclick=clearPhoto;
 $("#f").addEventListener("submit",e=>{e.preventDefault();ask()});
 EXAMPLES.forEach(x=>$("#chips").append(chip(x)));
 drawRecent();
-render(miniAI("투명 페트병"),"example");
+/* ---------- 소개 ↔ 앱 화면 전환 ---------- */
+render(miniAI("투명 페트병"),"example","",document.getElementById("demo"));
+function view(name){
+  const app=name==="app";
+  $("#intro").hidden=app; $("#app").hidden=!app;
+  window.scrollTo(0,0);
+  if(app){try{localStorage.setItem("seenIntro","1")}catch{}}
+}
+function route(){view(location.hash==="#app"?"app":"intro")}
+function go(h){try{if(location.hash==="#"+h){view(h);return}location.hash=h}catch{view(h)}}
+document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{go("app");setTimeout(()=>q.focus({preventScroll:true}),50)});
+$("#toIntro").onclick=()=>go("intro");
+window.addEventListener("hashchange",route);
+(()=>{let seen=false;try{seen=localStorage.getItem("seenIntro")==="1"}catch{}
+  route()})();
+
 (async()=>{
   sample=await window.claude?.use?.("sample");
   if(!sample) return;
@@ -532,3 +653,5 @@ render(miniAI("투명 페트병"),"example");
   if(lim&&lim.images){photo.hidden=false;$("#camBtn").hidden=false;photo.accept=lim.images.mediaTypes.join(",")}
 })();
 </script>
+</body>
+</html>
