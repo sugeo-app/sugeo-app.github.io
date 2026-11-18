@@ -123,6 +123,52 @@ header{display:flex;flex-direction:column;gap:6px}
 .topbar{display:flex;justify-content:flex-end;margin-bottom:-12px}
 .link{background:none;border:0;min-height:36px;padding:0;color:var(--muted);font-weight:500;font-size:.88rem;text-decoration:underline;text-underline-offset:3px}
 .link:hover{color:var(--fg)}
+/* ---- 결과 아래 버튼들 ---- */
+.actions{display:flex;flex-wrap:wrap;gap:6px 14px;padding-top:12px;border-top:1px solid var(--line)}
+.actions .link{font-size:.85rem}
+.panel{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:10px;background:var(--bg);font-size:.9rem}
+.panel p{margin:0}
+.panel ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.panel a{color:var(--accent)}
+.panel textarea{font:inherit;font-size:.9rem;min-height:70px;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);resize:vertical}
+.panel .row{display:flex;flex-wrap:wrap;gap:8px}
+.btn2{min-height:38px;padding:0 14px;font-size:.88rem;border-radius:8px;background:var(--accent);color:var(--accent-fg);text-decoration:none;display:inline-flex;align-items:center}
+.btn2.ghost{background:transparent;color:var(--fg);border:1.5px solid var(--line)}
+.link.small{font-size:.8rem;min-height:28px}
+.recent-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chip.rec{display:inline-flex;align-items:center;gap:2px;padding-right:4px}
+.chip.rec .x{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;color:var(--muted);font-size:1rem;line-height:1}
+.chip.rec .x:hover{background:var(--line);color:var(--fg)}
+/* ---- 화면 크기별 배치 ---- */
+/* 폰: 결과가 검색창 바로 아래, 최근 기록은 그 밑 */
+.side,.main{display:contents}
+#out,#empty{order:1}#recentBox{order:2}.main>.foot{order:3}
+.empty{display:none}
+.legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.legend li{display:flex;align-items:center;gap:8px;font-size:.88rem;padding:8px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.legend i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+@media (min-width:900px){
+  .wrap.app{max-width:1080px;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);column-gap:48px;align-items:start}
+  .wrap.app .topbar{grid-column:1/-1;margin-bottom:0}
+  .side,.main{display:flex;flex-direction:column;gap:18px;min-width:0}
+  .side{position:sticky;top:24px}
+  .main{padding-top:4px}
+  .empty{display:flex;flex-direction:column;gap:12px;padding:28px;border:1.5px dashed var(--line);border-radius:14px}
+  .result:not(:empty)~.empty{display:none}
+  .empty-title{margin:0;font-size:1.3rem;font-weight:700}
+  .result{padding:28px}
+  .result .item{font-size:1.6rem}
+  .wrap.intro{max-width:1080px}
+  .intro h1{font-size:3.8rem}
+  .intro-hero .lead{font-size:1.15rem;max-width:36ch}
+  .intro-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+  .feats{grid-template-columns:repeat(3,1fr)}
+  .feats li{flex-direction:column;align-items:flex-start}
+  .intro-end{flex-direction:row;align-items:center;gap:20px}
+}
+@media (min-width:900px) and (max-height:700px){.side{position:static}}
+.intro-grid{display:flex;flex-direction:column;gap:28px}
+@media (min-width:900px){.intro-grid{display:grid}}
 </style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
 </head>
@@ -134,6 +180,7 @@ header{display:flex;flex-direction:column;gap:6px}
     <p class="lead">치킨 뼈는 음식물일까? 아이스팩은? 버릴 물건 이름만 치면 어디에, 어떻게 버리는지 바로 알려줘.</p>
   </section>
 
+  <div class="intro-grid">
   <section>
     <p class="sec-title">이렇게 써</p>
     <ol class="steps">
@@ -147,6 +194,7 @@ header{display:flex;flex-direction:column;gap:6px}
     <p class="demo-cap">예를 들어 '투명 페트병'을 치면 ↓</p>
     <div class="result" id="demo"></div>
   </section>
+  </div>
 
   <ul class="feats">
     <li><b>330개+</b><span>아는 물건</span></li>
@@ -160,8 +208,9 @@ header{display:flex;flex-direction:column;gap:6px}
   </section>
 </div>
 
-<div class="wrap" id="app" hidden>
+<div class="wrap app" id="app" hidden>
   <div class="topbar"><button type="button" class="link" id="toIntro">이게 뭐야?</button></div>
+  <div class="side">
   <header>
     <p class="eyebrow">분리수거 도우미</p>
     <h1>이거 어디에 버려?</h1>
@@ -190,14 +239,21 @@ header{display:flex;flex-direction:column;gap:6px}
     <div class="chips" id="chips"></div>
   </div>
 
-  <section class="result" id="out" aria-live="polite"></section>
-
   <div id="recentBox" hidden>
-    <p class="label">최근에 찾은 것</p>
+    <div class="recent-head"><p class="label">최근에 찾은 것</p><button type="button" class="link small" id="clearRecent">전체 지우기</button></div>
     <div class="chips" id="recent"></div>
   </div>
+  </div>
 
-  <p class="foot">환경부 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어</p>
+  <div class="main">
+  <section class="result" id="out" aria-live="polite"></section>
+  <section class="empty" id="empty" aria-hidden="true">
+    <p class="empty-title">여기에 버리는 법이 나와</p>
+    <p class="lead">왼쪽에 물건 이름을 치거나 많이 찾는 것을 눌러 봐. 색깔은 이렇게 구분돼.</p>
+    <ul class="legend" id="legend"></ul>
+  </section>
+  <p class="foot">환경부·서울시 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어</p>
+  </div>
 </div>
 
 <script>
@@ -261,10 +317,10 @@ const DB=[
 // ---- 캔·고철 ----
 {n:["캔","음료캔","캔음료","캔커피","맥주캔","콜라캔","알루미늄캔","커피캔"],item:"음료 캔",parts:[P("캔","캔·고철","비우고 헹구기","찌그러뜨리기")],tip:""},
 {n:["참치캔","통조림","햄캔","스팸캔"],item:"통조림 캔",parts:[P("캔","캔·고철","기름 닦고 헹구기"),P("철 뚜껑","캔·고철","안쪽으로 접어서 캔이랑 같이 고철로"),P("플라스틱 뚜껑","플라스틱","따로 분리")],tip:"뚜껑 날이 날카로우니까 안쪽으로 접어."},
-{n:["부탄가스","스프레이","살충제","헤어스프레이","가스통","에어로졸"],item:"부탄가스·스프레이",parts:[P("통","캔·고철","가스를 끝까지 다 쓰기","남은 가스는 불 없는 실외나 바람 잘 통하는 곳에서 노즐을 눌러 완전히 빼기","소리가 안 날 때까지 비운 뒤 캔류로 (구멍은 뚫지 마)")],tip:"구멍을 뚫다가 남은 가스 때문에 폭발·중독 사고가 나. 소방청도 구멍 뚫지 말라고 안내해. 가스가 남아서 못 빼겠으면 주민센터에 물어봐."},
+{n:["부탄가스","에어로졸","에어로졸 스프레이","가스 스프레이","살충제","모기약 스프레이","헤어스프레이","탈취제","가스통"],item:"부탄가스·스프레이",parts:[P("통","캔·고철","가스를 끝까지 다 쓰기","남은 가스는 불 없는 실외나 바람 잘 통하는 곳에서 노즐을 눌러 완전히 빼기","소리가 안 날 때까지 비운 뒤 캔류로 (구멍은 뚫지 마)")],tip:"구멍을 뚫다가 남은 가스 때문에 폭발·중독 사고가 나. 소방청도 구멍 뚫지 말라고 안내해. 가스가 남아서 못 빼겠으면 주민센터에 물어봐."},
 {n:["알루미늄호일","은박지","쿠킹호일","호일"],item:"알루미늄 호일",parts:[P("호일","캔·고철","깨끗한 것만 뭉쳐서 고철로")],tip:"음식물이 묻었으면 일반쓰레기야."},
 {n:["프라이팬","냄비","후라이팬","주전자"],item:"프라이팬·냄비",parts:[P("몸체","캔·고철","고철로 배출"),P("플라스틱 손잡이","일반쓰레기","떼어지면 따로")],tip:""},
-{n:["옷걸이","철사 옷걸이"],item:"철 옷걸이",parts:[P("옷걸이","캔·고철","고철로 배출")],tip:"플라스틱 옷걸이는 플라스틱이야."},
+{n:["옷걸이","철 옷걸이","철사 옷걸이","세탁소 옷걸이","플라스틱 옷걸이","나무 옷걸이"],item:"옷걸이",parts:[P("옷걸이","일반쓰레기","종량제 봉투로")],tip:"서울시 기준으로 옷걸이는 재질 상관없이 종량제 봉투야. 구에 따라 철 옷걸이를 고철로 받기도 하고, 세탁소에 돌려주면 다시 쓰기도 해."},
 {n:["못","나사","철사","공구"],item:"작은 쇠붙이",parts:[P("쇠붙이","캔·고철","모아서 고철로")],tip:""},
 // ---- 유리 ----
 {n:["유리병","빈병","빈 병","소주병","맥주병","음료 유리병","잼병","소스병"],item:"유리병",parts:[P("병","유리병","비우고 헹구기"),P("뚜껑","캔·고철","금속이면 고철, 플라스틱이면 플라스틱")],tip:"소주·맥주병은 마트에 가져가면 보증금을 돌려줘."},
@@ -300,8 +356,9 @@ const DB=[
 // ---- 대형·특수 ----
 {n:["건전지","배터리","AA건전지","폐건전지"],item:"건전지",parts:[P("건전지","대형·특수","아파트·주민센터 폐건전지 수거함에")],tip:"종량제 봉투에 넣으면 불이 날 수 있어."},
 {n:["보조배터리","리튬배터리","충전배터리"],item:"보조배터리",parts:[P("배터리","대형·특수","단자에 테이프 붙이기","폐건전지 수거함이나 주민센터에")],tip:"리튬 배터리는 눌리면 불이 나서 절대 일반쓰레기에 넣지 마."},
-{n:["형광등","LED등","LED전구","LED 형광등"],item:"형광등·LED등",parts:[P("등","대형·특수","깨지지 않게 형광등 수거함에")],tip:"형광등엔 수은이 들어 있어."},
-{n:["약","남은 약","안 먹는 약","폐의약품","알약","감기약","물약","시럽"],item:"남은 약",parts:[P("알약","대형·특수","포장 벗겨서 한 봉투에 모으기","약국·보건소·주민센터 수거함에"),P("물약","대형·특수","한 병에 모아서 새지 않게 수거함에")],tip:"변기나 하수구에 버리면 물이 오염돼."},
+{n:["형광등","긴 형광등","원형 형광등","삼파장 전구"],item:"형광등",parts:[P("형광등","대형·특수","깨지지 않게 아파트·주민센터 형광등 수거함에")],tip:"형광등엔 수은이 들어 있어. 깨진 건 신문지에 싸서 종량제 봉투로(많으면 불연성 마대)."},
+{n:["LED등","LED전구","LED 전구","LED 형광등","LED 조명","엘이디"],item:"LED 조명",parts:[P("LED등","대형·특수","형광등 수거함에 LED 칸이 있으면 그쪽에","없으면 주민센터에 LED 회수함이 있는지 물어보기")],tip:"LED는 2023년부터 재활용 의무 대상이라 형광등과 따로 모아. 깨진 LED는 종량제 봉투로."},
+{n:["약","남은 약","안 먹는 약","폐의약품","알약","감기약","물약","시럽","처방약"],item:"남은 약",parts:[P("알약·캡슐","대형·특수","포장을 뜯지 말고 그대로","약국·보건소·주민센터 폐의약품 수거함에"),P("물약·시럽·연고","대형·특수","마개를 닫은 채로 수거함에")],tip:"지역에 따라 '폐의약품'이라고 써서 우체통에 넣어도 돼(물약은 안 돼). 변기나 하수구에 버리면 물이 오염돼."},
 {n:["휴대폰","핸드폰","스마트폰","태블릿","아이패드","갤럭시탭","아이폰","갤럭시","노트북"],item:"휴대폰·노트북",parts:[P("기기","대형·특수","개인정보 초기화하기","주민센터·대리점 수거함이나 폐가전 무상수거")],tip:""},
 {n:["충전기","이어폰","블루투스 스피커","스피커","키보드","마우스","게임기","케이블","전선","드라이기","선풍기","전기밥솥","믹서기","전자레인지","청소기"],item:"소형 가전",parts:[P("가전","대형·특수","소형가전 수거함이나 폐가전 무상방문수거(1599-0903) 신청")],tip:"작은 것 여러 개면 5개 이상 모아서 무상수거 신청할 수 있어."},
 {n:["냉장고","세탁기","TV","티비","에어컨","김치냉장고"],item:"대형 가전",parts:[P("가전","대형·특수","폐가전 무상방문수거 신청(전화 1599-0903)")],tip:"새 제품 살 때 판매점에서 가져가 주기도 해."},
@@ -314,10 +371,12 @@ const DB=[
 {n:["캡슐커피","커피캡슐","네스프레소","돌체구스토 캡슐"],item:"커피 캡슐",parts:[P("캡슐","일반쓰레기","찌꺼기째 종량제 봉투로")],tip:"알루미늄 캡슐은 브랜드 매장에서 회수해 주기도 해."},
 {n:["밀폐용기","락앤락","반찬통","플라스틱 밀폐용기"],item:"플라스틱 밀폐용기",parts:[P("통·뚜껑","플라스틱","헹궈서 플라스틱으로"),P("실리콘 패킹","일반쓰레기","빼서 종량제 봉투로")],tip:"유리 밀폐용기는 내열유리라 일반쓰레기야."},
 {n:["바구니","대야","양동이","플라스틱 바구니","빨래바구니"],item:"플라스틱 바구니·대야",parts:[P("바구니","플라스틱","깨끗하면 플라스틱으로")],tip:"너무 커서 안 들어가면 대형폐기물이야."},
-{n:["플라스틱 옷걸이"],item:"플라스틱 옷걸이",parts:[P("옷걸이","플라스틱","쇠고리 있으면 빼서 고철로")],tip:""},
-{n:["플라스틱 화분","화분"],item:"화분",parts:[P("흙","일반쓰레기","털어내기(양 많으면 불연성 마대)"),P("플라스틱 화분","플라스틱","헹궈서 배출")],tip:"도자기 화분은 불연성 마대에 넣어."},
+{n:["플라스틱 화분"],item:"플라스틱 화분",parts:[P("흙","일반쓰레기","털어내기(양 많으면 불연성 마대)"),P("화분","플라스틱","헹궈서 플라스틱으로")],tip:""},
+{n:["도자기 화분","토분","사기 화분","깨진 화분"],item:"도자기 화분",parts:[P("흙","일반쓰레기","털어내기"),P("화분","일반쓰레기","작으면 종량제 봉투, 크거나 많으면 불연성 마대로")],tip:"도자기는 재활용이 안 돼."},
+{n:["식물","죽은 식물","시든 화초","화초"],item:"식물",parts:[P("식물","일반쓰레기","흙 털고 종량제 봉투로")],tip:"화분은 재질 따라 따로 버려."},
 {n:["케첩통","마요네즈통","소스통","드레싱병","배달 소스통"],item:"소스 통",parts:[P("통","플라스틱","내용물 짜내고 헹구기")],tip:"안이 안 씻기면 일반쓰레기야."},
-{n:["영양제통","비타민통","유산균통"],item:"영양제 통",parts:[P("통","플라스틱","헹궈서 배출"),P("방습제·솜","일반쓰레기","빼서 종량제 봉투로")],tip:""},
+{n:["영양제통","비타민통","유산균통"],item:"영양제 통",parts:[P("통","플라스틱","헹궈서 배출"),P("방습제·솜","일반쓰레기","빼서 종량제 봉투로")],tip:"남은 영양제는 약이 아니라서 일반쓰레기야."},
+{n:["영양제","비타민","유산균","오메가3","남은 영양제","건강기능식품","홍삼"],item:"남은 영양제",parts:[P("영양제","일반쓰레기","종량제 봉투로"),P("통","플라스틱","헹궈서 플라스틱으로")],tip:"비타민·유산균 같은 건강기능식품은 폐의약품 수거함에 넣지 마. 일반쓰레기야."},
 {n:["딸기용기","과일 트레이","과일용기","방울토마토 용기","포도 용기"],item:"과일 포장 용기",parts:[P("용기","플라스틱","스티커 떼고 헹구기")],tip:""},
 {n:["아이스크림통","아이스크림 통","투게더 통"],item:"아이스크림 통",parts:[P("통","플라스틱","헹궈서 배출")],tip:"종이 통이면 종이팩·종이컵 쪽으로."},
 {n:["아이스크림 막대","아이스크림막대","하드 막대"],item:"아이스크림 막대",parts:[P("막대","일반쓰레기","종량제 봉투로")],tip:""},
@@ -332,9 +391,9 @@ const DB=[
 {n:["향수","향수병"],item:"향수병",parts:[P("병","일반쓰레기","분사구가 안 빠지면 통째로 종량제 봉투로"),P("유리 몸통","유리병","분사구가 빠지면 헹궈서 유리병으로")],tip:""},
 {n:["매니큐어","네일","리무버"],item:"매니큐어·리무버",parts:[P("병","일반쓰레기","남은 내용물 굳혀서 종량제 봉투로")],tip:"리무버는 하수구에 붓지 마."},
 {n:["쿠션팩트","팩트","파우더","아이섀도"],item:"쿠션·팩트",parts:[P("케이스","일반쓰레기","종량제 봉투로")],tip:"여러 재질이 섞여서 재활용이 어려워."},
-{n:["물조리개","조리개","분무기"],item:"분무기·물조리개",parts:[P("몸통","플라스틱","헹궈서 플라스틱으로"),P("분사 펌프","일반쓰레기","분리해서 종량제 봉투로")],tip:""},
+{n:["물조리개","조리개","분무기","분무기 스프레이","세정제 스프레이","펌프 스프레이","트리거"],item:"분무기·물조리개",parts:[P("몸통","플라스틱","내용물 비우고 헹궈서 플라스틱으로"),P("분사 펌프","일반쓰레기","스프링이 있어서 분리해 종량제 봉투로")],tip:"칙 하고 뿌리는 가스 캔(에어로졸)은 버리는 법이 달라."},
 {n:["세제 리필","리필파우치","리필 봉투"],item:"리필 파우치",parts:[P("파우치","비닐","헹궈서 비닐류로")],tip:""},
-{n:["제습제","물먹는하마","습기제거제"],item:"제습제",parts:[P("고인 물","일반쓰레기","하수구에 흘려 버리기"),P("통","플라스틱","헹궈서 플라스틱으로"),P("부직포·남은 알갱이","일반쓰레기","종량제 봉투로")],tip:""},
+{n:["제습제","물먹는하마","습기제거제"],item:"제습제",parts:[P("고인 물","싱크대","제품 뒷면에 하수구에 버려도 된다고 써 있는지 먼저 확인하기","괜찮다고 하면 물을 많이 틀어 놓고 조금씩 흘려보내기"),P("통","플라스틱","헹궈서 플라스틱으로"),P("부직포·남은 알갱이","일반쓰레기","종량제 봉투로")],tip:"대부분 염화칼슘 물이지만 제품마다 성분이 달라. 안내가 없거나 헷갈리면 사는 구청에 물어봐."},
 {n:["방향제","디퓨저","캔들 방향제"],item:"방향제·디퓨저",parts:[P("내용물","일반쓰레기","휴지에 적셔 종량제 봉투로"),P("통","유리병","유리면 유리병, 플라스틱이면 플라스틱")],tip:"리드 스틱은 일반쓰레기야."},
 {n:["플라스틱 의자","플라스틱 박스","리빙박스","수납함"],item:"큰 플라스틱 생활용품",parts:[P("물건","플라스틱","깨끗하면 플라스틱으로")],tip:"너무 크면 대형폐기물로 신고해."},
 // ---- 비닐 ----
@@ -371,7 +430,7 @@ const DB=[
 {n:["쇠숟가락","스텐 수저","쇠젓가락","스테인리스 숟가락","수저"],item:"쇠 수저",parts:[P("수저","캔·고철","고철로")],tip:""},
 {n:["가위","칼","식칼","커터칼","과도"],item:"가위·칼",parts:[P("칼날","캔·고철","신문지로 감싸서 '칼'이라고 쓰고 고철로"),P("플라스틱 손잡이","일반쓰레기","분리되면 따로")],tip:"수거하는 사람이 다치지 않게 꼭 감싸."},
 {n:["클립","스테이플러심","호치키스심","압정"],item:"클립·스테이플러 심",parts:[P("쇠붙이","캔·고철","모아서 캔에 넣어 고철로")],tip:""},
-{n:["알루미늄 용기","은박 도시락","은박 용기","알루미늄 트레이"],item:"알루미늄 용기",parts:[P("용기","캔·고철","음식물 닦고 고철로")],tip:"기름이 안 지워지면 일반쓰레기야."},
+{n:["알루미늄 용기","알루미늄 그릇","은박 도시락","은박 용기","알루미늄 트레이"],item:"알루미늄 용기",parts:[P("용기","캔·고철","음식물 닦고 고철로")],tip:"기름이 안 지워지면 일반쓰레기야."},
 {n:["캠핑가스","무스","폼","헤어무스","휘핑크림 가스"],item:"가스 용기",parts:[P("통","캔·고철","남은 가스는 실외에서 노즐을 눌러 완전히 빼기","다 빈 걸 확인하고 캔류로 (구멍은 뚫지 마)")],tip:"가스가 남은 채로 구멍을 뚫거나 불 근처에서 빼면 위험해."},
 {n:["금속 뚜껑","쇠 뚜껑","병뚜껑 금속","맥주병 뚜껑","왕관뚜껑","캔 뚜껑","캔따개"],item:"금속 뚜껑",parts:[P("뚜껑","캔·고철","모아서 캔에 넣어 고철로")],tip:""},
 {n:["철제 행거","행거","철제 선반","선반"],item:"철제 행거·선반",parts:[P("철","캔·고철","분해해서 고철로")],tip:"크면 대형폐기물로 신고해."},
@@ -455,6 +514,7 @@ const DB=[
 {n:["컵홀더","컵 홀더","슬리브"],item:"컵홀더",parts:[P("홀더","종이","종이류로")],tip:""},
 {n:["컵뚜껑","컵 뚜껑","커피 뚜껑","음료 뚜껑"],item:"컵 뚜껑",parts:[P("뚜껑","플라스틱","헹궈서 플라스틱으로")],tip:"종이 뚜껑이면 종이류야."},
 {n:["강아지 간식","고양이 간식","반려동물 간식","츄르","개껌"],item:"반려동물 간식",parts:[P("남은 간식","음식물","음식물로"),P("포장","비닐","헹궈서 비닐류로")],tip:"딱딱한 개껌·뼈 간식은 일반쓰레기야."},
+{n:["약 포장지","알약 포장","알약 껍데기","약 껍데기","PTP","약 포장"],item:"약 포장재",parts:[P("알약 판(은박+플라스틱)","일반쓰레기","남은 약이 있으면 판째 폐의약품 수거함에","빈 판은 종량제 봉투로"),P("종이 약상자","종이","설명서와 함께 종이류로"),P("비닐 약봉지","비닐","깨끗하면 비닐류로")],tip:"알약 포장재는 재질이 섞여서 재활용이 안 돼."},
 {n:["어항","수족관"],item:"어항",parts:[P("유리","일반쓰레기","작으면 신문지로 싸서 불연성 마대에"),P("큰 어항","대형·특수","대형폐기물 신고")],tip:""},
 // ---- 3차 학습: 음료·액체 ----
 {n:["우유","상한 우유","남은 우유","우유 남은거","유통기한 지난 우유"],item:"우유",parts:[P("남은 우유","싱크대","조금이면 물을 틀어 놓고 싱크대에 흘려보내기","많으면 신문지·휴지에 적셔 종량제 봉투로"),P("우유팩","종이팩","헹궈서 펼쳐 말리기","종이팩 수거함에")],tip:"우유는 물을 많이 오염시켜서 한꺼번에 많이 붓지 마."},
@@ -626,6 +686,8 @@ const AMBIG={
   "씨":["복숭아 씨","과일 씨","호두 껍질"],
   "팩":["우유팩","아이스팩","마스크팩","두유팩"],
   "카드":["신용카드","포토카드","생일카드"],
+  "스프레이":["에어로졸 스프레이","분무기","세정제 스프레이"],
+  "화분":["플라스틱 화분","도자기 화분","화분 흙","식물"],
 };
 const INDEX=DB.map(d=>({d,keys:d.n.map(n=>{const k=norm(n);return {k,j:jamo(k),w:n.split(/\s+/).map(norm)}})}));
 function rank(raw){
@@ -641,6 +703,13 @@ function rank(raw){
 const MODS=/^(다\s*쓴|다\s*먹은|다\s*마신|먹다\s*남은|먹고\s*남은|마시다\s*남은|먹던|마시던|쓰던|입던|안\s*쓰는|안\s*입는|못\s*입는|작아진|고장\s*난|망가진|부러진|찢어진|낡은|오래된|더러운|상한|썩은|쉰|식은|불은|퉁퉁\s*불은|곰팡이\s*핀|유통기한\s*지난|우리\s*집|헌\s+|빈\s+)\s*/;
 const TAIL=/\s*(남은\s*거|남은\s*것|버리는\s*법|버리는\s*방법)$/;
 const LEFT=/남은|먹다|마시다|상한|썩은|쉰|식은|불은|곰팡이|유통기한/;
+// "빈", "다 쓴" 이 붙으면 내용물(남은 약·음료 등) 안내는 빼기
+const EMPTY=/(^|\s)(빈|다\s*쓴|다\s*먹은|다\s*마신|비운|깨끗한)(\s|$)/;
+function emptied(d,conf,orig){
+  if(!EMPTY.test(orig))return {...d,conf};
+  const keep=d.parts.filter(p=>!/남은|내용물|고인|국물|음료|^술$|^약$|알약|물약/.test(p.name||"")&&p.bin!=="싱크대"&&p.bin!=="음식물");
+  return keep.length&&keep.length<d.parts.length?{...d,item:keep.length===1&&keep[0].name?keep[0].name:"빈 "+d.item,parts:keep,conf}:{...d,conf};
+}
 function stripMods(t){let p;do{p=t;t=t.replace(MODS,"").replace(TAIL,"").trim()}while(t!==p);return t}
 // 남은 음식 얘기면 음식물·싱크대 쪽 답에 가산점
 function pick(q,leftover){const l=rank(q);if(leftover)l.forEach(x=>{if(x.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))x.s=Math.min(1,x.s+.12)});l.sort((a,b)=>b.s-a.s);return l[0]}
@@ -652,7 +721,7 @@ function miniAI(text){
   if(AMBIG[norm(raw)]) return {ambig:true,item:raw,options:AMBIG[norm(raw)]};
   const words=raw.split(/\s+/), last=words.length>1?words[words.length-1]:null;
   const full=pick(raw,leftover);
-  if(full&&full.s>=.95) return {...full.d,conf:"high"};
+  if(full&&full.s>=.95) return emptied(full.d,"high",orig);
   // 1) 물건의 일부를 물으면 그 부분만: "케이크 플라스틱 칼", "참치캔 뚜껑"
   for(let i=words.length-1;i>=1;i--){
     const head=words.slice(0,i).join(" "), tail=norm(words.slice(i).join(""));
@@ -674,7 +743,7 @@ function miniAI(text){
     const conf=top.s>=.8?"high":"mid";
     if(last&&!top.key.includes(norm(last))&&!MATERIAL.test(top.key)&&CONT[last]&&top.s<.95)
       return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
-    return {...top.d,conf};
+    return emptied(top.d,conf,orig);
   }
   // 4) 끝말이 담는 그릇이면 그걸로 ("강아지 간식 봉지" → 비닐)
   if(last&&CONT[last]) return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
@@ -684,7 +753,7 @@ function miniAI(text){
 function suggest(text){return rank(text.trim()).filter(x=>x.s>=.4).slice(0,3).map(x=>x.d.item)}
 
 /* ================================================================ */
-const SEASON={winter:["택배 상자","아이스팩","핫팩","귤껍질"],spring:["화분","우산","택배 상자"],summer:["수박껍질","아이스크림 막대","아이스팩","모기향"],fall:["밤 껍질","낙엽","택배 상자"]};
+const SEASON={winter:["택배 상자","아이스팩","핫팩","귤껍질"],spring:["플라스틱 화분","우산","택배 상자"],summer:["수박껍질","아이스크림 막대","아이스팩","모기향"],fall:["밤 껍질","낙엽","택배 상자"]};
 const COMMON=["치킨 뼈","컵라면 용기","깨진 유리컵","보조배터리","우유팩","영수증","계란 껍데기","남은 약","티백","마라탕 용기","페트병"];
 const EXAMPLES=(()=>{const m=new Date().getMonth()+1;const s=m>=11||m<=2?"winter":m<=5?"spring":m<=8?"summer":"fall";return[...new Set([...SEASON[s],...COMMON])].slice(0,6)})();
 const $=s=>document.querySelector(s), out=$("#out"), btn=$("#go"), q=$("#q"), photo=$("#photo");
@@ -699,10 +768,51 @@ function saveRecent(name){
 function drawRecent(){
   const list=loadRecent(), box=$("#recent"); box.innerHTML="";
   $("#recentBox").hidden=!list.length;
-  list.forEach(x=>box.append(chip(x)));
+  list.forEach(x=>{const c=chip(x);c.classList.add("rec");const del=el("span","x","×");del.setAttribute("role","button");del.setAttribute("aria-label",x+" 지우기");del.tabIndex=0;
+    const rm=e=>{e.stopPropagation();try{localStorage.setItem("recent",JSON.stringify(loadRecent().filter(y=>y!==x)))}catch{}drawRecent()};
+    del.onclick=rm;del.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();rm(e)}};c.append(del);box.append(c)});
 }
 function chip(x){const c=document.createElement("button");c.type="button";c.className="chip";c.textContent=x;c.onclick=()=>{q.value=x;clearPhoto();ask()};return c}
 
+/* ---------- 결과 아래: 아니에요 / 잘못됐어요 / 다시 / 출처 ---------- */
+const REPO="https://github.com/sugeo-app/sugeo-app.github.io/issues/new";
+const GENERAL_SRC=[["서울시 「헷갈리는 분리배출 기준」(2025)","https://news.seoul.go.kr/env/archives/564022"],["환경부 생활폐기물 분리배출 누리집","https://www.wasteguide.or.kr"]];
+const ITEM_SRC={
+  "부탄가스·스프레이":[["대한민국 정책브리핑: 부탄가스 안전 안내","https://www.korea.kr/news/policyNewsView.do?newsId=148923719"],["서울시: 부탄가스 배출 방법(소방청 안내)","https://news.seoul.go.kr/env/archives/558471"]],
+  "가스 용기":[["대한민국 정책브리핑: 부탄가스 안전 안내","https://www.korea.kr/news/policyNewsView.do?newsId=148923719"]],
+  "남은 약":[["서울시: 폐의약품 올바른 배출 방법","https://news.seoul.go.kr/env/archives/564807"]],
+  "남은 영양제":[["서울시: 폐의약품 올바른 배출 방법","https://news.seoul.go.kr/env/archives/564807"]],
+  "LED 조명":[["LED등 재활용 의무화 관련 기사(2021)","https://www.hapt.co.kr/news/articleView.html?idxno=151712"]],
+};
+function actions(r,query){
+  const box=el("div"), row=el("div","actions"), panel=el("div","panel");panel.hidden=true;
+  const btn=(t,f)=>{const b=el("button","link",t);b.type="button";b.onclick=f;row.append(b)};
+  const open=fill=>{panel.innerHTML="";fill(panel);panel.hidden=false};
+  btn("이 결과가 아니에요",()=>open(p=>{
+    const alt=suggest(query||r.item).filter(x=>x!==r.item);
+    p.append(el("p",null,alt.length?"혹시 이 중에 있어?":"비슷한 걸 못 찾았어. 다른 이름으로 쳐 봐."));
+    if(alt.length){const c=el("div","chips");alt.forEach(x=>c.append(chip(x)));p.append(c)}
+  }));
+  btn("정보가 잘못됐어요",()=>open(p=>{
+    p.append(el("p",null,"뭐가 틀렸는지 알려 줘. 확인하고 고칠게."));
+    const ta=el("textarea");ta.id="reportText";ta.placeholder="예: 우리 구는 이거 플라스틱으로 받아요";p.append(ta);
+    const row2=el("div","row");
+    const make=()=>`검색어: ${query||"-"}\n나온 결과: ${r.item} (${[...new Set((r.parts||[]).map(x=>x.bin))].join(", ")})\n내용: ${ta.value.trim()||"(안 적음)"}`;
+    const a=el("a","btn2","GitHub로 보내기");a.target="_blank";a.rel="noopener";
+    const upd=()=>{a.href=REPO+"?title="+encodeURIComponent("[정보 오류] "+r.item)+"&body="+encodeURIComponent(make())};upd();ta.oninput=upd;
+    const cp=el("button","btn2 ghost","내용 복사");cp.type="button";
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText(make());cp.textContent="복사했어"}catch{ta.value=make();ta.select();cp.textContent="선택했어, 복사해 줘"}};
+    row2.append(a,cp);p.append(row2);
+    p.append(el("p","foot","GitHub로 보내려면 GitHub 계정이 필요해. 없으면 내용을 복사해서 만든 사람한테 보내 줘."));
+  }));
+  btn("다른 물건 다시 찾기",()=>{q.value="";out.innerHTML="";q.focus();window.scrollTo({top:0,behavior:"smooth"})});
+  btn("출처 보기",()=>open(p=>{
+    p.append(el("p",null,"이 안내는 아래 자료를 바탕으로 정리했어. 동네마다 다를 수 있으니 확실하지 않으면 구청에 물어봐."));
+    const ul=el("ul");[...(ITEM_SRC[r.item]||[]),...GENERAL_SRC].forEach(([t,u])=>{const li=el("li"),a=el("a",null,t);a.href=u;a.target="_blank";a.rel="noopener";li.append(a);ul.append(li)});p.append(ul);
+  }));
+  box.append(row,panel);box.style.display="flex";box.style.flexDirection="column";box.style.gap="10px";
+  return box;
+}
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 const SRC={high:["꼬마 AI","--accent"],mid:["꼬마 AI · 아마 이거야","--pack"],guess:["꼬마 AI · 추측","--warn"],big:["Claude","--plastic"],example:["예시","--line"]};
 function render(r,src,query,o=out){
@@ -731,6 +841,7 @@ function render(r,src,query,o=out){
   });
   o.append(list);
   if(r.tip){const t=el("p","tip");t.append(el("b",null,"알아두기 "),document.createTextNode(r.tip));o.append(t)}
+  if(o===out&&src!=="example") o.append(actions(r,query));
   if(sample&&query&&src!=="big"&&src!=="example"){
     const m=el("button","more","Claude한테 더 자세히 물어보기");m.type="button";m.onclick=()=>askBig(query);o.append(m);
   }
@@ -818,6 +929,8 @@ $("#clearPhoto").onclick=clearPhoto;
 $("#f").addEventListener("submit",e=>{e.preventDefault();ask()});
 EXAMPLES.forEach(x=>$("#chips").append(chip(x)));
 drawRecent();
+$("#clearRecent").onclick=()=>{try{localStorage.removeItem("recent")}catch{}drawRecent()};
+Object.entries(BINS).forEach(([n,v])=>{const li=el("li"),i=el("i");i.style.setProperty("--c",`var(${v})`);li.append(i,document.createTextNode(n));$("#legend").append(li)});
 /* ---------- 소개 ↔ 앱 화면 전환 ---------- */
 render(miniAI("투명 페트병"),"example","",document.getElementById("demo"));
 function view(name){
