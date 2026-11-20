@@ -1,0 +1,12 @@
+{
+  "name": "sugeo-app",
+  "private": true,
+  "description": "이거 어디에 버려? · 분리수거 도우미",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/run.mjs",
+    "test:parity": "node tests/parity.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
