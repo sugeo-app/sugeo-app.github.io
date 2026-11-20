@@ -169,6 +169,10 @@ header{display:flex;flex-direction:column;gap:6px}
 @media (min-width:900px) and (max-height:700px){.side{position:static}}
 .intro-grid{display:flex;flex-direction:column;gap:28px}
 @media (min-width:900px){.intro-grid{display:grid}}
+.egg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:8px 0}
+.egg-e{font-size:4.5rem;line-height:1;animation:holy 1s ease-out}
+@keyframes holy{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(6deg);opacity:1}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.egg-e{animation:none}}
 </style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
 </head>
@@ -663,6 +667,8 @@ const MATERIAL=/^(스티로폼|플라스틱|유리|종이|비닐|알루미늄|�
 function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let prev=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){const cur=[i];let lo=i;for(let j=1;j<=b.length;j++){cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));lo=Math.min(lo,cur[j])}if(lo>max)return max+1;prev=cur}return prev[b.length]}
 // 버리는 물건이 아닌 말
 const NOT_TRASH=new Set(["사람","나","너","저","우리","엄마","아빠","부모님","할머니","할아버지","형","누나","오빠","언니","동생","친구","선생님","쌤","남친","여친","남자친구","여자친구","강아지","개","고양이","반려동물","햄스터","물고기","금붕어","토끼","학교","학원","집","숙제","시험","공부","사랑","돈","지구","하늘","시간","인생","미래","꿈","행복","스트레스","기분","월요일"]);
+// 숨은 재미 (이스터에그)
+const EGG={"사탄":{e:"✝️",t:"사탄은 어느 수거함에도 안 들어가…",d:"십자가로 퇴치 완료! 이제 진짜 버릴 물건을 알려줘."},"악마":{e:"✝️",t:"악마는 분리수거 대상이 아니야",d:"십자가로 쫓아냈어. 버릴 물건 이름을 써 줘."}};
 const PET=/^(강아지|개|고양이|반려동물|햄스터|물고기|금붕어|토끼)$/;
 // 뜻이 여러 개인 말은 단정하지 말고 되묻기
 const AMBIG={
@@ -717,6 +723,7 @@ function miniAI(text){
   const orig=text.trim(), leftover=LEFT.test(orig);
   const raw=stripMods(orig)||orig;
   if(!norm(raw)) return null;
+  if(EGG[norm(raw)]) return {egg:EGG[norm(raw)]};
   if(NOT_TRASH.has(norm(raw))) return {notTrash:true,item:raw,pet:PET.test(norm(raw))};
   if(AMBIG[norm(raw)]) return {ambig:true,item:raw,options:AMBIG[norm(raw)]};
   const words=raw.split(/\s+/), last=words.length>1?words[words.length-1]:null;
@@ -858,6 +865,7 @@ function ask(){
   if(!item){q.focus();return}
   if(matchMedia("(pointer:coarse)").matches) q.blur();
   const r=miniAI(item);
+  if(r&&r.egg){out.innerHTML="";const b=el("div","egg");b.append(el("span","egg-e",r.egg.e),el("p","item",r.egg.t),el("p","lead",r.egg.d));out.append(b);show();return}
   if(r&&r.notTrash){notTrash(r);show();return}
   if(r&&r.ambig){ambig(r);show();return}
   if(r&&r.conf!=="guess"){render(r,r.conf,item);saveRecent(r.item);show();return}
