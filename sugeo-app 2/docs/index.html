@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>이거 어디에 버려? · 분리수거 도우미</title>
+<meta name="description" content="헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게. 치킨 뼈, 아이스팩, 깨진 유리까지.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이거 어디에 버려? · 분리수거 도우미">
+<meta property="og:description" content="헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게. 치킨 뼈, 아이스팩, 깨진 유리까지.">
+<meta property="og:url" content="https://sugeo-app.github.io/">
+<meta property="og:image" content="https://sugeo-app.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="이거 어디에 버려? 분리수거 도우미">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f3f5f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141a17" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%BB%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/noto-sans-kr-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="어디에 버려?">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+/* 폰트: 사이트 안에 직접 담음 (구글 폰트로 요청 안 보냄). OFL 라이선스 → static/fonts/OFL.txt */
+@font-face{font-family:"Noto Sans KR";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/noto-sans-kr-400.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans KR";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/noto-sans-kr-500.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans KR";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/noto-sans-kr-700.woff2") format("woff2")}
+@font-face{font-family:"Black Han Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/black-han-sans.woff2") format("woff2")}
+/* Layout: 한 칸짜리 검색 도구. 입력(글/사진) → 부품별 결과 카드 → 최근·자주 묻는 물건 */
+:root{
+  --bg:#f3f5f1; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a62; --line:#d9dfd8;
+  --accent:#1f6b4f; --accent-fg:#ffffff; --warn:#b4471f;
+  --plastic:#2f6fb0; --vinyl:#5a5fc0; --paper:#9a6b2f; --pack:#b08a2a; --can:#6b6f78; --glass:#2a8a7f; --food:#c0612b; --general:#4a4a4a; --special:#9b3f8c; --sink:#3f7fa3;
+  --bin-fg:#ffffff;
+  --display:"Black Han Sans","Noto Sans KR",system-ui,sans-serif;
+  --body:"Noto Sans KR",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1d2521; --fg:#e8eee9; --muted:#9aa89f; --line:#2f3a34;
+  --accent:#5cc79a; --accent-fg:#0f1a14; --warn:#f0946b;
+  --plastic:#6aa6e6; --vinyl:#9a9ef0; --paper:#d4a466; --pack:#e0c060; --can:#a8adb8; --glass:#5fc7ba; --food:#ec9361; --general:#b5b5b5; --special:#d585c6; --sink:#86bfdc;
+  --bin-fg:#111611; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1d2521; --fg:#e8eee9; --muted:#9aa89f; --line:#2f3a34;
+  --accent:#5cc79a; --accent-fg:#0f1a14; --warn:#f0946b;
+  --plastic:#6aa6e6; --vinyl:#9a9ef0; --paper:#d4a466; --pack:#e0c060; --can:#a8adb8; --glass:#5fc7ba; --food:#ec9361; --general:#b5b5b5; --special:#d585c6; --sink:#86bfdc;
+  --bin-fg:#111611; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;word-break:keep-all;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,9vw,3rem);line-height:1.15;margin:0;text-wrap:balance}
+.lead{margin:4px 0 0;color:var(--muted)}
+form{display:flex;gap:8px}
+#q{flex:1;-webkit-appearance:none;appearance:none;min-width:0;font:inherit;padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
+#q:focus{outline:none;border-color:var(--accent)}
+button,.cam{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:10px;padding:0 18px;background:var(--accent);color:var(--accent-fg);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:52px}
+.cam{background:var(--surface);color:var(--fg);border:2px solid var(--line);padding:0 14px}
+.cam:hover{border-color:var(--accent)}
+.cam svg{width:22px;height:22px}
+#photo{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#photo:focus-visible + .cam,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.55;cursor:wait}
+.preview{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--muted)}
+.preview img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.preview button{min-height:32px;padding:0 10px;font-size:.85rem;background:transparent;color:var(--muted);border:1px solid var(--line)}
+.label{font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:34px;font-weight:500;font-size:.9rem;padding:0 12px;border-radius:999px;background:transparent;border:1px solid var(--line);color:var(--fg)}
+.chip:hover{border-color:var(--accent)}
+.result:empty{display:none}
+.result{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.item{font-size:1.35rem;font-weight:700;margin:0}
+.count{font-size:.9rem;color:var(--muted)}
+.tag{font-size:.72rem;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 6px;letter-spacing:.04em}
+.src{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--muted)}
+.src i{width:8px;height:8px;border-radius:50%;background:var(--c,var(--accent))}
+.parts{display:flex;flex-direction:column;gap:0}
+.part{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:14px 0;border-top:1px dashed var(--line)}
+.part:first-child{border-top:0;padding-top:0}
+.part:last-child{padding-bottom:0}
+.part.solo{grid-template-columns:1fr}
+.dot{grid-row:span 2;width:12px;height:12px;border-radius:50%;margin-top:8px;background:var(--c)}
+.ph{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.pname{font-weight:700}
+.bin{font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:999px;color:var(--bin-fg);background:var(--c)}
+ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px;color:var(--fg);min-width:0}
+.tip{margin:0;padding:10px 14px;border-radius:8px;background:var(--bg);font-size:.92rem;color:var(--muted)}
+.tip b{color:var(--fg)}
+.more{align-self:flex-start;min-height:38px;padding:0 14px;font-size:.88rem;background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.status{margin:0;color:var(--muted);display:flex;align-items:center;gap:10px}
+.spin{width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:s 0.8s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.err{color:var(--warn);margin:0}
+.foot{font-size:.8rem;color:var(--muted);margin:0}
+header{display:flex;flex-direction:column;gap:6px}
+.eyebrow{margin:0;font-size:.82rem;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.lead{margin:0}
+.badge{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--surface)}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.try{display:flex;flex-direction:column;gap:2px;margin-top:-6px}
+.hint{margin:0 0 -8px;font-size:.88rem;font-weight:700;color:var(--accent)}
+.verdict{margin:-6px 0 0;font-size:1.05rem;font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.verdict .arrow{color:var(--muted)}
+.verdict .v{color:var(--c)}
+.verdict .plus{color:var(--muted);font-weight:500}
+.warn{margin:0;padding:10px 14px;border-radius:8px;border:1px dashed var(--warn);color:var(--fg);font-size:.9rem}
+.warn b{color:var(--warn)}
+/* ---- 소개 페이지 ---- */
+.intro{gap:28px}
+.intro-hero{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.intro h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:1.12}
+.intro h1 em{font-style:normal;color:var(--accent)}
+.intro .lead{font-size:1.05rem;max-width:30ch}
+.cta{min-height:56px;font-size:1.05rem;border-radius:12px;width:100%;max-width:360px}
+.cta:hover{filter:brightness(1.08)}
+.sec-title{margin:0 0 10px;font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:st}
+.steps li{counter-increment:st;display:grid;grid-template-columns:32px 1fr;gap:2px 12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.steps li::before{content:counter(st);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.steps b{font-size:1rem}
+.steps span{color:var(--muted);font-size:.92rem}
+.demo-cap{margin:0 0 8px;font-size:.88rem;font-weight:700;color:var(--accent)}
+.feats{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.feats li{display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:12px;border:1px solid var(--line);min-width:0}
+.feats b{font-size:1.15rem;font-variant-numeric:tabular-nums}
+.feats span{font-size:.82rem;color:var(--muted)}
+@media (max-width:420px){.feats{grid-template-columns:1fr}.feats li{flex-direction:row;align-items:baseline;gap:10px}}
+.intro-end{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:-12px}
+.link{background:none;border:0;min-height:36px;padding:0;color:var(--muted);font-weight:500;font-size:.88rem;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--fg)}
+/* ---- 결과 아래 버튼들 ---- */
+.actions{display:flex;flex-wrap:wrap;gap:6px 14px;padding-top:12px;border-top:1px solid var(--line)}
+.actions .link{font-size:.85rem}
+.panel{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:10px;background:var(--bg);font-size:.9rem}
+.panel p{margin:0}
+.panel ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.panel a{color:var(--accent)}
+.panel textarea{font:inherit;font-size:.9rem;min-height:70px;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);resize:vertical}
+.panel .row{display:flex;flex-wrap:wrap;gap:8px}
+.btn2{min-height:38px;padding:0 14px;font-size:.88rem;border-radius:8px;background:var(--accent);color:var(--accent-fg);text-decoration:none;display:inline-flex;align-items:center}
+.btn2.ghost{background:transparent;color:var(--fg);border:1.5px solid var(--line)}
+.link.small{font-size:.8rem;min-height:28px}
+.recent-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chip.rec{display:inline-flex;align-items:center;gap:2px;padding-right:4px}
+.chip.rec .x{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;color:var(--muted);font-size:1rem;line-height:1}
+.chip.rec .x:hover{background:var(--line);color:var(--fg)}
+/* ---- 화면 크기별 배치 ---- */
+/* 폰: 결과가 검색창 바로 아래, 최근 기록은 그 밑 */
+.side,.main{display:contents}
+#out,#empty{order:1}#recentBox{order:2}.main>.foot{order:3}
+.empty{display:none}
+.legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.legend li{display:flex;align-items:center;gap:8px;font-size:.88rem;padding:8px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.legend i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+@media (min-width:900px){
+  .wrap.app{max-width:1080px;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);column-gap:48px;align-items:start}
+  .wrap.app .topbar{grid-column:1/-1;margin-bottom:0}
+  .side,.main{display:flex;flex-direction:column;gap:18px;min-width:0}
+  .side{position:sticky;top:24px}
+  .main{padding-top:4px}
+  .empty{display:flex;flex-direction:column;gap:12px;padding:28px;border:1.5px dashed var(--line);border-radius:14px}
+  .result:not(:empty)~.empty{display:none}
+  .empty-title{margin:0;font-size:1.3rem;font-weight:700}
+  .result{padding:28px}
+  .result .item{font-size:1.6rem}
+  .wrap.intro{max-width:1080px}
+  .intro h1{font-size:3.8rem}
+  .intro-hero .lead{font-size:1.15rem;max-width:36ch}
+  .intro-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+  .feats{grid-template-columns:repeat(3,1fr)}
+  .feats li{flex-direction:column;align-items:flex-start}
+  .intro-end{flex-direction:row;align-items:center;gap:20px}
+}
+@media (min-width:900px) and (max-height:700px){.side{position:static}}
+.intro-grid{display:flex;flex-direction:column;gap:28px}
+@media (min-width:900px){.intro-grid{display:grid}}
+.egg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:8px 0}
+.egg-e{font-size:4.5rem;line-height:1;display:inline-block}
+.a-holy{animation:holy 1s ease-out}
+.a-melt{animation:melt 1.6s ease-in-out;transform-origin:50% 100%}
+@keyframes melt{0%{transform:scaleY(1)}50%{transform:scaleY(.55) scaleX(1.25)}100%{transform:scaleY(1)}}
+.a-spin{animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.a-shake{animation:shake .7s ease-in-out 2}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.a-drop{animation:drop .9s cubic-bezier(.3,1.5,.6,1)}
+@keyframes drop{from{transform:translateY(-60px);opacity:0}}
+.a-bounce{animation:bnc 1s ease infinite}
+@keyframes bnc{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+/* 안전 경고 */
+.alert{margin:0;padding:12px 14px;border-radius:10px;border:1.5px solid var(--warn);background:color-mix(in srgb,var(--warn) 10%,var(--surface));font-size:.93rem;color:var(--fg)}
+.alert b{color:var(--warn)}
+/* 홈 화면 추가 안내 */
+.install{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.9rem}
+.install p{margin:0;flex:1;min-width:12em}
+.install .btn2{min-height:36px}
+.install .x{background:none;border:0;color:var(--muted);font-size:1.2rem;min-height:36px;padding:0 6px}
+@keyframes holy{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(6deg);opacity:1}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.egg-e{animation:none!important}}
+/* 폰 안전 영역 */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}
+</style>
+</head>
+<body>
+<div class="wrap intro" id="intro">
+  <section class="intro-hero">
+    <p class="eyebrow">분리수거 도우미</p>
+    <h1>헷갈리는 쓰레기,<br><em>3초면 끝.</em></h1>
+    <p class="lead">치킨 뼈는 음식물일까? 아이스팩은? 버릴 물건 이름만 치면 어디에, 어떻게 버리는지 바로 알려줘.</p>
+  </section>
+
+  <div class="intro-grid">
+  <section>
+    <p class="sec-title">이렇게 써</p>
+    <ol class="steps">
+      <li><b>버릴 물건 이름을 쳐</b><span>"컵라면 용기", "깨진 접시"처럼 부르는 대로 쓰면 돼. 오타도 웬만큼 알아들어.</span></li>
+      <li><b>어디에 버리는지 확인해</b><span>플라스틱, 비닐, 음식물처럼 수거함이 색깔로 바로 보여.</span></li>
+      <li><b>부품별로 나눠서 버려</b><span>뚜껑, 라벨, 몸통이 따로 버려야 하면 하나씩 알려줘.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="demo-cap">예를 들어 '투명 페트병'을 치면 ↓</p>
+    <div class="result" id="demo"></div>
+  </section>
+  </div>
+
+  <ul class="feats">
+    <li><b>330개+</b><span>아는 물건</span></li>
+    <li><b>부품별</b><span>나눠서 안내</span></li>
+    <li><b>오프라인</b><span>인터넷 없어도 돼</span></li>
+  </ul>
+
+  <section class="intro-end">
+    <button type="button" class="cta" data-start>시작하기</button>
+    <p class="foot">환경부 분리배출 기준이야. 동네마다 세부 규칙은 다를 수 있어.</p>
+  </section>
+</div>
+
+<div class="wrap app" id="app" hidden>
+  <div class="topbar"><button type="button" class="link" id="toIntro">이게 뭐야?</button></div>
+  <div class="side">
+  <header>
+    <p class="eyebrow">분리수거 도우미</p>
+    <h1>이거 어디에 버려?</h1>
+    <p class="lead">헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게.</p>
+  </header>
+
+  <div>
+    <form id="f">
+      <label for="q" hidden>버릴 물건</label>
+      <input type="search" id="q" placeholder="예: 치킨 뼈, 아이스팩" aria-label="버릴 물건 이름" enterkeyhint="search" autocomplete="off" maxlength="80">
+      <button id="go" type="submit">찾기</button>
+    </form>
+  </div>
+
+  <div class="install" id="install" hidden>
+    <p id="installText"></p>
+    <button type="button" class="btn2" id="installBtn" hidden>홈 화면에 추가</button>
+    <button type="button" class="x" id="installClose" aria-label="안내 닫기">×</button>
+  </div>
+
+  <div class="try">
+    <p class="label">많이 찾는 것</p>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="recentBox" hidden>
+    <div class="recent-head"><p class="label">최근에 찾은 것</p><button type="button" class="link small" id="clearRecent">전체 지우기</button></div>
+    <div class="chips" id="recent"></div>
+  </div>
+  </div>
+
+  <div class="main">
+  <section class="result" id="out" aria-live="polite"></section>
+  <section class="empty" id="empty" aria-hidden="true">
+    <p class="empty-title">여기에 버리는 법이 나와</p>
+    <p class="lead">왼쪽에 물건 이름을 치거나 많이 찾는 것을 눌러 봐. 색깔은 이렇게 구분돼.</p>
+    <ul class="legend" id="legend"></ul>
+  </section>
+  <p class="foot">환경부·서울시 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어</p>
+  </div>
+</div>
+
+<script>
+const DB=[{"name":"투명 페트병","aliases":["페트병","생수병","음료수병","콜라병","사이다병","투명페트병","물병"],"parts":[{"name":"몸통","bin":"플라스틱","steps":["내용물 비우고 헹구기","찌그러뜨린 뒤 뚜껑 닫기"]},{"name":"라벨","bin":"비닐","steps":["뜯어서 비닐류로"]}],"tip":"투명 페트병은 유색 플라스틱이랑 따로 모으는 곳이 많아."},{"name":"플라스틱 용기","aliases":["플라스틱","플라스틱 용기","플라스틱 통","플라스틱통"],"parts":[{"name":"용기","bin":"플라스틱","steps":["내용물 비우고 헹구기","스티커·다른 재질 떼고 플라스틱으로"]}],"tip":"음식이 안 지워지거나 여러 재질이 붙어 있으면 일반쓰레기야."},{"name":"색깔 있는 페트병","aliases":["유색페트병","음료 페트","이온음료병","녹색페트병"],"parts":[{"name":"몸통","bin":"플라스틱","steps":["비우고 헹구기","찌그러뜨리기"]},{"name":"라벨","bin":"비닐","steps":["뜯어서 비닐류로"]}],"tip":""},{"name":"배달 음식 용기","aliases":["배달음식용기","배달용기","플라스틱 반찬통","반찬용기","포장용기","떡볶이 용기","마라탕 용기","짜장면 용기","짜장면 그릇","짬뽕 그릇","배달 그릇"],"parts":[{"name":"용기","bin":"플라스틱","steps":["남은 음식 비우기","세제로 기름기 헹구기"]}],"tip":"빨간 양념 자국이 안 지워지면 일반쓰레기로 버려."},{"name":"테이크아웃 플라스틱 컵","aliases":["테이크아웃컵","플라스틱컵","아이스커피컵","카페컵","음료컵"],"parts":[{"name":"컵·뚜껑","bin":"플라스틱","steps":["헹궈서 배출"]},{"name":"빨대","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"컵홀더","bin":"종이","steps":["종이류로"]}],"tip":""},{"name":"요구르트병","aliases":["요구르트병","요구르트","야쿠르트"],"parts":[{"name":"병","bin":"플라스틱","steps":["헹궈서 배출"]},{"name":"뚜껑(은박)","bin":"일반쓰레기","steps":["떼서 종량제 봉투로"]}],"tip":""},{"name":"즉석밥 용기","aliases":["즉석밥용기","햇반","즉석밥"],"parts":[{"name":"용기","bin":"플라스틱","steps":["밥알 떼고 헹구기"]},{"name":"뚜껑 필름","bin":"일반쓰레기","steps":["떼서 종량제 봉투로"]}],"tip":""},{"name":"샴푸·세제 통","aliases":["샴푸통","린스통","바디워시","세제통","샴푸"],"parts":[{"name":"통","bin":"플라스틱","steps":["내용물 비우고 헹구기"]},{"name":"펌프","bin":"일반쓰레기","steps":["스프링이 있어서 종량제 봉투로"]}],"tip":""},{"name":"플라스틱 뚜껑","aliases":["플라스틱 뚜껑","병뚜껑"],"parts":[{"name":"뚜껑","bin":"플라스틱","steps":["깨끗하면 플라스틱으로"]}],"tip":"페트병 뚜껑은 병에 닫아서 같이 버려도 돼."},{"name":"스티로폼","aliases":["스티로폼","스티로폼 박스","스티로폼 상자","스티로폼상자","아이스박스"],"parts":[{"name":"스티로폼","bin":"플라스틱","steps":["테이프·송장 떼기","깨끗한 것만 스티로폼으로 따로"]}],"tip":"음식물이 묻었거나 색이 있는 스티로폼은 일반쓰레기야."},{"name":"컵라면 용기","aliases":["컵라면","컵라면 용기","컵라면용기","용기면"],"parts":[{"name":"용기","bin":"플라스틱","steps":["국물 비우고 헹구기","종이 재질이면 종이로"]},{"name":"뚜껑","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"빨간 국물 자국이 안 지워지면 일반쓰레기로 버려."},{"name":"두부 용기","aliases":["두부용기","두부곽"],"parts":[{"name":"용기","bin":"플라스틱","steps":["헹궈서 배출"]},{"name":"필름","bin":"일반쓰레기","steps":["떼서 종량제 봉투로"]}],"tip":""},{"name":"플라스틱 계란판","aliases":["계란판 플라스틱","계란 플라스틱 판"],"parts":[{"name":"판","bin":"플라스틱","steps":["깨끗하면 플라스틱으로"]}],"tip":"종이 계란판은 종이류야."},{"name":"장난감","aliases":["플라스틱 장난감","장난감","레고"],"parts":[{"name":"장난감","bin":"일반쓰레기","steps":["여러 재질이 섞여서 종량제 봉투로"]}],"tip":"크면 대형폐기물로 신고해야 해. 건전지는 빼서 따로."},{"name":"칫솔","aliases":["칫솔"],"parts":[{"name":"칫솔","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"솔과 손잡이 재질이 달라서 재활용이 안 돼."},{"name":"필기구","aliases":["볼펜","샤프","펜","색연필","사인펜"],"parts":[{"name":"필기구","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"일회용 숟가락·포크","aliases":["일회용 숟가락","플라스틱 숟가락","플라스틱 포크","일회용 수저","숟가락","포크"],"parts":[{"name":"수저","bin":"일반쓰레기","steps":["작아서 종량제 봉투로"]}],"tip":"작은 플라스틱은 선별이 안 돼서 일반쓰레기야."},{"name":"인형","aliases":["인형","곰인형","봉제인형"],"parts":[{"name":"인형","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"의류수거함에는 넣으면 안 돼. 크면 대형폐기물이야."},{"name":"빨대","aliases":["빨대"],"parts":[{"name":"빨대","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"작아서 선별이 안 돼서 일반쓰레기야."},{"name":"휴대폰 케이스","aliases":["휴대폰케이스","폰케이스","핸드폰케이스"],"parts":[{"name":"케이스","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"화장품 용기","aliases":["화장품 용기","로션통","스킨병","크림통"],"parts":[{"name":"용기","bin":"플라스틱","steps":["내용물 닦아내기","유리면 유리병으로"]},{"name":"펌프·스포이드","bin":"일반쓰레기","steps":["분리해서 종량제 봉투로"]}],"tip":"내용물을 다 못 닦으면 일반쓰레기로 버려."},{"name":"립스틱·작은 화장품","aliases":["립스틱","립밤","틴트","마스카라"],"parts":[{"name":"통째로","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"작고 재질이 섞여 있어서 재활용이 안 돼."},{"name":"치약 튜브","aliases":["치약","치약튜브"],"parts":[{"name":"튜브","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"속을 잘라서 깨끗이 씻었으면 플라스틱도 돼."},{"name":"실리카겔","aliases":["실리카겔","방습제","김 방습제"],"parts":[{"name":"실리카겔","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"김 트레이","aliases":["김 트레이","김 용기","김통"],"parts":[{"name":"트레이","bin":"플라스틱","steps":["부스러기 털고 배출"]},{"name":"방습제","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"과자·라면 봉지","aliases":["과자봉지","과자 봉지","라면봉지","라면 봉지","스낵봉지"],"parts":[{"name":"봉지","bin":"비닐","steps":["부스러기 털고 헹구기"]}],"tip":"안쪽이 은색이어도 비닐류야."},{"name":"비닐봉지","aliases":["비닐봉지","비닐봉투","검은봉지","택배비닐","배달비닐","비닐"],"parts":[{"name":"봉지","bin":"비닐","steps":["이물질 털고 모아서 배출"]}],"tip":"음식물이 묻어서 안 지워지면 일반쓰레기야."},{"name":"뽁뽁이(에어캡)","aliases":["뽁뽁이","에어캡","완충재"],"parts":[{"name":"에어캡","bin":"비닐","steps":["테이프 떼고 배출"]}],"tip":""},{"name":"랩·지퍼백","aliases":["랩","비닐랩","위생랩","지퍼백","위생백"],"parts":[{"name":"랩·지퍼백","bin":"비닐","steps":["깨끗하면 비닐류로"]}],"tip":"음식물이 묻었으면 일반쓰레기야."},{"name":"양파망","aliases":["양파망","귤망"],"parts":[{"name":"망","bin":"비닐","steps":["이물질 털고 비닐류로"]}],"tip":""},{"name":"택배 상자","aliases":["택배상자","택배 상자","박스","골판지","상자","택배박스"],"parts":[{"name":"상자","bin":"종이","steps":["테이프·송장 떼기","펼쳐서 납작하게"]}],"tip":"송장은 개인정보라 찢거나 지워서 일반쓰레기로."},{"name":"신문·전단지","aliases":["신문","신문지","전단지","광고지"],"parts":[{"name":"종이","bin":"종이","steps":["물에 젖지 않게 묶어서 배출"]}],"tip":"반짝이는 비닐 코팅 전단지는 일반쓰레기야."},{"name":"책·공책","aliases":["책","공책","노트","교과서","문제집","잡지"],"parts":[{"name":"속지","bin":"종이","steps":["묶어서 종이류로"]},{"name":"스프링·비닐 표지","bin":"일반쓰레기","steps":["떼서 따로"]}],"tip":""},{"name":"종이컵","aliases":["종이컵"],"parts":[{"name":"종이컵","bin":"종이팩","steps":["헹궈서 종이팩·종이컵 수거함에"]}],"tip":"따로 수거함이 없으면 종이류에 겹쳐서 내놔."},{"name":"피자 박스","aliases":["피자박스","피자 박스","피자상자"],"parts":[{"name":"박스","bin":"종이","steps":["기름 안 묻은 부분은 종이로"]},{"name":"기름 묻은 부분","bin":"일반쓰레기","steps":["찢어서 종량제 봉투로"]},{"name":"피자 고정핀","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"치킨 상자","aliases":["치킨박스","치킨 상자","치킨상자"],"parts":[{"name":"상자","bin":"종이","steps":["기름 덜 묻었으면 종이로"]},{"name":"기름종이","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"기름이 많이 배었으면 통째로 일반쓰레기야."},{"name":"종이 계란판","aliases":["종이 계란판","계란판"],"parts":[{"name":"계란판","bin":"종이","steps":["깨끗하면 종이로"]}],"tip":""},{"name":"휴지심","aliases":["휴지심","키친타올심","두루마리심"],"parts":[{"name":"휴지심","bin":"종이","steps":["납작하게 펴서 종이로"]}],"tip":""},{"name":"영수증","aliases":["영수증","카드전표","감열지"],"parts":[{"name":"영수증","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"영수증은 코팅된 감열지라 종이로 재활용이 안 돼."},{"name":"사진","aliases":["사진","인화사진","폴라로이드"],"parts":[{"name":"사진","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"인화지는 코팅돼서 종이가 아니야."},{"name":"휴지","aliases":["휴지","티슈","화장지","키친타올","냅킨"],"parts":[{"name":"휴지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"물에 녹는 종이라 재활용이 안 돼."},{"name":"물티슈","aliases":["물티슈"],"parts":[{"name":"물티슈","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"플라스틱 섬유라서 변기에 버리면 안 돼."},{"name":"스티커·포스트잇","aliases":["포스트잇","스티커","라벨지"],"parts":[{"name":"스티커","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"종이 쇼핑백","aliases":["종이 쇼핑백","쇼핑백"],"parts":[{"name":"가방","bin":"종이","steps":["손잡이 끈·비닐 코팅 떼기"]}],"tip":"겉이 비닐 코팅된 쇼핑백은 일반쓰레기야."},{"name":"우유팩","aliases":["우유팩","우유곽","주스팩","종이팩"],"parts":[{"name":"팩","bin":"종이팩","steps":["헹구기","펼쳐서 말리기","종이팩 수거함에"]}],"tip":"주민센터에서 모아 가면 휴지로 바꿔 주는 곳도 있어."},{"name":"멸균팩","aliases":["두유팩","멸균팩","두유","소주팩"],"parts":[{"name":"팩","bin":"종이팩","steps":["빨대 빼고 헹구기","펼쳐서 말리기"]}],"tip":"안쪽이 은박이어도 종이팩이야. 일반 종이랑 섞지 마."},{"name":"음료 캔","aliases":["캔","음료캔","캔음료","캔커피","맥주캔","콜라캔","알루미늄캔","커피캔"],"parts":[{"name":"캔","bin":"캔·고철","steps":["비우고 헹구기","찌그러뜨리기"]}],"tip":""},{"name":"통조림 캔","aliases":["참치캔","통조림","햄캔","스팸캔"],"parts":[{"name":"캔","bin":"캔·고철","steps":["기름 닦고 헹구기"]},{"name":"철 뚜껑","bin":"캔·고철","steps":["안쪽으로 접어서 캔이랑 같이 고철로"]},{"name":"플라스틱 뚜껑","bin":"플라스틱","steps":["따로 분리"]}],"tip":"뚜껑 날이 날카로우니까 안쪽으로 접어."},{"name":"부탄가스·스프레이","aliases":["부탄가스","에어로졸","에어로졸 스프레이","가스 스프레이","살충제","모기약 스프레이","헤어스프레이","탈취제","가스통"],"parts":[{"name":"통","bin":"캔·고철","steps":["가스를 끝까지 다 쓰기","남은 가스는 불 없는 실외나 바람 잘 통하는 곳에서 노즐을 눌러 완전히 빼기","소리가 안 날 때까지 비운 뒤 캔류로 (구멍은 뚫지 마)"]}],"tip":"구멍을 뚫다가 남은 가스 때문에 폭발·중독 사고가 나. 소방청도 구멍 뚫지 말라고 안내해. 가스가 남아서 못 빼겠으면 주민센터에 물어봐."},{"name":"알루미늄 호일","aliases":["알루미늄호일","은박지","쿠킹호일","호일"],"parts":[{"name":"호일","bin":"캔·고철","steps":["깨끗한 것만 뭉쳐서 고철로"]}],"tip":"음식물이 묻었으면 일반쓰레기야."},{"name":"프라이팬·냄비","aliases":["프라이팬","냄비","후라이팬","주전자"],"parts":[{"name":"몸체","bin":"캔·고철","steps":["고철로 배출"]},{"name":"플라스틱 손잡이","bin":"일반쓰레기","steps":["떼어지면 따로"]}],"tip":""},{"name":"옷걸이","aliases":["옷걸이","철 옷걸이","철사 옷걸이","세탁소 옷걸이","플라스틱 옷걸이","나무 옷걸이"],"parts":[{"name":"옷걸이","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"서울시 기준으로 옷걸이는 재질 상관없이 종량제 봉투야. 구에 따라 철 옷걸이를 고철로 받기도 하고, 세탁소에 돌려주면 다시 쓰기도 해."},{"name":"작은 쇠붙이","aliases":["못","나사","철사","공구"],"parts":[{"name":"쇠붙이","bin":"캔·고철","steps":["모아서 고철로"]}],"tip":""},{"name":"유리병","aliases":["유리병","빈병","빈 병","소주병","맥주병","음료 유리병","잼병","소스병"],"parts":[{"name":"병","bin":"유리병","steps":["비우고 헹구기"]},{"name":"뚜껑","bin":"캔·고철","steps":["금속이면 고철, 플라스틱이면 플라스틱"]}],"tip":"소주·맥주병은 마트에 가져가면 보증금을 돌려줘."},{"name":"깨진 유리·유리컵","aliases":["깨진유리","깨진 유리","깨진 컵","깨진컵","유리컵","와인잔","소주잔","맥주잔","샴페인잔","꽃병","화병","유리 꽃병","깨진유리컵","깨진 유리컵","유리잔","유리그릇"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["신문지로 여러 번 싸기","'깨진 유리'라고 써서 종량제 봉투로"]}],"tip":"유리컵·유리그릇은 유리병이랑 성분이 달라서 유리병으로 내면 안 돼. 양이 많으면 불연성 마대에."},{"name":"거울","aliases":["거울"],"parts":[{"name":"거울","bin":"일반쓰레기","steps":["신문지로 싸서 종량제 봉투로"]}],"tip":"크면 대형폐기물로 신고해."},{"name":"도자기·사기그릇","aliases":["도자기","사기그릇","그릇","깨진 그릇","깨진그릇","도자기 그릇","접시","밥그릇","머그컵","뚝배기","깨진 접시","깨진접시"],"parts":[{"name":"그릇","bin":"일반쓰레기","steps":["깨졌으면 신문지로 싸기","불연성 마대나 종량제 봉투로"]}],"tip":"구마다 불연성 마대(특수마대)를 따로 팔아."},{"name":"내열·강화유리","aliases":["내열유리","강화유리","냄비뚜껑 유리"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["신문지로 싸서 불연성 마대에"]}],"tip":"유리병이랑 녹는 온도가 달라서 섞으면 안 돼."},{"name":"과일 껍질","aliases":["과일껍질","귤","사과","바나나","참외","딸기","수박","사과껍질","바나나껍질","귤껍질","수박껍질","배껍질","참외껍질"],"parts":[{"name":"껍질","bin":"음식물","steps":["물기 빼고 음식물로"]}],"tip":"수박 껍질은 잘게 잘라야 수거가 잘 돼."},{"name":"남은 음식","aliases":["남은음식","남은 음식","음식물","밥","반찬","찌개","김치"],"parts":[{"name":"음식","bin":"음식물","steps":["국물은 따라 버리고 건더기만","물기 꼭 짜기"]}],"tip":"김치·찌개는 물에 한 번 헹구면 염분이 줄어서 더 좋아."},{"name":"채소 찌꺼기","aliases":["채소","야채","상한 채소","시든 채소"],"parts":[{"name":"채소","bin":"음식물","steps":["물기 빼고 음식물로"]}],"tip":"양파·마늘 껍질, 파 뿌리, 옥수수 껍질은 일반쓰레기야."},{"name":"빵·떡·면","aliases":["빵","떡","과자 부스러기","라면 면"],"parts":[{"name":"음식","bin":"음식물","steps":["포장 비닐 벗기고 음식물로"]}],"tip":""},{"name":"생선·고기","aliases":["생선","생선 내장","고기","고기 비계","삼겹살","회","닭껍질","닭 껍질","비계"],"parts":[{"name":"살·내장","bin":"음식물","steps":["물기 빼고 음식물로"]},{"name":"뼈·가시","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"뼈","aliases":["치킨뼈","치킨 뼈","닭뼈","뼈","소뼈","돼지뼈","갈비뼈","족발뼈","생선뼈","생선가시"],"parts":[{"name":"뼈","bin":"일반쓰레기","steps":["살 발라내고 종량제 봉투로"]}],"tip":"동물이 못 먹을 만큼 딱딱한 건 음식물이 아니야."},{"name":"치킨 먹고 남은 것","aliases":["치킨 먹고 남은 거","치킨 남은거","치킨"],"parts":[{"name":"살·튀김옷","bin":"음식물","steps":["뼈에서 발라내기"]},{"name":"뼈","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"상자","bin":"종이","steps":["기름 많이 뱄으면 일반쓰레기"]},{"name":"소스통·무 용기","bin":"플라스틱","steps":["헹궈서 배출"]}],"tip":"치킨무 국물은 하수구 말고 음식물에 조금씩 섞어 버려."},{"name":"계란 껍데기","aliases":["계란껍질","달걀껍질","계란 껍데기","메추리알껍질"],"parts":[{"name":"껍데기","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"딱딱해서 음식물이 아니야."},{"name":"조개·갑각류 껍데기","aliases":["조개껍데기","조개껍질","굴껍질","꼬막껍질","게껍질","소라껍질","전복껍데기"],"parts":[{"name":"껍데기","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"양파·마늘 껍질, 파 뿌리","aliases":["양파껍질","마늘껍질","파뿌리","대파뿌리","옥수수껍질","옥수수대"],"parts":[{"name":"껍질·뿌리","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"질기고 단단해서 음식물 처리가 안 돼."},{"name":"딱딱한 씨·견과류 껍데기","aliases":["복숭아씨","과일씨","자두씨","망고씨","아보카도씨","호두껍질","땅콩껍질","견과류껍질"],"parts":[{"name":"씨·껍데기","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"티백·커피 찌꺼기","aliases":["티백","커피찌꺼기","커피 찌꺼기","원두찌꺼기","한약찌꺼기","녹차티백"],"parts":[{"name":"찌꺼기","bin":"일반쓰레기","steps":["물기 빼서 종량제 봉투로"]}],"tip":"구에 따라 음식물로 받는 곳도 있으니 확인해 봐."},{"name":"나무젓가락·꼬치","aliases":["나무젓가락","이쑤시개","꼬치","산적꼬치"],"parts":[{"name":"나무","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"마스크","aliases":["마스크"],"parts":[{"name":"마스크","bin":"일반쓰레기","steps":["끈 자르고 접어서 종량제 봉투로"]}],"tip":""},{"name":"기저귀·생리대","aliases":["기저귀","생리대"],"parts":[{"name":"통째로","bin":"일반쓰레기","steps":["말아서 종량제 봉투로"]}],"tip":""},{"name":"담배꽁초","aliases":["담배꽁초","담배"],"parts":[{"name":"꽁초","bin":"일반쓰레기","steps":["불 완전히 끄고 종량제 봉투로"]}],"tip":""},{"name":"고무 제품","aliases":["고무장갑","고무줄","장화"],"parts":[{"name":"고무","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"고양이 모래","aliases":["고양이모래","고양이 모래","두부모래","벤토나이트"],"parts":[{"name":"모래","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"두부 모래라도 변기에 버리면 막혀."},{"name":"아이스팩","aliases":["아이스팩"],"parts":[{"name":"젤 아이스팩","bin":"일반쓰레기","steps":["자르지 말고 통째로 종량제 봉투로"]},{"name":"물 아이스팩","bin":"비닐","steps":["물만 버리고 비닐류로"]}],"tip":"주민센터에 깨끗한 아이스팩을 모으는 수거함이 있는 곳도 있어."},{"name":"수세미","aliases":["수세미","스펀지"],"parts":[{"name":"수세미","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"백열전구","aliases":["백열전구","전구","할로겐"],"parts":[{"name":"전구","bin":"일반쓰레기","steps":["깨지지 않게 싸서 종량제 봉투로"]}],"tip":"형광등·LED는 따로 수거함이야."},{"name":"우산","aliases":["우산","장우산","3단우산"],"parts":[{"name":"천","bin":"일반쓰레기","steps":["살에서 떼어내기"]},{"name":"살·대","bin":"캔·고철","steps":["고철로"]},{"name":"손잡이","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"분해가 힘들면 통째로 일반쓰레기도 돼."},{"name":"CD·DVD","aliases":["CD","DVD","씨디"],"parts":[{"name":"디스크","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"케이스","bin":"플라스틱","steps":["종이 빼고 플라스틱으로"]}],"tip":""},{"name":"건전지","aliases":["건전지","배터리","AA건전지","폐건전지"],"parts":[{"name":"건전지","bin":"대형·특수","steps":["아파트·주민센터 폐건전지 수거함에"]}],"tip":"종량제 봉투에 넣으면 불이 날 수 있어."},{"name":"보조배터리","aliases":["보조배터리","리튬배터리","충전배터리"],"parts":[{"name":"배터리","bin":"대형·특수","steps":["단자에 테이프 붙이기","폐건전지 수거함이나 주민센터에"]}],"tip":"리튬 배터리는 눌리면 불이 나서 절대 일반쓰레기에 넣지 마."},{"name":"형광등","aliases":["형광등","긴 형광등","원형 형광등","삼파장 전구"],"parts":[{"name":"형광등","bin":"대형·특수","steps":["깨지지 않게 아파트·주민센터 형광등 수거함에"]}],"tip":"형광등엔 수은이 들어 있어. 깨진 건 신문지에 싸서 종량제 봉투로(많으면 불연성 마대)."},{"name":"LED 조명","aliases":["LED등","LED전구","LED 전구","LED 형광등","LED 조명","엘이디"],"parts":[{"name":"LED등","bin":"대형·특수","steps":["형광등 수거함에 LED 칸이 있으면 그쪽에","없으면 주민센터에 LED 회수함이 있는지 물어보기"]}],"tip":"LED는 2023년부터 재활용 의무 대상이라 형광등과 따로 모아. 깨진 LED는 종량제 봉투로."},{"name":"남은 약","aliases":["약","남은 약","안 먹는 약","폐의약품","알약","감기약","물약","시럽","처방약"],"parts":[{"name":"알약·캡슐","bin":"대형·특수","steps":["포장을 뜯지 말고 그대로","약국·보건소·주민센터 폐의약품 수거함에"]},{"name":"물약·시럽·연고","bin":"대형·특수","steps":["마개를 닫은 채로 수거함에"]}],"tip":"지역에 따라 '폐의약품'이라고 써서 우체통에 넣어도 돼(물약은 안 돼). 변기나 하수구에 버리면 물이 오염돼."},{"name":"휴대폰·노트북","aliases":["휴대폰","핸드폰","스마트폰","태블릿","아이패드","갤럭시탭","아이폰","갤럭시","노트북"],"parts":[{"name":"기기","bin":"대형·특수","steps":["개인정보 초기화하기","주민센터·대리점 수거함이나 폐가전 무상수거"]}],"tip":""},{"name":"소형 가전","aliases":["충전기","이어폰","블루투스 스피커","스피커","키보드","마우스","게임기","케이블","전선","드라이기","선풍기","전기밥솥","믹서기","전자레인지","청소기"],"parts":[{"name":"가전","bin":"대형·특수","steps":["소형가전 수거함이나 폐가전 무상방문수거(1599-0903) 신청"]}],"tip":"작은 것 여러 개면 5개 이상 모아서 무상수거 신청할 수 있어."},{"name":"대형 가전","aliases":["냉장고","세탁기","TV","티비","에어컨","김치냉장고"],"parts":[{"name":"가전","bin":"대형·특수","steps":["폐가전 무상방문수거 신청(전화 1599-0903)"]}],"tip":"새 제품 살 때 판매점에서 가져가 주기도 해."},{"name":"가구","aliases":["가구","책상","의자","침대","매트리스","소파","옷장","서랍장"],"parts":[{"name":"가구","bin":"대형·특수","steps":["구청 홈페이지·앱에서 대형폐기물 신고","스티커 붙여서 내놓기"]}],"tip":""},{"name":"옷·신발·가방","aliases":["옷","옷가지","헌옷","청바지","바지","치마","티셔츠","셔츠","니트","원피스","재킷","자켓","코트","겨울옷","여름옷","잠옷","신발","운동화","가방","책가방","커튼"],"parts":[{"name":"옷·신발","bin":"대형·특수","steps":["깨끗하면 의류수거함에"]}],"tip":"젖거나 찢어진 건 일반쓰레기야."},{"name":"페인트·화학약품","aliases":["페인트","신나","시너","남은 락스","농약"],"parts":[{"name":"약품","bin":"대형·특수","steps":["남은 양이 많으면 구청에 문의","굳힌 페인트통은 종량제 봉투로"]}],"tip":"하수구에 버리면 안 돼."},{"name":"자전거·킥보드","aliases":["자전거","킥보드","유모차"],"parts":[{"name":"본체","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":"전동 킥보드 배터리는 따로 분리해."},{"name":"텀블러·보온병","aliases":["텀블러","보온병","보냉병","스텐 텀블러","스탠리"],"parts":[{"name":"몸통","bin":"캔·고철","steps":["스테인리스면 고철로","플라스틱이면 플라스틱으로"]},{"name":"뚜껑","bin":"플라스틱","steps":["분리해서 플라스틱으로"]},{"name":"고무 패킹","bin":"일반쓰레기","steps":["빼서 종량제 봉투로"]}],"tip":""},{"name":"커피 캡슐","aliases":["캡슐커피","커피캡슐","네스프레소","돌체구스토 캡슐"],"parts":[{"name":"캡슐","bin":"일반쓰레기","steps":["찌꺼기째 종량제 봉투로"]}],"tip":"알루미늄 캡슐은 브랜드 매장에서 회수해 주기도 해."},{"name":"플라스틱 밀폐용기","aliases":["밀폐용기","락앤락","반찬통","플라스틱 밀폐용기"],"parts":[{"name":"통·뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"실리콘 패킹","bin":"일반쓰레기","steps":["빼서 종량제 봉투로"]}],"tip":"유리 밀폐용기는 내열유리라 일반쓰레기야."},{"name":"플라스틱 바구니·대야","aliases":["바구니","대야","양동이","플라스틱 바구니","빨래바구니"],"parts":[{"name":"바구니","bin":"플라스틱","steps":["깨끗하면 플라스틱으로"]}],"tip":"너무 커서 안 들어가면 대형폐기물이야."},{"name":"플라스틱 화분","aliases":["플라스틱 화분"],"parts":[{"name":"흙","bin":"일반쓰레기","steps":["털어내기(양 많으면 불연성 마대)"]},{"name":"화분","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":""},{"name":"도자기 화분","aliases":["도자기 화분","토분","사기 화분","깨진 화분"],"parts":[{"name":"흙","bin":"일반쓰레기","steps":["털어내기"]},{"name":"화분","bin":"일반쓰레기","steps":["작으면 종량제 봉투, 크거나 많으면 불연성 마대로"]}],"tip":"도자기는 재활용이 안 돼."},{"name":"식물","aliases":["식물","죽은 식물","시든 화초","화초"],"parts":[{"name":"식물","bin":"일반쓰레기","steps":["흙 털고 종량제 봉투로"]}],"tip":"화분은 재질 따라 따로 버려."},{"name":"소스 통","aliases":["케첩통","마요네즈통","소스통","드레싱병","배달 소스통"],"parts":[{"name":"통","bin":"플라스틱","steps":["내용물 짜내고 헹구기"]}],"tip":"안이 안 씻기면 일반쓰레기야."},{"name":"영양제 통","aliases":["영양제통","비타민통","유산균통"],"parts":[{"name":"통","bin":"플라스틱","steps":["헹궈서 배출"]},{"name":"방습제·솜","bin":"일반쓰레기","steps":["빼서 종량제 봉투로"]}],"tip":"남은 영양제는 약이 아니라서 일반쓰레기야."},{"name":"남은 영양제","aliases":["영양제","비타민","유산균","오메가3","남은 영양제","건강기능식품","홍삼"],"parts":[{"name":"영양제","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"통","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":"비타민·유산균 같은 건강기능식품은 폐의약품 수거함에 넣지 마. 일반쓰레기야."},{"name":"과일 포장 용기","aliases":["딸기용기","과일 트레이","과일용기","방울토마토 용기","포도 용기"],"parts":[{"name":"용기","bin":"플라스틱","steps":["스티커 떼고 헹구기"]}],"tip":""},{"name":"아이스크림 통","aliases":["아이스크림통","아이스크림 통","투게더 통"],"parts":[{"name":"통","bin":"플라스틱","steps":["헹궈서 배출"]}],"tip":"종이 통이면 종이팩·종이컵 쪽으로."},{"name":"아이스크림 막대","aliases":["아이스크림 막대","아이스크림막대","하드 막대"],"parts":[{"name":"막대","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"아이스크림 포장","aliases":["아이스크림 껍질","아이스크림 포장","하드 껍질"],"parts":[{"name":"포장","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":""},{"name":"일회용 면도기","aliases":["일회용 면도기","면도기","면도날"],"parts":[{"name":"면도기","bin":"일반쓰레기","steps":["날을 종이로 감싸서 종량제 봉투로"]}],"tip":"전기 면도기는 소형가전이야."},{"name":"콘택트렌즈","aliases":["렌즈","콘택트렌즈","렌즈케이스","렌즈 통"],"parts":[{"name":"렌즈","bin":"일반쓰레기","steps":["변기 말고 종량제 봉투로"]},{"name":"포장 플라스틱","bin":"플라스틱","steps":["은박 떼고 플라스틱으로"]},{"name":"은박 뚜껑","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"플라스틱 카드","aliases":["신용카드","체크카드","교통카드","멤버십카드","플라스틱 카드"],"parts":[{"name":"카드","bin":"일반쓰레기","steps":["IC칩·번호 부분 잘라서 종량제 봉투로"]}],"tip":""},{"name":"형광펜·마커","aliases":["형광펜","매직","네임펜","보드마카"],"parts":[{"name":"펜","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"지우개·테이프","aliases":["지우개","테이프","박스테이프","스카치테이프","마스킹테이프"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"풍선","aliases":["풍선"],"parts":[{"name":"풍선","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"튜브형 화장품","aliases":["폼클렌징","핸드크림","선크림","튜브형 화장품","클렌징폼"],"parts":[{"name":"튜브","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"잘라서 속까지 씻으면 플라스틱으로 내도 돼."},{"name":"향수병","aliases":["향수","향수병"],"parts":[{"name":"병","bin":"일반쓰레기","steps":["분사구가 안 빠지면 통째로 종량제 봉투로"]},{"name":"유리 몸통","bin":"유리병","steps":["분사구가 빠지면 헹궈서 유리병으로"]}],"tip":""},{"name":"매니큐어·리무버","aliases":["매니큐어","네일","리무버"],"parts":[{"name":"병","bin":"일반쓰레기","steps":["남은 내용물 굳혀서 종량제 봉투로"]}],"tip":"리무버는 하수구에 붓지 마."},{"name":"쿠션·팩트","aliases":["쿠션팩트","팩트","파우더","아이섀도"],"parts":[{"name":"케이스","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"여러 재질이 섞여서 재활용이 어려워."},{"name":"분무기·물조리개","aliases":["물조리개","조리개","분무기","분무기 스프레이","세정제 스프레이","펌프 스프레이","트리거"],"parts":[{"name":"몸통","bin":"플라스틱","steps":["내용물 비우고 헹궈서 플라스틱으로"]},{"name":"분사 펌프","bin":"일반쓰레기","steps":["스프링이 있어서 분리해 종량제 봉투로"]}],"tip":"칙 하고 뿌리는 가스 캔(에어로졸)은 버리는 법이 달라."},{"name":"리필 파우치","aliases":["세제 리필","리필파우치","리필 봉투"],"parts":[{"name":"파우치","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":""},{"name":"제습제","aliases":["제습제","물먹는하마","습기제거제"],"parts":[{"name":"고인 물","bin":"싱크대","steps":["제품 뒷면에 하수구에 버려도 된다고 써 있는지 먼저 확인하기","괜찮다고 하면 물을 많이 틀어 놓고 조금씩 흘려보내기"]},{"name":"통","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"부직포·남은 알갱이","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"대부분 염화칼슘 물이지만 제품마다 성분이 달라. 안내가 없거나 헷갈리면 사는 구청에 물어봐."},{"name":"방향제·디퓨저","aliases":["방향제","디퓨저","캔들 방향제"],"parts":[{"name":"내용물","bin":"일반쓰레기","steps":["휴지에 적셔 종량제 봉투로"]},{"name":"통","bin":"유리병","steps":["유리면 유리병, 플라스틱이면 플라스틱"]}],"tip":"리드 스틱은 일반쓰레기야."},{"name":"큰 플라스틱 생활용품","aliases":["플라스틱 의자","플라스틱 박스","리빙박스","수납함"],"parts":[{"name":"물건","bin":"플라스틱","steps":["깨끗하면 플라스틱으로"]}],"tip":"너무 크면 대형폐기물로 신고해."},{"name":"커피 원두 봉투","aliases":["커피 원두 봉투","원두봉투","커피봉지"],"parts":[{"name":"봉투","bin":"비닐","steps":["원두 가루 털고 비닐류로"]}],"tip":""},{"name":"냉동식품 봉지","aliases":["냉동식품 봉지","만두봉지","냉동봉지"],"parts":[{"name":"봉지","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":""},{"name":"쌀 포대","aliases":["쌀포대","쌀 포대","쌀봉지"],"parts":[{"name":"포대","bin":"비닐","steps":["비닐 포대면 비닐류로"]},{"name":"종이 포대","bin":"종이","steps":["종이 포대면 종이류로"]}],"tip":""},{"name":"빵 봉지","aliases":["빵봉지","빵 봉지","식빵 봉지"],"parts":[{"name":"봉지","bin":"비닐","steps":["부스러기 털고 비닐류로"]},{"name":"묶는 끈","bin":"일반쓰레기","steps":["철사 끈은 종량제 봉투로"]}],"tip":""},{"name":"커피믹스 봉지","aliases":["커피믹스","믹스커피 봉지","스틱커피"],"parts":[{"name":"봉지","bin":"비닐","steps":["가루 털고 비닐류로"]}],"tip":""},{"name":"작은 양념 봉지","aliases":["스프봉지","소스봉지","케첩봉지","양념 봉지","작은 비닐"],"parts":[{"name":"봉지","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":"안이 안 씻기면 일반쓰레기로."},{"name":"세탁소 비닐","aliases":["세탁소 비닐","옷 비닐"],"parts":[{"name":"비닐","bin":"비닐","steps":["옷걸이 빼고 비닐류로"]}],"tip":""},{"name":"일회용 장갑","aliases":["비닐장갑","일회용 장갑","위생장갑","라텍스장갑","니트릴장갑"],"parts":[{"name":"장갑","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"음식이 묻어서 대부분 재활용이 안 돼."},{"name":"마스크 포장","aliases":["마스크 포장","마스크 비닐"],"parts":[{"name":"포장","bin":"비닐","steps":["비닐류로"]}],"tip":""},{"name":"김장 비닐","aliases":["김장비닐","김장 봉투"],"parts":[{"name":"비닐","bin":"비닐","steps":["양념 헹궈서 비닐류로"]}],"tip":"양념이 안 지워지면 일반쓰레기야."},{"name":"묶음 포장 비닐","aliases":["생수 묶음 비닐","묶음 포장 비닐","수축필름"],"parts":[{"name":"비닐","bin":"비닐","steps":["비닐류로"]}],"tip":""},{"name":"달력","aliases":["달력","탁상달력","벽걸이 달력"],"parts":[{"name":"종이","bin":"종이","steps":["종이류로"]},{"name":"스프링·받침","bin":"일반쓰레기","steps":["분리해서 따로"]}],"tip":"코팅된 사진 달력은 일반쓰레기야."},{"name":"포장지","aliases":["포장지","선물포장지","포장 종이"],"parts":[{"name":"포장지","bin":"종이","steps":["테이프 떼고 종이류로"]}],"tip":"반짝이거나 비닐 코팅된 포장지는 일반쓰레기야."},{"name":"얇은 종이 상자","aliases":["과자상자","과자 상자","화장품 상자","신발상자","신발 박스","약상자"],"parts":[{"name":"상자","bin":"종이","steps":["안쪽 비닐 빼고 펼쳐서 종이류로"]}],"tip":""},{"name":"종이 봉투","aliases":["종이봉투","편지봉투","서류봉투"],"parts":[{"name":"봉투","bin":"종이","steps":["비닐 창문 떼고 종이류로"]}],"tip":""},{"name":"명함","aliases":["명함"],"parts":[{"name":"명함","bin":"종이","steps":["일반 종이면 종이류로"]}],"tip":"코팅·금박 명함은 일반쓰레기야."},{"name":"A4·프린트 종이","aliases":["A4","프린트","이면지","시험지","학습지","복사지","종이"],"parts":[{"name":"종이","bin":"종이","steps":["스테이플러 심 빼고 종이류로"]}],"tip":"개인정보 있는 건 찢거나 파쇄해."},{"name":"종이 호일·유산지","aliases":["종이호일","종이 호일","유산지","베이킹페이퍼","기름종이"],"parts":[{"name":"종이","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"코팅돼 있어서 종이로 재활용이 안 돼."},{"name":"종이 용기","aliases":["종이도시락","종이 용기","종이 트레이"],"parts":[{"name":"용기","bin":"종이","steps":["깨끗하면 종이류로"]}],"tip":"기름·양념이 배었으면 일반쓰레기야."},{"name":"택배 송장","aliases":["택배송장","송장","운송장"],"parts":[{"name":"송장","bin":"일반쓰레기","steps":["이름·주소 지우고 종량제 봉투로"]}],"tip":""},{"name":"축하 카드","aliases":["생일카드","카드 편지","크리스마스카드"],"parts":[{"name":"카드","bin":"종이","steps":["일반 종이면 종이류로"]}],"tip":"반짝이·음악 칩이 붙은 카드는 일반쓰레기야."},{"name":"포스터·팜플렛","aliases":["포스터","브로슈어","팜플렛"],"parts":[{"name":"종이","bin":"종이","steps":["종이류로"]}],"tip":"코팅 포스터는 일반쓰레기야."},{"name":"코팅 종이컵류","aliases":["종이 아이스크림컵","배스킨라빈스 컵","종이 컵라면"],"parts":[{"name":"컵","bin":"종이팩","steps":["헹궈서 종이팩·종이컵 수거함에"]}],"tip":""},{"name":"종이 완충재","aliases":["택배 종이 완충재","종이 완충재","크라프트지"],"parts":[{"name":"종이","bin":"종이","steps":["펴서 종이류로"]}],"tip":""},{"name":"퍼즐·보드게임","aliases":["퍼즐","보드게임","카드게임","트럼프카드"],"parts":[{"name":"상자","bin":"종이","steps":["종이류로"]},{"name":"조각·카드·말","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"테트라팩","aliases":["테트라팩","생크림팩","주스 종이팩","요거트팩"],"parts":[{"name":"팩","bin":"종이팩","steps":["헹궈서 펼쳐 말리기","종이팩 수거함에"]}],"tip":""},{"name":"분유캔·깡통","aliases":["분유캔","분유통","커피 깡통","깡통","과자캔"],"parts":[{"name":"캔","bin":"캔·고철","steps":["헹궈서 고철로"]},{"name":"플라스틱 뚜껑·스푼","bin":"플라스틱","steps":["분리해서 플라스틱으로"]}],"tip":""},{"name":"쇠 수저","aliases":["쇠숟가락","스텐 수저","쇠젓가락","스테인리스 숟가락","수저"],"parts":[{"name":"수저","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"가위·칼","aliases":["가위","칼","식칼","커터칼","과도"],"parts":[{"name":"칼날","bin":"캔·고철","steps":["신문지로 감싸서 '칼'이라고 쓰고 고철로"]},{"name":"플라스틱 손잡이","bin":"일반쓰레기","steps":["분리되면 따로"]}],"tip":"수거하는 사람이 다치지 않게 꼭 감싸."},{"name":"클립·스테이플러 심","aliases":["클립","스테이플러심","호치키스심","압정"],"parts":[{"name":"쇠붙이","bin":"캔·고철","steps":["모아서 캔에 넣어 고철로"]}],"tip":""},{"name":"알루미늄 용기","aliases":["알루미늄 용기","알루미늄 그릇","은박 도시락","은박 용기","알루미늄 트레이"],"parts":[{"name":"용기","bin":"캔·고철","steps":["음식물 닦고 고철로"]}],"tip":"기름이 안 지워지면 일반쓰레기야."},{"name":"가스 용기","aliases":["캠핑가스","무스","폼","헤어무스","휘핑크림 가스"],"parts":[{"name":"통","bin":"캔·고철","steps":["남은 가스는 실외에서 노즐을 눌러 완전히 빼기","다 빈 걸 확인하고 캔류로 (구멍은 뚫지 마)"]}],"tip":"가스가 남은 채로 구멍을 뚫거나 불 근처에서 빼면 위험해."},{"name":"금속 뚜껑","aliases":["금속 뚜껑","쇠 뚜껑","병뚜껑 금속","맥주병 뚜껑","왕관뚜껑","캔 뚜껑","캔따개"],"parts":[{"name":"뚜껑","bin":"캔·고철","steps":["모아서 캔에 넣어 고철로"]}],"tip":""},{"name":"철제 행거·선반","aliases":["철제 행거","행거","철제 선반","선반"],"parts":[{"name":"철","bin":"캔·고철","steps":["분해해서 고철로"]}],"tip":"크면 대형폐기물로 신고해."},{"name":"와인·드링크 병","aliases":["와인병","양주병","막걸리병 유리","드링크병","박카스병","비타500"],"parts":[{"name":"병","bin":"유리병","steps":["비우고 헹구기"]},{"name":"뚜껑","bin":"캔·고철","steps":["금속 뚜껑은 고철로"]}],"tip":"와인 코르크는 일반쓰레기야."},{"name":"코르크","aliases":["코르크","와인 코르크"],"parts":[{"name":"코르크","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"깨진 유리병","aliases":["깨진 병","깨진병","깨진 소주병"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["신문지로 싸고 '깨진 유리'라고 쓰기","종량제 봉투나 불연성 마대로"]}],"tip":"깨진 건 수거하는 사람이 다칠 수 있어서 유리병으로 내면 안 돼."},{"name":"유리 밀폐용기","aliases":["글라스락","유리 밀폐용기","유리 반찬통","파이렉스"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["신문지로 싸서 불연성 마대나 종량제 봉투로"]},{"name":"플라스틱 뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":"내열유리라 유리병으로 내면 안 돼."},{"name":"안경","aliases":["안경","선글라스"],"parts":[{"name":"안경","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"안경점에서 기부용으로 받는 곳도 있어."},{"name":"액자","aliases":["액자","사진액자"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["신문지로 싸서 종량제 봉투로"]},{"name":"틀","bin":"일반쓰레기","steps":["작으면 종량제 봉투로"]}],"tip":"크면 대형폐기물이야."},{"name":"부드러운 과일 껍질","aliases":["포도껍질","감껍질","키위껍질","딸기꼭지","오렌지껍질","레몬껍질","망고껍질","멜론껍질","자몽껍질","복숭아껍질","토마토","체리","블루베리","포도","키위","멜론","오렌지"],"parts":[{"name":"껍질","bin":"음식물","steps":["물기 빼고 음식물로"]}],"tip":""},{"name":"파인애플·코코넛 껍질","aliases":["파인애플껍질","파인애플 껍질","코코넛껍질","두리안껍질"],"parts":[{"name":"껍질","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"딱딱하고 질겨서 음식물 처리가 안 돼."},{"name":"채소 껍질","aliases":["감자껍질","고구마껍질","당근껍질","무껍질","오이꼭지"],"parts":[{"name":"껍질","bin":"음식물","steps":["물기 빼고 음식물로"]}],"tip":""},{"name":"밤 껍질","aliases":["밤껍질","밤 껍질","도토리껍질"],"parts":[{"name":"껍질","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"찻잎·곡물차 찌꺼기","aliases":["찻잎","녹차잎","보리차","옥수수차 찌꺼기"],"parts":[{"name":"찌꺼기","bin":"일반쓰레기","steps":["물기 빼서 종량제 봉투로"]}],"tip":"구에 따라 음식물로 받기도 해."},{"name":"남은 배달 음식","aliases":["떡볶이","배달 음식","피자","짜장면","짬뽕","햄버거","감자튀김","라면","족발","보쌈","탕수육","떡볶이 남은거","라면 남은거","짜장면 남은거","피자 남은거","치킨 살"],"parts":[{"name":"음식","bin":"음식물","steps":["국물·소스 따라내고 건더기만"]},{"name":"용기","bin":"플라스틱","steps":["헹궈서 배출"]}],"tip":""},{"name":"잎채소","aliases":["배추","배춧잎","상추","시금치","깻잎"],"parts":[{"name":"채소","bin":"음식물","steps":["물기 빼고 음식물로"]}],"tip":""},{"name":"고춧대 같은 줄기","aliases":["고춧대","고추대","깨대","마늘대"],"parts":[{"name":"줄기","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]}],"tip":""},{"name":"버섯","aliases":["버섯밑동","버섯"],"parts":[{"name":"버섯","bin":"음식물","steps":["음식물로"]}],"tip":""},{"name":"남은 사료","aliases":["반려동물 사료","사료","개사료","고양이사료"],"parts":[{"name":"사료","bin":"음식물","steps":["음식물로"]},{"name":"봉지","bin":"비닐","steps":["털어서 비닐류로"]}],"tip":""},{"name":"치실","aliases":["치실","치간칫솔"],"parts":[{"name":"치실","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"면봉·화장솜","aliases":["면봉","화장솜","솜","퍼프"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"반창고·파스","aliases":["반창고","밴드","붕대","파스"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"머리카락·먼지","aliases":["머리카락","손톱","먼지","청소기 먼지"],"parts":[{"name":"먼지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"낙엽·나뭇가지","aliases":["낙엽","나뭇가지","잔디"],"parts":[{"name":"낙엽","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"양이 많으면 구청에서 낙엽을 따로 모으기도 해."},{"name":"흙","aliases":["흙","화분흙","모래"],"parts":[{"name":"흙","bin":"일반쓰레기","steps":["조금이면 종량제 봉투, 많으면 불연성 마대로"]}],"tip":""},{"name":"고무호스","aliases":["고무호스","호스"],"parts":[{"name":"호스","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]}],"tip":""},{"name":"슬리퍼","aliases":["슬리퍼","실내화","쪼리"],"parts":[{"name":"슬리퍼","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"멀쩡한 운동화는 의류수거함에 넣어도 돼."},{"name":"걸레·수건","aliases":["걸레","행주","수건","헌 수건"],"parts":[{"name":"천","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"깨끗한 수건은 동물보호소에서 받기도 해."},{"name":"속옷·양말","aliases":["속옷","양말","스타킹"],"parts":[{"name":"천","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"의류수거함에서 안 받는 곳이 많아."},{"name":"실리콘 제품","aliases":["실리콘 주걱","실리콘","실리콘 매트"],"parts":[{"name":"실리콘","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"끈·리본","aliases":["노끈","끈","리본","포장끈","케이블타이"],"parts":[{"name":"끈","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"마우스패드","aliases":["마우스패드","장패드"],"parts":[{"name":"패드","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"우비·돗자리","aliases":["우비","비옷","돗자리"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["접어서 종량제 봉투로"]}],"tip":""},{"name":"이불·베개·쿠션","aliases":["베개","쿠션","방석","이불","담요","솜이불"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투에 들어가면 종량제로"]},{"name":"큰 것","bin":"대형·특수","steps":["안 들어가면 대형폐기물 신고"]}],"tip":"이불·베개는 의류수거함에서 안 받는 곳이 많아."},{"name":"매트","aliases":["요가매트","매트","놀이매트"],"parts":[{"name":"매트","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]},{"name":"큰 매트","bin":"대형·특수","steps":["자르기 힘들면 대형폐기물 신고"]}],"tip":""},{"name":"공·헬멧","aliases":["헬멧","축구공","농구공","공","배드민턴공","테니스공"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"미술용품","aliases":["물감","크레파스","크레용","파스텔","점토","슬라임","클레이"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"물감은 하수구에 짜 버리지 마."},{"name":"붓","aliases":["붓"],"parts":[{"name":"붓","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"비누","aliases":["비누","고체비누"],"parts":[{"name":"비누","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"라이터","aliases":["라이터","일회용 라이터","성냥"],"parts":[{"name":"라이터","bin":"일반쓰레기","steps":["가스를 다 쓰고 종량제 봉투로"]}],"tip":"가스가 남아 있으면 불이 날 수 있어."},{"name":"양초","aliases":["양초","촛불","향초"],"parts":[{"name":"초","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"유리 컵","bin":"일반쓰레기","steps":["향초 유리는 내열이라 일반쓰레기"]}],"tip":""},{"name":"핫팩","aliases":["핫팩","손난로","붙이는 핫팩"],"parts":[{"name":"핫팩","bin":"일반쓰레기","steps":["다 식은 뒤 종량제 봉투로"]}],"tip":"뜯어서 내용물을 쏟지 마."},{"name":"모기향","aliases":["모기향","모기약","전자모기향 매트"],"parts":[{"name":"모기향","bin":"일반쓰레기","steps":["완전히 꺼진 뒤 종량제 봉투로"]}],"tip":""},{"name":"귀마개","aliases":["귀마개","이어플러그"],"parts":[{"name":"귀마개","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"위생용품","aliases":["탐폰","팬티라이너","요실금패드"],"parts":[{"name":"통째로","bin":"일반쓰레기","steps":["말아서 종량제 봉투로"]}],"tip":"변기에 버리면 막혀."},{"name":"가발","aliases":["가발","붙임머리"],"parts":[{"name":"가발","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"낚시용품","aliases":["낚싯줄","낚시바늘"],"parts":[{"name":"줄·바늘","bin":"일반쓰레기","steps":["바늘은 감싸서 종량제 봉투로"]}],"tip":""},{"name":"도마·컵받침","aliases":["컵받침","코스터","나무 도마","도마"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"나무","aliases":["나무","목재","합판","나무상자"],"parts":[{"name":"나무","bin":"일반쓰레기","steps":["잘게 잘라 종량제 봉투로"]},{"name":"큰 목재","bin":"대형·특수","steps":["크면 대형폐기물 신고"]}],"tip":""},{"name":"지갑·가죽 소품","aliases":["가죽","가죽가방","가죽 지갑","지갑"],"parts":[{"name":"물건","bin":"대형·특수","steps":["멀쩡하면 의류수거함에"]},{"name":"망가진 것","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"소화기","aliases":["소화기"],"parts":[{"name":"소화기","bin":"대형·특수","steps":["구청·주민센터에 수거 문의","판매처나 소화기 수거업체에 맡기기"]}],"tip":"압력이 남아 있어서 종량제 봉투에 넣으면 위험해."},{"name":"전기장판","aliases":["전기장판","전기요","온수매트"],"parts":[{"name":"장판","bin":"대형·특수","steps":["소형가전 무상수거나 대형폐기물 신고"]}],"tip":"온수매트 물은 빼고 버려."},{"name":"체온계","aliases":["체온계","수은 체온계","온도계"],"parts":[{"name":"수은 체온계","bin":"대형·특수","steps":["보건소·주민센터에 문의"]},{"name":"전자 체온계","bin":"대형·특수","steps":["건전지 빼고 소형가전 수거함에"]}],"tip":"수은이 새면 맨손으로 만지지 마."},{"name":"전자담배","aliases":["전자담배","액상 카트리지","아이코스"],"parts":[{"name":"기기","bin":"대형·특수","steps":["배터리가 있어서 소형가전 수거함에"]},{"name":"다 쓴 스틱·팟","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"멀티탭·어댑터","aliases":["멀티탭","콘센트","어댑터","연장선"],"parts":[{"name":"멀티탭","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":""},{"name":"컴퓨터·모니터","aliases":["컴퓨터","모니터","본체","데스크탑","프린터","복합기"],"parts":[{"name":"기기","bin":"대형·특수","steps":["저장장치 초기화하기","폐가전 무상방문수거 신청"]}],"tip":""},{"name":"카메라","aliases":["카메라","디카","캠코더","블랙박스"],"parts":[{"name":"기기","bin":"대형·특수","steps":["메모리카드 빼고 소형가전 수거함에"]}],"tip":""},{"name":"작은 전기 제품","aliases":["전동칫솔","전기면도기","고데기","헤어드라이어","다리미"],"parts":[{"name":"기기","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":""},{"name":"주방·생활 가전","aliases":["에어프라이어","전기포트","커피머신","토스터","가습기","공기청정기","정수기","로봇청소기"],"parts":[{"name":"가전","bin":"대형·특수","steps":["폐가전 무상방문수거 신청(1599-0903)"]}],"tip":"작은 건 5개 이상 모으면 무상수거 돼."},{"name":"시계","aliases":["손목시계","벽시계","탁상시계","시계","스마트워치"],"parts":[{"name":"건전지","bin":"대형·특수","steps":["빼서 폐건전지 수거함에"]},{"name":"시계","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":""},{"name":"단추형 전지","aliases":["단추전지","수은전지","코인전지","시계 배터리"],"parts":[{"name":"전지","bin":"대형·특수","steps":["테이프 붙여서 폐건전지 수거함에"]}],"tip":"아이가 삼키면 위험하니 바로 치워."},{"name":"폐식용유","aliases":["폐식용유","식용유","튀김기름","기름"],"parts":[{"name":"기름","bin":"대형·특수","steps":["식혀서 병에 담기","아파트·주민센터 폐식용유 수거함에"]}],"tip":"조금이면 휴지에 흡수시켜 종량제 봉투로. 하수구엔 절대 안 돼."},{"name":"잉크 카트리지","aliases":["잉크 카트리지","잉크","토너","프린터 잉크"],"parts":[{"name":"카트리지","bin":"대형·특수","steps":["판매처·주민센터 회수함에"]}],"tip":"없으면 비닐에 싸서 종량제 봉투로."},{"name":"타이어","aliases":["타이어","자동차 타이어"],"parts":[{"name":"타이어","bin":"대형·특수","steps":["타이어 가게에 맡기거나 대형폐기물 신고"]}],"tip":""},{"name":"캐리어","aliases":["캐리어","여행가방","트렁크"],"parts":[{"name":"캐리어","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"카펫·러그","aliases":["카펫","러그","카페트"],"parts":[{"name":"카펫","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":"작은 건 잘라서 종량제 봉투에 넣어도 돼."},{"name":"캠핑용품","aliases":["텐트","캠핑의자","캠핑 테이블"],"parts":[{"name":"물건","bin":"대형·특수","steps":["종량제 봉투에 안 들어가면 대형폐기물 신고"]},{"name":"폴대","bin":"캔·고철","steps":["분리되면 고철로"]}],"tip":""},{"name":"악기","aliases":["피아노","전자피아노","기타","악기"],"parts":[{"name":"악기","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":"전자피아노는 폐가전 무상수거도 돼."},{"name":"문짝·창틀·블라인드","aliases":["문짝","창틀","블라인드","커튼봉"],"parts":[{"name":"물건","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"건축 자재","aliases":["변기","세면대","타일","벽돌","시멘트"],"parts":[{"name":"자재","bin":"대형·특수","steps":["조금이면 불연성 마대, 많으면 구청에 공사폐기물 문의"]}],"tip":""},{"name":"유아용품","aliases":["보행기","카시트","아기띠"],"parts":[{"name":"물건","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":"멀쩡하면 나눔하는 게 제일 좋아."},{"name":"운동기구","aliases":["운동기구","아령","덤벨","러닝머신","실내자전거"],"parts":[{"name":"아령","bin":"캔·고철","steps":["쇠면 고철로"]},{"name":"큰 기구","bin":"대형·특수","steps":["러닝머신은 폐가전 무상수거, 나머진 대형폐기물"]}],"tip":""},{"name":"얼음","aliases":["얼음","남은 얼음","얼음물"],"parts":[{"name":"얼음","bin":"싱크대","steps":["싱크대에 녹여 버리기"]}],"tip":""},{"name":"양념·기름 병","aliases":["양념병","참기름병","참기름 병","들기름병","간장병","식초병","기름병","올리브유병"],"parts":[{"name":"유리병","bin":"유리병","steps":["헹궈서 유리병으로"]},{"name":"플라스틱 병","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"남은 기름","bin":"대형·특수","steps":["기름병이면 남은 기름은 폐식용유 수거함에"]}],"tip":"기름병은 세제로 한 번 닦아야 재활용이 잘 돼."},{"name":"자동차·오토바이","aliases":["자동차","폐차","오토바이"],"parts":[{"name":"차","bin":"대형·특수","steps":["폐차장에 연락하면 말소 등록까지 처리해 줘"]}],"tip":"종량제나 대형폐기물로는 못 버려."},{"name":"플라스틱 우유 용기","aliases":["바나나우유","바나나우유 통","단지우유","커피우유 통","플라스틱 우유병"],"parts":[{"name":"용기","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"은박 뚜껑","bin":"일반쓰레기","steps":["떼서 종량제 봉투로"]}],"tip":""},{"name":"컵홀더","aliases":["컵홀더","컵 홀더","슬리브"],"parts":[{"name":"홀더","bin":"종이","steps":["종이류로"]}],"tip":""},{"name":"컵 뚜껑","aliases":["컵뚜껑","컵 뚜껑","커피 뚜껑","음료 뚜껑"],"parts":[{"name":"뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":"종이 뚜껑이면 종이류야."},{"name":"반려동물 간식","aliases":["강아지 간식","고양이 간식","반려동물 간식","츄르","개껌"],"parts":[{"name":"남은 간식","bin":"음식물","steps":["음식물로"]},{"name":"포장","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":"딱딱한 개껌·뼈 간식은 일반쓰레기야."},{"name":"약 포장재","aliases":["약 포장지","알약 포장","알약 껍데기","약 껍데기","PTP","약 포장"],"parts":[{"name":"알약 판(은박+플라스틱)","bin":"일반쓰레기","steps":["남은 약이 있으면 판째 폐의약품 수거함에","빈 판은 종량제 봉투로"]},{"name":"종이 약상자","bin":"종이","steps":["설명서와 함께 종이류로"]},{"name":"비닐 약봉지","bin":"비닐","steps":["깨끗하면 비닐류로"]}],"tip":"알약 포장재는 재질이 섞여서 재활용이 안 돼."},{"name":"어항","aliases":["어항","수족관"],"parts":[{"name":"유리","bin":"일반쓰레기","steps":["작으면 신문지로 싸서 불연성 마대에"]},{"name":"큰 어항","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"우유","aliases":["우유","상한 우유","남은 우유","우유 남은거","유통기한 지난 우유"],"parts":[{"name":"남은 우유","bin":"싱크대","steps":["조금이면 물을 틀어 놓고 싱크대에 흘려보내기","많으면 신문지·휴지에 적셔 종량제 봉투로"]},{"name":"우유팩","bin":"종이팩","steps":["헹궈서 펼쳐 말리기","종이팩 수거함에"]}],"tip":"우유는 물을 많이 오염시켜서 한꺼번에 많이 붓지 마."},{"name":"남은 음료수","aliases":["콜라","사이다","탄산음료","음료수","주스","에이드","이온음료"],"parts":[{"name":"음료","bin":"싱크대","steps":["남은 건 싱크대에 버리기"]},{"name":"페트병","bin":"플라스틱","steps":["헹궈서 찌그러뜨리기, 라벨은 비닐로"]},{"name":"캔","bin":"캔·고철","steps":["헹궈서 찌그러뜨리기"]}],"tip":"끈적이는 게 남으면 벌레가 꼬이니까 꼭 헹궈."},{"name":"남은 커피","aliases":["커피","아메리카노","라떼","남은 커피","식은 커피"],"parts":[{"name":"커피","bin":"싱크대","steps":["얼음·커피는 싱크대에 버리기"]},{"name":"컵·뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"빨대","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"컵홀더","bin":"종이","steps":["종이류로"]}],"tip":"종이컵이면 헹궈서 종이팩·종이컵 수거함에 넣어."},{"name":"남은 술","aliases":["술","남은 술","맥주","소주","막걸리","와인 남은거"],"parts":[{"name":"술","bin":"싱크대","steps":["물 틀어 놓고 싱크대에 버리기"]},{"name":"유리병","bin":"유리병","steps":["헹궈서 유리병으로"]},{"name":"캔","bin":"캔·고철","steps":["헹궈서 고철로"]},{"name":"페트병","bin":"플라스틱","steps":["막걸리·맥주 페트는 플라스틱으로"]}],"tip":"소주·맥주 유리병은 마트에 가져가면 보증금을 돌려줘."},{"name":"국물","aliases":["라면 국물","국물","찌개 국물","국 국물","짬뽕 국물","마라탕 국물"],"parts":[{"name":"건더기","bin":"음식물","steps":["체에 걸러서 음식물로"]},{"name":"국물","bin":"싱크대","steps":["기름은 휴지로 먼저 닦고 물과 함께 흘려보내기"]}],"tip":"기름을 그대로 부으면 배수관이 막혀."},{"name":"치킨무·피클","aliases":["치킨무","치킨 무","무 국물","피클","단무지"],"parts":[{"name":"무","bin":"음식물","steps":["건져서 음식물로"]},{"name":"국물","bin":"싱크대","steps":["싱크대에 버리기"]},{"name":"용기","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"비닐 뚜껑","bin":"비닐","steps":["떼서 비닐류로"]}],"tip":""},{"name":"요거트·푸딩 컵","aliases":["요거트","요구르트 컵","떠먹는 요거트","푸딩","요플레"],"parts":[{"name":"남은 요거트","bin":"음식물","steps":["음식물로"]},{"name":"컵","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"은박 뚜껑","bin":"일반쓰레기","steps":["떼서 종량제 봉투로"]}],"tip":""},{"name":"락스·세정제 통","aliases":["락스통","빈 락스","표백제통","세정제통","배수구 세정제"],"parts":[{"name":"통","bin":"플라스틱","steps":["물로 여러 번 헹구기","뚜껑 닫아서 플라스틱으로"]}],"tip":"남은 락스는 물에 많이 섞어서 조금씩 흘려보내. 다른 세제랑 섞으면 독한 가스가 나와."},{"name":"세제 통","aliases":["섬유유연제","섬유유연제통","세탁세제통","주방세제통"],"parts":[{"name":"통","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"펌프","bin":"일반쓰레기","steps":["분리해서 종량제 봉투로"]}],"tip":""},{"name":"약통","aliases":["약통","빈 약통","알약통","처방약 통"],"parts":[{"name":"남은 약","bin":"대형·특수","steps":["약은 빼서 약국·보건소 수거함에"]},{"name":"빈 통","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"라벨·이름 스티커","bin":"일반쓰레기","steps":["이름 적힌 건 떼서 종량제 봉투로"]}],"tip":""},{"name":"약 봉투","aliases":["약봉지","약 봉투","처방전 봉투"],"parts":[{"name":"봉투","bin":"종이","steps":["이름 지우고 종이류로"]},{"name":"남은 약","bin":"대형·특수","steps":["약국·보건소 수거함에"]}],"tip":"비닐 약봉지는 비닐류야."},{"name":"주사기·바늘","aliases":["주사기","주삿바늘","인슐린 주사","혈당 바늘","란셋"],"parts":[{"name":"바늘","bin":"대형·특수","steps":["뚜껑 씌워 페트병 같은 단단한 통에 모으기","약국·보건소에 가져가기"]}],"tip":"그냥 버리면 수거하는 사람이 찔릴 수 있어."},{"name":"안약·연고","aliases":["안약","연고","물약병","시럽병"],"parts":[{"name":"약","bin":"대형·특수","steps":["남은 채로 약국·보건소 수거함에"]}],"tip":""},{"name":"생활 의료기기","aliases":["혈압계","체중계","전자체온계","보청기"],"parts":[{"name":"기기","bin":"대형·특수","steps":["건전지 빼고 소형가전 수거함에"]}],"tip":""},{"name":"깁스·보호대","aliases":["깁스","목발","보호대","무릎보호대"],"parts":[{"name":"깁스·보호대","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"쇠 목발","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"반려동물 똥","aliases":["강아지 똥","개똥","고양이 똥","반려동물 똥","똥","응가","대변","배설물","동물 똥","새똥"],"parts":[{"name":"똥","bin":"일반쓰레기","steps":["배변봉투나 비닐에 싸서 묶기","종량제 봉투로"]}],"tip":"산책할 땐 꼭 주워 와. 휴지에 싼 소량은 변기에 내려도 되지만, 비닐째 넣으면 막혀."},{"name":"배변패드","aliases":["배변패드","배변 패드","강아지 패드","펫시트"],"parts":[{"name":"패드","bin":"일반쓰레기","steps":["말아서 종량제 봉투로"]}],"tip":"물 먹은 패드는 무거워서 봉투가 터지지 않게 묶어."},{"name":"배변봉투","aliases":["배변봉투","똥봉투","산책 봉투"],"parts":[{"name":"봉투","bin":"일반쓰레기","steps":["똥을 담았으면 종량제 봉투로"]}],"tip":"안 쓴 봉투는 비닐류야."},{"name":"반려동물 털","aliases":["동물 털","강아지 털","고양이 털","털뭉치"],"parts":[{"name":"털","bin":"일반쓰레기","steps":["모아서 종량제 봉투로"]}],"tip":""},{"name":"반려동물 장난감","aliases":["반려동물 장난감","강아지 장난감","고양이 장난감","캣닢","스크래쳐"],"parts":[{"name":"장난감","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"종이 스크래쳐","bin":"종이","steps":["깨끗하면 종이류로"]}],"tip":""},{"name":"반려동물 집·캣타워","aliases":["강아지 집","켄넬","캣타워","이동장"],"parts":[{"name":"물건","bin":"대형·특수","steps":["종량제 봉투에 안 들어가면 대형폐기물 신고"]}],"tip":""},{"name":"반려동물이 죽었을 때","aliases":["반려동물 사체","강아지가 죽었어","고양이가 죽었어","죽은 강아지","죽은 고양이","동물 사체"],"parts":[{"name":"반려동물","bin":"대형·특수","steps":["동물병원에 문의하면 처리를 도와줘","동물 장례식장(동물장묘업체)을 이용할 수 있어"]}],"tip":"마음이 많이 힘들 거야. 천천히 해도 돼. 땅에 묻는 건 법으로 금지돼 있어."},{"name":"어항 물","aliases":["어항 물","수조 물"],"parts":[{"name":"물","bin":"싱크대","steps":["싱크대나 화장실에 버리기"]}],"tip":"화분에 주면 거름이 되기도 해."},{"name":"연필","aliases":["연필","몽당연필","연필깎이 찌꺼기"],"parts":[{"name":"연필","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"샤프심","aliases":["샤프심","샤프심통"],"parts":[{"name":"심","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"통","bin":"플라스틱","steps":["깨끗하면 플라스틱으로"]}],"tip":""},{"name":"수정테이프·풀","aliases":["수정테이프","화이트","수정액","딱풀","풀","물풀"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"필통","aliases":["필통"],"parts":[{"name":"천·가죽 필통","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"철 필통","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"자·각도기","aliases":["자","삼각자","각도기","컴퍼스"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["작아서 종량제 봉투로"]},{"name":"쇠 자","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"스테이플러","aliases":["스테이플러","호치키스","펀치","철 집게"],"parts":[{"name":"스테이플러","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"클리어파일","aliases":["클리어파일","L자 파일","파일철","투명 파일"],"parts":[{"name":"파일","bin":"플라스틱","steps":["종이 빼고 플라스틱으로"]}],"tip":""},{"name":"바인더","aliases":["바인더","링바인더","스프링 파일"],"parts":[{"name":"철 고리","bin":"캔·고철","steps":["떼어지면 고철로"]},{"name":"표지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"메모지","aliases":["단어장","메모지","포스트잇 묶음"],"parts":[{"name":"종이","bin":"종이","steps":["철 고리 빼고 종이류로"]}],"tip":"포스트잇은 접착제 때문에 일반쓰레기야."},{"name":"학습지 묶음","aliases":["시험지 묶음","학습지 묶음","프린트물"],"parts":[{"name":"종이","bin":"종이","steps":["스테이플러 심 빼고 종이류로"]}],"tip":""},{"name":"코팅된 종이","aliases":["상장","졸업장","임명장","코팅 종이","코팅지"],"parts":[{"name":"종이","bin":"일반쓰레기","steps":["코팅돼 있으면 종량제 봉투로"]}],"tip":"코팅 안 된 종이는 종이류야."},{"name":"사진첩·졸업앨범","aliases":["졸업앨범","앨범 사진첩","사진첩"],"parts":[{"name":"앨범","bin":"일반쓰레기","steps":["코팅 사진이 많아서 종량제 봉투로"]}],"tip":"개인정보가 있으니까 찢어서 버려."},{"name":"교복","aliases":["교복","체육복"],"parts":[{"name":"옷","bin":"대형·특수","steps":["깨끗하면 의류수거함에"]}],"tip":"학교나 지역에서 교복 나눔을 하기도 해."},{"name":"포토카드","aliases":["포토카드","포카","아이돌 포카","폴라로이드 사진"],"parts":[{"name":"카드","bin":"일반쓰레기","steps":["코팅돼 있어서 종량제 봉투로"]},{"name":"투명 슬리브","bin":"비닐","steps":["비닐류로"]}],"tip":""},{"name":"아이돌 앨범","aliases":["앨범","아이돌 앨범","CD 앨범","음반"],"parts":[{"name":"포장 비닐","bin":"비닐","steps":["비닐류로"]},{"name":"종이 상자·화보","bin":"종이","steps":["코팅 적으면 종이류, 반짝이면 일반쓰레기"]},{"name":"CD","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"CD 케이스","bin":"플라스틱","steps":["플라스틱으로"]}],"tip":""},{"name":"굿즈(아크릴·키링)","aliases":["아크릴 스탠드","아크릴 키링","키링","굿즈","뱃지","배지"],"parts":[{"name":"굿즈","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"아크릴은 플라스틱이지만 작아서 선별이 안 돼."},{"name":"응원봉","aliases":["응원봉","야광봉"],"parts":[{"name":"건전지","bin":"대형·특수","steps":["빼서 폐건전지 수거함에"]},{"name":"응원봉","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":"야광봉(케미라이트)은 일반쓰레기야."},{"name":"다이어리","aliases":["다이어리","플래너","일기장"],"parts":[{"name":"속지","bin":"종이","steps":["찢어서 종이류로"]},{"name":"표지·고리","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"테이프 심","aliases":["마스킹테이프 심","테이프 심"],"parts":[{"name":"심","bin":"종이","steps":["종이 심이면 종이류로"]}],"tip":""},{"name":"보드게임 부속","aliases":["보드게임 말","주사위","카드 슬리브"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"바느질 용품","aliases":["뜨개실","털실","실","바늘","단추","옷핀"],"parts":[{"name":"실·단추","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"바늘·옷핀","bin":"캔·고철","steps":["종이에 감싸서 고철로"]}],"tip":""},{"name":"머리 소품","aliases":["실핀","헤어핀","머리핀","머리끈","곱창밴드","빗","헤어롤"],"parts":[{"name":"핀","bin":"캔·고철","steps":["쇠면 고철로"]},{"name":"끈·빗","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"마스크팩","aliases":["마스크팩","시트팩"],"parts":[{"name":"시트","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"파우치","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":"에센스가 남은 파우치는 일반쓰레기야."},{"name":"화장품 샘플","aliases":["화장품 샘플","샘플 파우치","샘플"],"parts":[{"name":"샘플","bin":"일반쓰레기","steps":["내용물이 남아 있으면 종량제 봉투로"]}],"tip":""},{"name":"껌","aliases":["껌","씹던 껌","껌종이"],"parts":[{"name":"껌","bin":"일반쓰레기","steps":["종이에 싸서 종량제 봉투로"]}],"tip":"바닥에 뱉으면 떼기 정말 힘들어."},{"name":"사탕·젤리 포장","aliases":["사탕 껍질","사탕 비닐","젤리 봉지","초콜릿 포장","캔디 포장"],"parts":[{"name":"포장","bin":"비닐","steps":["모아서 비닐류로"]},{"name":"은박","bin":"일반쓰레기","steps":["은박 포장은 종량제 봉투로"]}],"tip":""},{"name":"담뱃갑","aliases":["담뱃갑","담배갑","담배 포장"],"parts":[{"name":"종이갑","bin":"종이","steps":["겉 비닐 벗기고 종이류로"]},{"name":"비닐","bin":"비닐","steps":["비닐류로"]},{"name":"안쪽 은박지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"삼각김밥 포장","aliases":["삼각김밥","삼각김밥 비닐","김밥 포장"],"parts":[{"name":"비닐","bin":"비닐","steps":["밥알 털고 비닐류로"]}],"tip":""},{"name":"편의점 도시락","aliases":["편의점 도시락","도시락 용기","컵밥","컵밥 용기"],"parts":[{"name":"남은 음식","bin":"음식물","steps":["음식물로"]},{"name":"용기·뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":"양념이 안 지워지면 일반쓰레기야."},{"name":"햄버거 포장지","aliases":["햄버거 포장지","햄버거 종이","감자튀김 종이","샌드위치 포장"],"parts":[{"name":"포장지","bin":"일반쓰레기","steps":["기름 묻은 종이는 종량제 봉투로"]}],"tip":"깨끗한 종이 봉투는 종이류야."},{"name":"케이크","aliases":["케이크","케이크 상자","생일 케이크"],"parts":[{"name":"남은 케이크","bin":"음식물","steps":["음식물로"]},{"name":"상자","bin":"종이","steps":["종이류로"]},{"name":"받침·플라스틱 칼","bin":"일반쓰레기","steps":["크림 묻은 건 종량제 봉투로"]},{"name":"투명 커버","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":"초는 일반쓰레기야."},{"name":"꽃다발","aliases":["꽃다발","꽃","생화","시든 꽃"],"parts":[{"name":"꽃·줄기","bin":"일반쓰레기","steps":["종량제 봉투로"]},{"name":"포장 비닐","bin":"비닐","steps":["비닐류로"]},{"name":"포장 종이","bin":"종이","steps":["코팅 없으면 종이류로"]},{"name":"리본","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"꽃은 음식물이 아니야."},{"name":"크리스마스 트리","aliases":["크리스마스 트리","트리","트리 장식"],"parts":[{"name":"트리","bin":"대형·특수","steps":["크면 대형폐기물 신고"]},{"name":"전구 장식","bin":"대형·특수","steps":["소형가전 수거함에"]},{"name":"오너먼트","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"종이 아이스박스","aliases":["택배 아이스박스 종이","종이 아이스박스"],"parts":[{"name":"상자","bin":"종이","steps":["테이프 떼고 종이류로"]}],"tip":"안쪽에 은박 코팅이 있으면 일반쓰레기야."},{"name":"계란","aliases":["달걀","계란","상한 계란"],"parts":[{"name":"내용물","bin":"음식물","steps":["음식물로"]},{"name":"껍데기","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"두부","aliases":["두부","두부 남은거"],"parts":[{"name":"두부","bin":"음식물","steps":["음식물로"]},{"name":"용기","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]}],"tip":""},{"name":"남은 밥","aliases":["밥솥 밥","찬밥","쉰밥"],"parts":[{"name":"밥","bin":"음식물","steps":["음식물로"]}],"tip":""},{"name":"옥수수","aliases":["옥수수"],"parts":[{"name":"알갱이","bin":"음식물","steps":["음식물로"]},{"name":"껍질·대","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"새우 껍질","aliases":["새우껍질","새우 껍질","새우 머리","랍스터 껍질","가재 껍질"],"parts":[{"name":"껍질","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"구에 따라 음식물로 받는 곳도 있으니 확인해 봐."},{"name":"치즈·햄","aliases":["치즈","햄","소시지","베이컨"],"parts":[{"name":"음식","bin":"음식물","steps":["음식물로"]},{"name":"포장","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":""},{"name":"남은 과자","aliases":["과자","과자 부스러기 남은거","라면 사리"],"parts":[{"name":"과자","bin":"음식물","steps":["음식물로"]},{"name":"봉지","bin":"비닐","steps":["털어서 비닐류로"]}],"tip":""},{"name":"국자·뒤집개","aliases":["국자","뒤집개","집게","주걱","스텐 국자"],"parts":[{"name":"스테인리스","bin":"캔·고철","steps":["고철로"]},{"name":"실리콘·나무","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"채반·거름망","aliases":["채반","소쿠리","거름망","체"],"parts":[{"name":"스테인리스","bin":"캔·고철","steps":["고철로"]},{"name":"플라스틱","bin":"플라스틱","steps":["플라스틱으로"]}],"tip":""},{"name":"밥솥 내솥","aliases":["밥솥 내솥","내솥"],"parts":[{"name":"내솥","bin":"캔·고철","steps":["고철로"]}],"tip":"밥솥 본체는 소형가전이야."},{"name":"보온도시락","aliases":["보온도시락","스텐 도시락"],"parts":[{"name":"스텐 통","bin":"캔·고철","steps":["고철로"]},{"name":"플라스틱 뚜껑","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"고무 패킹","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"플라스틱 젓가락","aliases":["플라스틱 젓가락","일회용 젓가락"],"parts":[{"name":"젓가락","bin":"일반쓰레기","steps":["작아서 종량제 봉투로"]}],"tip":""},{"name":"음식물 묻은 휴지","aliases":["음식물 묻은 휴지","기름 닦은 휴지"],"parts":[{"name":"휴지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"휴지는 음식물이 아니야."},{"name":"커피 필터·드립백","aliases":["커피 필터","드립백","원두 필터"],"parts":[{"name":"필터·찌꺼기","bin":"일반쓰레기","steps":["물기 빼서 종량제 봉투로"]},{"name":"포장","bin":"비닐","steps":["비닐류로"]}],"tip":""},{"name":"한약·즙 파우치","aliases":["한약 파우치","한약 봉지","즙 파우치","건강즙"],"parts":[{"name":"파우치","bin":"비닐","steps":["헹궈서 비닐류로"]}],"tip":""},{"name":"막걸리·맥주 페트병","aliases":["막걸리병","막걸리 페트","맥주 페트","맥주 페트병"],"parts":[{"name":"병","bin":"플라스틱","steps":["헹궈서 찌그러뜨리기"]},{"name":"라벨","bin":"비닐","steps":["비닐류로"]}],"tip":"유색 페트라 투명 페트랑 따로 모아."},{"name":"페트병 라벨","aliases":["생수 라벨","페트병 라벨","라벨"],"parts":[{"name":"라벨","bin":"비닐","steps":["비닐류로"]}],"tip":""},{"name":"젖병","aliases":["젖병","젖꼭지","이유식 용기","빨대컵"],"parts":[{"name":"젖병","bin":"플라스틱","steps":["헹궈서 플라스틱으로"]},{"name":"실리콘 젖꼭지","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":"유리 젖병은 신문지에 싸서 일반쓰레기야."},{"name":"빨래망·집게","aliases":["빨래망","세탁망","빨래집게"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"빨래건조대","aliases":["빨래건조대","건조대"],"parts":[{"name":"건조대","bin":"캔·고철","steps":["쇠면 고철로"]},{"name":"큰 것","bin":"대형·특수","steps":["크면 대형폐기물 신고"]}],"tip":""},{"name":"다리미판","aliases":["다리미판"],"parts":[{"name":"판","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"청소도구","aliases":["빗자루","대걸레","밀대","쓰레받기"],"parts":[{"name":"쓰레받기","bin":"플라스틱","steps":["플라스틱으로"]},{"name":"빗자루·걸레","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]}],"tip":""},{"name":"휴지통","aliases":["휴지통","쓰레기통"],"parts":[{"name":"통","bin":"플라스틱","steps":["깨끗이 씻어서 플라스틱으로"]},{"name":"철 휴지통","bin":"캔·고철","steps":["고철로"]}],"tip":""},{"name":"필터·먼지봉투","aliases":["공기청정기 필터","정수기 필터","에어컨 필터","청소기 먼지봉투"],"parts":[{"name":"필터","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""},{"name":"벽지·장판","aliases":["벽지","도배지","장판","시트지"],"parts":[{"name":"조금","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]},{"name":"많이","bin":"대형·특수","steps":["구청에 생활 공사폐기물로 문의"]}],"tip":""},{"name":"사다리·쇠파이프","aliases":["사다리","쇠파이프","철근"],"parts":[{"name":"쇠","bin":"캔·고철","steps":["고철로"]},{"name":"큰 것","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"유리창","aliases":["유리창","창문","깨진 창문","창문 유리","통유리"],"parts":[{"name":"유리","bin":"대형·특수","steps":["대형폐기물 신고"]}],"tip":""},{"name":"가구","aliases":["화장대","신발장","책장","식탁","장롱","수납장","TV장"],"parts":[{"name":"가구","bin":"대형·특수","steps":["구청 홈페이지·앱에서 대형폐기물 신고","스티커 붙여서 내놓기"]}],"tip":""},{"name":"안마기","aliases":["안마의자","마사지기","족욕기"],"parts":[{"name":"기기","bin":"대형·특수","steps":["폐가전 무상방문수거(1599-0903)나 대형폐기물 신고"]}],"tip":""},{"name":"주방·계절 가전","aliases":["가스레인지","인덕션","오븐","식기세척기","건조기","전기히터","온풍기","제습기"],"parts":[{"name":"가전","bin":"대형·특수","steps":["폐가전 무상방문수거 신청(1599-0903)"]}],"tip":""},{"name":"작은 전자제품","aliases":["리모컨","손전등","휴대용 선풍기","충전식 손난로","전기 모기채","전자사전"],"parts":[{"name":"건전지","bin":"대형·특수","steps":["빼서 폐건전지 수거함에"]},{"name":"기기","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":""},{"name":"무선 이어폰·헤드셋","aliases":["무선이어폰","에어팟","버즈","헤드셋","헤드폰"],"parts":[{"name":"기기","bin":"대형·특수","steps":["배터리가 있어서 소형가전 수거함에"]}],"tip":"절대 종량제 봉투에 넣지 마. 불이 날 수 있어."},{"name":"USB·메모리카드","aliases":["USB","메모리카드","SD카드","외장하드"],"parts":[{"name":"기기","bin":"대형·특수","steps":["데이터 지우고 소형가전 수거함에"]}],"tip":""},{"name":"전동공구","aliases":["전동드릴","전동공구","글루건"],"parts":[{"name":"배터리","bin":"대형·특수","steps":["빼서 폐건전지 수거함에"]},{"name":"공구","bin":"대형·특수","steps":["소형가전 수거함에"]}],"tip":""},{"name":"줄넘기·훌라후프","aliases":["줄넘기","훌라후프","탱탱볼"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]}],"tip":""},{"name":"스케이트보드·인라인","aliases":["스케이트보드","인라인","인라인 스케이트","롤러스케이트"],"parts":[{"name":"물건","bin":"대형·특수","steps":["봉투에 안 들어가면 대형폐기물 신고"]}],"tip":""},{"name":"배트·라켓","aliases":["야구배트","배트","골프채","라켓","배드민턴 라켓","테니스 라켓"],"parts":[{"name":"쇠","bin":"캔·고철","steps":["알루미늄·쇠면 고철로"]},{"name":"나무·카본","bin":"일반쓰레기","steps":["잘라서 종량제 봉투로"]}],"tip":""},{"name":"물놀이 용품","aliases":["수영복","물안경","수모","튜브","물놀이 튜브","비치볼"],"parts":[{"name":"물건","bin":"일반쓰레기","steps":["튜브는 바람 빼고 종량제 봉투로"]}],"tip":""},{"name":"모자·패딩·구두","aliases":["모자","목도리","장갑","패딩","겨울 코트","구두","벨트"],"parts":[{"name":"옷","bin":"대형·특수","steps":["깨끗하면 의류수거함에"]}],"tip":"찢어지거나 젖은 건 일반쓰레기야."},{"name":"비료 포대","aliases":["비료 포대","퇴비 포대","흙 포대"],"parts":[{"name":"포대","bin":"비닐","steps":["털어서 비닐류로"]}],"tip":""},{"name":"우편물·고지서","aliases":["고지서","우편물","택배 안내문","청구서"],"parts":[{"name":"종이","bin":"종이","steps":["이름·주소 지우고 종이류로"]},{"name":"비닐 창","bin":"비닐","steps":["떼서 비닐류로"]}],"tip":""},{"name":"티켓·쿠폰","aliases":["상품권","쿠폰","종이 티켓","영화표","기차표"],"parts":[{"name":"종이","bin":"종이","steps":["일반 종이면 종이류로"]}],"tip":"영수증처럼 반질반질한 감열지 표는 일반쓰레기야."},{"name":"과일 완충재","aliases":["포장 박스 스티로폼","과일 포장 망","과일 완충재","스티로폼 망"],"parts":[{"name":"완충재","bin":"일반쓰레기","steps":["종량제 봉투로"]}],"tip":""}].map(x=>({n:x.aliases,item:x.name,parts:x.parts,tip:x.tip||""}));
+/* ================================================================
+   꼬마 AI — 분리배출 판단기 (화면 없이도 돌아가는 부분)
+   빌드할 때 data/items.json 이 DB 로 들어오고, 이 파일이 그 뒤에 붙어.
+   테스트(tests/)도 이 파일을 그대로 불러서 써.
+   ================================================================ */
+const BINS={"플라스틱":"--plastic","비닐":"--vinyl","종이":"--paper","종이팩":"--pack","캔·고철":"--can","유리병":"--glass","음식물":"--food","일반쓰레기":"--general","대형·특수":"--special","싱크대":"--sink"};
+
+// 재질 단어로 추측 (사전에 없을 때)
+const GUESS=[
+  [/배터리|건전지|형광등|충전|전자|전기|가전|폰|약/,"대형·특수",["따로 수거하는 품목일 수 있어","주민센터나 구청에 확인하기"]],
+  [/유리|글라스/,"유리병",["병이면 비우고 헹궈서 유리병으로","컵·그릇이면 신문지에 싸서 일반쓰레기로"]],
+  [/캔|알루미늄|철|스텐|스테인리스|금속|쇠|구리/,"캔·고철",["비우고 헹구기","고철로 배출"]],
+  [/비닐|봉지|봉투|랩|필름|포장지/,"비닐",["이물질 털고 비닐류로"]],
+  [/팩/,"종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]],
+  [/종이|박스|상자|책|노트|신문|카드/,"종이",["테이프·비닐 떼기","납작하게 묶어서 종이류로"]],
+  [/플라스틱|페트|용기|통|컵|뚜껑|트레이/,"플라스틱",["내용물 비우고 헹구기","플라스틱으로"]],
+  [/껍질|껍데기|뼈|씨|가시/,"일반쓰레기",["딱딱하면 일반쓰레기","부드러운 과일 껍질이면 음식물"]],
+  [/음식|반찬|과일|채소|야채|고기|생선|국물|소스/,"음식물",["물기 빼고 음식물로"]],
+];
+
+// "치킨뼈 어디에 버려?" 같은 말꼬리는 떼고 비교 (단, "고양이"의 '이'처럼 이름 끝 글자는 안 건드림)
+const norm=s=>s.toLowerCase().replace(/[\s·.,!?~'"()\-]/g,"").replace(/껍데기|껍대기/g,"껍질").replace(/반려견|애견/g,"강아지").replace(/반려묘/g,"고양이").replace(/메론/g,"멜론").replace(/씨앗/g,"씨").replace(/막대기/g,"막대").replace(/(?:(?:을|를|은|는)?(?:어디에?|어떻게|어디로))?(?:버려요?|버리나요|버리지|버릴까|버리는법|버리는방법|분리수거|분리배출|버리기)$/,"").replace(/(?:을|를|은|는)?(?:어디에?|어떻게|어디로)$/,"");
+const grams=s=>{const g=[];if(s.length<2)return[s];for(let i=0;i<s.length-1;i++)g.push(s.slice(i,i+2));return g};
+function dice(a,b){const A=grams(a),B=grams(b).slice(),total=A.length+B.length;let m=0;A.forEach(x=>{const k=B.indexOf(x);if(k>=0){m++;B.splice(k,1)}});return 2*m/total}
+function sim(q,a){
+  let s=dice(q,a);
+  if(a.length>=2&&q.includes(a)) s=Math.max(s,.62+.38*a.length/q.length);
+  if(q.length>=2&&a.includes(q)) s=Math.max(s,.55+.35*q.length/a.length);
+  return s;
+}
+// 오타 잡기: 한글을 자음·모음으로 쪼개서 한 번 더 비교 (칫숄 → 칫솔)
+const CHO="ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",JUNG="ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",JONG=" ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ";
+const jamo=s=>[...s].map(c=>{const k=c.charCodeAt(0)-0xAC00;if(k<0||k>11171)return c;return CHO[Math.floor(k/588)]+JUNG[Math.floor(k%588/28)]+(k%28?JONG[k%28]:"")}).join("");
+// "다 쓴 건전지", "고장난 이어폰" 같은 앞말은 떼고 찾기
+// "고양이 사료 캔"처럼 끝에 담는 그릇 이름이 붙으면 그걸 보고 판단
+const CONT={"캔":["캔·고철",["비우고 헹구기","찌그러뜨려서 캔류로"]],"봉지":["비닐",["털고 헹궈서 비닐류로"]],"봉투":["비닐",["비닐이면 비닐류, 종이면 종이류로"]],"상자":["종이",["테이프 떼고 펼쳐서 종이류로"]],"박스":["종이",["테이프 떼고 펼쳐서 종이류로"]],"팩":["종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]]};
+const MATERIAL=/^(스티로폼|플라스틱|유리|종이|비닐|알루미늄|스텐|철)$/;
+// 자음·모음 기준 편집거리 (max를 넘으면 바로 포기)
+function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let prev=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){const cur=[i];let lo=i;for(let j=1;j<=b.length;j++){cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));lo=Math.min(lo,cur[j])}if(lo>max)return max+1;prev=cur}return prev[b.length]}
+// 버리는 물건이 아닌 말
+const NOT_TRASH=new Set(["사람","나","너","저","우리","엄마","아빠","부모님","할머니","할아버지","형","누나","오빠","언니","동생","친구","선생님","쌤","남친","여친","남자친구","여자친구","강아지","개","고양이","반려동물","햄스터","물고기","금붕어","토끼","학교","학원","집","숙제","시험","공부","사랑","돈","지구","하늘","시간","인생","미래","꿈","행복","스트레스","기분","월요일"]);
+// 숨은 재미 (이스터에그)
+const EGG=(()=>{
+  const holy={e:"✝️",a:"holy",t:"사탄은 어느 수거함에도 안 들어가…",d:"십자가로 퇴치 완료! 이제 진짜 버릴 물건을 알려줘."};
+  const ex={e:"💔",a:"shake",t:"전 애인은 분리수거가 안 돼",d:"추억은 마음속 종량제 봉투에, 받은 선물은 재질별로 분리배출! 선물 이름을 쳐 봐."};
+  return {
+    "사탄":holy,
+    "악마":{...holy,t:"악마는 분리수거 대상이 아니야",d:"십자가로 쫓아냈어. 버릴 물건 이름을 써 줘."},
+    "월요일":{e:"🫠",a:"melt",t:"월요일은 수거 거부 품목이야",d:"대형폐기물 스티커를 붙여도 안 가져가… 금요일까지만 버텨 보자."},
+    "지구":{e:"🌏",a:"spin",t:"지구는 버리는 게 아니라 지키는 거야",d:"분리수거 하나만 제대로 해도 지구가 조금 덜 아파. 버릴 물건을 알려줘!"},
+    "전남친":ex,"전여친":ex,"전남자친구":ex,"전여자친구":ex,"전애인":ex,
+    "숙제":{e:"📚",a:"drop",t:"숙제는 아직 버리면 안 돼…",d:"다 끝내고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!"},
+    "과제":{e:"📚",a:"drop",t:"과제는 아직 버리면 안 돼…",d:"제출하고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!"},
+    "쓰레기":{e:"🗑️",a:"bounce",t:"그래서… 어떤 쓰레기?",d:"이름만 알려주면 바로 찾아 줄게.",chips:["컵라면 용기","치킨 뼈","택배 상자"]},
+  };
+})();
+const PET=/^(강아지|개|고양이|반려동물|햄스터|물고기|금붕어|토끼)$/;
+// 뜻이 여러 개인 말은 단정하지 말고 되묻기
+const AMBIG={
+  "유리":["유리병","유리컵","깨진 유리","거울","글라스락"],
+  "껍질":["과일 껍질","채소 껍질","계란 껍데기","조개 껍데기","양파 껍질","견과류 껍질"],
+  "용기":["배달 음식 용기","컵라면 용기","플라스틱 용기","글라스락","스티로폼","알루미늄 용기"],
+  "컵":["플라스틱 컵","종이컵","유리컵","머그컵","텀블러"],
+  "배터리":["건전지","보조배터리","휴대폰","노트북","단추전지"],
+  "페트병":["투명 페트병","유색페트병","막걸리병"],
+  "종이":["A4","택배 상자","종이컵","영수증","코팅지","책"],
+  "우유병":["우유팩","바나나우유","유리병"],
+  "병":["유리병","투명 페트병","소주병","약통","향수병"],
+  "가전":["드라이기","전자레인지","냉장고","휴대폰","선풍기"],
+  "전자제품":["충전기","드라이기","전자레인지","냉장고","휴대폰"],
+  "전기제품":["충전기","드라이기","전자레인지","냉장고","휴대폰"],
+  "가스":["부탄가스","스프레이","캠핑가스","소화기"],
+  "통":["플라스틱 통","약통","샴푸통","분유캔","휴지통"],
+  "뚜껑":["페트병 뚜껑","컵 뚜껑","금속 뚜껑","플라스틱 뚜껑"],
+  "전구":["백열전구","LED 전구","형광등"],
+  "그릇":["배달 그릇","깨진 그릇","글라스락","냄비"],
+  "씨":["복숭아 씨","과일 씨","호두 껍질"],
+  "팩":["우유팩","아이스팩","마스크팩","두유팩"],
+  "카드":["신용카드","포토카드","생일카드"],
+  "스프레이":["에어로졸 스프레이","분무기","세정제 스프레이"],
+  "화분":["플라스틱 화분","도자기 화분","화분 흙","식물"],
+};
+const INDEX=DB.map(d=>({d,keys:d.n.map(n=>{const k=norm(n);return {k,j:jamo(k),w:n.split(/\s+/).map(norm)}})}));
+function rank(raw){
+  const q=norm(raw), qj=jamo(q), list=[];
+  const tol=q.length<=2?1:2;
+  for(const e of INDEX){let best=0,key="";for(const {k,j,w} of e.keys){let s=sim(q,k);
+    // 두 글자 이하는 딱 맞거나 낱말 단위로 맞을 때만 인정 ("다리"가 "다리미"로 가지 않게)
+    if(q.length<=2&&s<.95&&!w.includes(q)&&!(k.startsWith(q)&&/^(통|병|용기|팩|곽|봉지|봉투|캔|박스|상자|컵|껍질|뚜껑|케이스|심|병뚜껑)$/.test(k.slice(q.length))))s=Math.min(s,.5);
+    if(s<.72&&q.length>=2&&q[0]===k[0]&&Math.abs(q.length-k.length)<=1&&lev(qj,j,tol)<=tol)s=.72;if(s>best){best=s;key=k}}list.push({d:e.d,s:best,key})}
+  return list.sort((a,b)=>b.s-a.s);
+}
+// 앞에 붙는 꾸밈말 ("먹다 남은", "고장난" …) — 여러 개 붙어도 다 떼기
+const MODS=/^(다\s*쓴|다\s*먹은|다\s*마신|먹다\s*남은|먹고\s*남은|마시다\s*남은|먹던|마시던|쓰던|입던|안\s*쓰는|안\s*입는|못\s*입는|작아진|고장\s*난|망가진|부러진|찢어진|낡은|오래된|더러운|상한|썩은|쉰|식은|불은|퉁퉁\s*불은|곰팡이\s*핀|유통기한\s*지난|우리\s*집|헌\s+|빈\s+)\s*/;
+const TAIL=/\s*(남은\s*거|남은\s*것|버리는\s*법|버리는\s*방법)$/;
+const LEFT=/남은|먹다|마시다|상한|썩은|쉰|식은|불은|곰팡이|유통기한/;
+// "빈", "다 쓴" 이 붙으면 내용물(남은 약·음료 등) 안내는 빼기
+const EMPTY=/(^|\s)(빈|다\s*쓴|다\s*먹은|다\s*마신|비운|깨끗한)(\s|$)/;
+function emptied(d,conf,orig){
+  if(!EMPTY.test(orig))return {...d,conf};
+  const keep=d.parts.filter(p=>!/남은|내용물|고인|국물|음료|^술$|^약$|알약|물약/.test(p.name||"")&&p.bin!=="싱크대"&&p.bin!=="음식물");
+  return keep.length&&keep.length<d.parts.length?{...d,item:keep.length===1&&keep[0].name?keep[0].name:"빈 "+d.item,parts:keep,conf}:{...d,conf};
+}
+function stripMods(t){let p;do{p=t;t=t.replace(MODS,"").replace(TAIL,"").trim()}while(t!==p);return t}
+// 남은 음식 얘기면 음식물·싱크대 쪽 답에 가산점
+function pick(q,leftover){const l=rank(q);if(leftover)l.forEach(x=>{if(x.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))x.s=Math.min(1,x.s+.12)});l.sort((a,b)=>b.s-a.s);return l[0]}
+function miniAI(text){
+  const orig=text.trim(), leftover=LEFT.test(orig);
+  const raw=stripMods(orig)||orig;
+  if(!norm(raw)) return null;
+  if(EGG[norm(raw)]) return {egg:EGG[norm(raw)]};
+  if(NOT_TRASH.has(norm(raw))) return {notTrash:true,item:raw,pet:PET.test(norm(raw))};
+  if(AMBIG[norm(raw)]) return {ambig:true,item:raw,options:AMBIG[norm(raw)]};
+  const words=raw.split(/\s+/), last=words.length>1?words[words.length-1]:null;
+  const full=pick(raw,leftover);
+  if(full&&full.s>=.95) return emptied(full.d,"high",orig);
+  // 1) 물건의 일부를 물으면 그 부분만: "케이크 플라스틱 칼", "참치캔 뚜껑"
+  for(let i=words.length-1;i>=1;i--){
+    const head=words.slice(0,i).join(" "), tail=norm(words.slice(i).join(""));
+    const t=pick(head,leftover);
+    if(t&&t.s>=.7&&!t.key.includes(tail)&&!MATERIAL.test(t.key)){
+      const part=t.d.parts.find(p=>{const n=p.name&&norm(p.name);return n&&(n===tail||(tail.length>=2&&n.includes(tail))||(n.length>=2&&tail.includes(n)))});
+      if(part) return {item:`${t.d.item} · ${part.name}`,parts:[part],tip:"",conf:t.s>=.8?"high":"mid"};
+    }
+  }
+  // 2) 전체 문장으로 찾기, 3) 뒷부분 핵심어가 딱 맞으면 그걸로 ("유통기한 지난 약" → 약)
+  let top=full;
+  for(let k=1;k<words.length;k++){const t=pick(words.slice(k).join(" "),leftover);if(t&&t.s>=.95&&(!top||t.s>top.s+.05))top=t}
+  if(top&&top.s>=.56&&top.s<.8&&!(leftover&&top.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))){
+    const near=rank(raw).filter(x=>x.d!==top.d&&x.s>=top.s-.03&&x.s>=.56);
+    const binsOf=x=>[...new Set(x.d.parts.map(p=>p.bin))].sort().join();
+    if(near.length&&near.some(x=>binsOf(x)!==binsOf(top))) return {ambig:true,item:raw,options:[top,...near].slice(0,4).map(x=>x.d.item)};
+  }
+  if(top&&top.s>=.56){
+    const conf=top.s>=.8?"high":"mid";
+    if(last&&!top.key.includes(norm(last))&&!MATERIAL.test(top.key)&&CONT[last]&&top.s<.95)
+      return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
+    return emptied(top.d,conf,orig);
+  }
+  // 4) 끝말이 담는 그릇이면 그걸로 ("강아지 간식 봉지" → 비닐)
+  if(last&&CONT[last]) return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
+  for(const [re,bin,steps] of GUESS) if(re.test(raw)) return {item:raw,parts:[{name:"",bin,steps}],tip:"",conf:"guess"};
+  return null;
+}
+function suggest(text){return rank(text.trim()).filter(x=>x.s>=.4).slice(0,3).map(x=>x.d.item)}
+
+/* 화면 동작: 검색창, 결과 카드, 최근 기록, 소개 ↔ 검색 화면 전환 */
+const SEASON={winter:["택배 상자","아이스팩","핫팩","귤껍질"],spring:["플라스틱 화분","우산","택배 상자"],summer:["수박껍질","아이스크림 막대","아이스팩","모기향"],fall:["밤 껍질","낙엽","택배 상자"]};
+const COMMON=["치킨 뼈","컵라면 용기","깨진 유리컵","보조배터리","우유팩","영수증","계란 껍데기","남은 약","티백","마라탕 용기","페트병"];
+const EXAMPLES=(()=>{const m=new Date().getMonth()+1;const s=m>=11||m<=2?"winter":m<=5?"spring":m<=8?"summer":"fall";return[...new Set([...SEASON[s],...COMMON])].slice(0,6)})();
+const $=s=>document.querySelector(s), out=$("#out"), q=$("#q");
+
+function loadRecent(){try{return JSON.parse(localStorage.getItem("recent")||"[]")}catch{return[]}}
+function saveRecent(name){
+  const list=[name,...loadRecent().filter(x=>x!==name)].slice(0,6);
+  try{localStorage.setItem("recent",JSON.stringify(list))}catch{}
+  drawRecent();
+}
+function drawRecent(){
+  const list=loadRecent(), box=$("#recent"); box.innerHTML="";
+  $("#recentBox").hidden=!list.length;
+  list.forEach(x=>{const c=chip(x);c.classList.add("rec");const del=el("span","x","×");del.setAttribute("role","button");del.setAttribute("aria-label",x+" 지우기");del.tabIndex=0;
+    const rm=e=>{e.stopPropagation();try{localStorage.setItem("recent",JSON.stringify(loadRecent().filter(y=>y!==x)))}catch{}drawRecent()};
+    del.onclick=rm;del.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();rm(e)}};c.append(del);box.append(c)});
+}
+function chip(x){const c=document.createElement("button");c.type="button";c.className="chip";c.textContent=x;c.onclick=()=>{q.value=x;ask()};return c}
+
+/* ---------- 결과 아래: 아니에요 / 잘못됐어요 / 다시 / 출처 ---------- */
+const REPO="https://github.com/sugeo-app/sugeo-app.github.io/issues/new";
+const GENERAL_SRC=[["서울시 「헷갈리는 분리배출 기준」(2025)","https://news.seoul.go.kr/env/archives/564022"],["환경부 생활폐기물 분리배출 누리집","https://www.wasteguide.or.kr"]];
+const ITEM_SRC={
+  "부탄가스·스프레이":[["대한민국 정책브리핑: 부탄가스 안전 안내","https://www.korea.kr/news/policyNewsView.do?newsId=148923719"],["서울시: 부탄가스 배출 방법(소방청 안내)","https://news.seoul.go.kr/env/archives/558471"]],
+  "가스 용기":[["대한민국 정책브리핑: 부탄가스 안전 안내","https://www.korea.kr/news/policyNewsView.do?newsId=148923719"]],
+  "남은 약":[["서울시: 폐의약품 올바른 배출 방법","https://news.seoul.go.kr/env/archives/564807"]],
+  "남은 영양제":[["서울시: 폐의약품 올바른 배출 방법","https://news.seoul.go.kr/env/archives/564807"]],
+  "LED 조명":[["LED등 재활용 의무화 관련 기사(2021)","https://www.hapt.co.kr/news/articleView.html?idxno=151712"]],
+};
+function actions(r,query){
+  const box=el("div"), row=el("div","actions"), panel=el("div","panel");panel.hidden=true;
+  const btn=(t,f)=>{const b=el("button","link",t);b.type="button";b.onclick=f;row.append(b)};
+  const open=fill=>{panel.innerHTML="";fill(panel);panel.hidden=false};
+  btn("이 결과가 아니에요",()=>open(p=>{
+    const alt=suggest(query||r.item).filter(x=>x!==r.item);
+    p.append(el("p",null,alt.length?"혹시 이 중에 있어?":"비슷한 걸 못 찾았어. 다른 이름으로 쳐 봐."));
+    if(alt.length){const c=el("div","chips");alt.forEach(x=>c.append(chip(x)));p.append(c)}
+  }));
+  btn("정보가 잘못됐어요",()=>open(p=>{
+    p.append(el("p",null,"뭐가 틀렸는지 알려 줘. 확인하고 고칠게."));
+    const ta=el("textarea");ta.id="reportText";ta.placeholder="예: 우리 구는 이거 플라스틱으로 받아요";p.append(ta);
+    const row2=el("div","row");
+    const make=()=>`검색어: ${query||"-"}\n나온 결과: ${r.item} (${[...new Set((r.parts||[]).map(x=>x.bin))].join(", ")})\n내용: ${ta.value.trim()||"(안 적음)"}`;
+    const a=el("a","btn2","GitHub로 보내기");a.target="_blank";a.rel="noopener";
+    const upd=()=>{a.href=REPO+"?title="+encodeURIComponent("[정보 오류] "+r.item)+"&body="+encodeURIComponent(make())};upd();ta.oninput=upd;
+    const cp=el("button","btn2 ghost","내용 복사");cp.type="button";
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText(make());cp.textContent="복사했어"}catch{ta.value=make();ta.select();cp.textContent="선택했어, 복사해 줘"}};
+    row2.append(a,cp);p.append(row2);
+    p.append(el("p","foot","GitHub로 보내려면 GitHub 계정이 필요해. 없으면 내용을 복사해서 만든 사람한테 보내 줘."));
+  }));
+  btn("다른 물건 다시 찾기",()=>{q.value="";out.innerHTML="";q.focus();window.scrollTo({top:0,behavior:"smooth"})});
+  btn("출처 보기",()=>open(p=>{
+    p.append(el("p",null,"이 안내는 아래 자료를 바탕으로 정리했어. 동네마다 다를 수 있으니 확실하지 않으면 구청에 물어봐."));
+    const ul=el("ul");[...(ITEM_SRC[r.item]||[]),...GENERAL_SRC].forEach(([t,u])=>{const li=el("li"),a=el("a",null,t);a.href=u;a.target="_blank";a.rel="noopener";li.append(a);ul.append(li)});p.append(ul);
+  }));
+  box.append(row,panel);box.style.display="flex";box.style.flexDirection="column";box.style.gap="10px";
+  return box;
+}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+const SRC={high:["꼬마 AI","--accent"],mid:["꼬마 AI · 아마 이거야","--pack"],guess:["꼬마 AI · 추측","--warn"],example:["예시","--line"]};
+// 안전 품목: 결과 위에 경고 (공식 안내의 요지만)
+const SAFETY=(()=>{
+  const gas="구멍을 뚫지 마. 남은 가스 때문에 폭발·중독 사고가 날 수 있어.";
+  const bat="종량제 봉투에 넣으면 수거차·선별장에서 불이 날 수 있어. 꼭 전용 수거함에 넣어.";
+  const med="변기나 하수구에 버리지 마. 물이 오염돼.";
+  const sharp="신문지로 단단히 싸고 겉에 표시해 줘. 수거하는 사람이 다칠 수 있어.";
+  return {"부탄가스·스프레이":gas,"가스 용기":gas,"건전지":bat,"보조배터리":bat,"단추형 전지":bat,"전자담배":bat,"무선 이어폰·헤드셋":bat,
+    "남은 약":med,"안약·연고":med,"주사기·바늘":"바늘은 뚜껑을 씌워 단단한 통에 모아. 그냥 버리면 수거하는 사람이 찔릴 수 있어.",
+    "형광등":"수은이 들어 있어. 깨지지 않게 전용 수거함에 넣어.","폐식용유":"하수구에 부으면 배관이 막히고 물이 오염돼.",
+    "소화기":"압력이 남아 있어서 종량제 봉투에 넣으면 위험해.","페인트·화학약품":"하수구에 버리지 마. 많이 남았으면 구청에 물어봐.",
+    "깨진 유리·유리컵":sharp,"깨진 유리병":sharp,"가위·칼":sharp};
+})();
+function render(r,src,query,o=out){
+  o.innerHTML="";
+  const parts=Array.isArray(r.parts)?r.parts:[];
+  const top=el("div","top");
+  top.append(el("p","item",r.item||"물건"));
+  const bins=new Set(parts.map(p=>p.bin));
+  if(src!=="example"&&src!=="high"){const [label,color]=SRC[src]||SRC.high;
+  const s=el("span","src");const dot=el("i");dot.style.setProperty("--c",`var(${color})`);s.append(dot,document.createTextNode(label));top.append(s);}
+  o.append(top);
+  const v=el("p","verdict");v.append(el("span","arrow","→"));
+  [...bins].forEach((b,i)=>{if(i)v.append(el("span","plus","+"));const t=el("span","v",b||"일반쓰레기");t.style.setProperty("--c",`var(${BINS[b]||"--general"})`);v.append(t)});
+  o.append(v);
+  const warn=SAFETY[r.item]; if(warn&&src!=="example"){const a=el("p","alert");a.append(el("b",null,"⚠️ 안전 주의 "),document.createTextNode(warn));o.append(a)}
+  if(src==="mid"||src==="guess"){const w=el("p","warn");w.append(el("b",null,"정확하지 않을 수 있어. "),document.createTextNode((r.note?r.note+" ":src==="mid"?`'${r.item}'(으)로 찾았어. 찾던 게 아니면 이름을 더 자세히 써줘. `:"목록에 없는 물건이라 이름만 보고 추측했어. ")+"확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐."));o.append(w)}
+  const list=el("div","parts");
+  parts.forEach(p=>{
+    const c=`var(${BINS[p.bin]||"--general"})`;
+    const row=el("div","part");
+    const d=el("span","dot"); d.style.setProperty("--c",c);
+    const ph=el("div","ph");
+    if(parts.length>1&&p.name) ph.append(el("span","pname",p.name));
+    if(parts.length>1){const b=el("span","bin",p.bin||"일반쓰레기"); b.style.setProperty("--c",c); ph.append(b);}
+    const ol=el("ol"); (p.steps||[]).forEach(x=>ol.append(el("li",null,x)));
+    if(parts.length>1) row.append(d,ph,ol); else {row.classList.add("solo");row.append(ol);} list.append(row);
+  });
+  o.append(list);
+  if(r.tip){const t=el("p","tip");t.append(el("b",null,"알아두기 "),document.createTextNode(r.tip));o.append(t)}
+  if(o===out&&src!=="example") o.append(actions(r,query));
+}
+function status(t){out.innerHTML="";const p=el("p","status");p.append(el("span","spin"),document.createTextNode(t));out.append(p)}
+function msg(t){out.innerHTML="";out.append(el("p","err",t))}
+
+/* ---------- 검색 ---------- */
+let firstTouch=true;
+q.addEventListener("focus",()=>{if(firstTouch){q.select();firstTouch=false}});
+function ask(){
+  const item=q.value.trim();
+  if(!item){q.focus();return}
+  if(matchMedia("(pointer:coarse)").matches) q.blur();
+  const r=miniAI(item);
+  if(r&&r.egg){out.innerHTML="";const b=el("div","egg");b.append(el("span","egg-e a-"+(r.egg.a||"holy"),r.egg.e),el("p","item",r.egg.t),el("p","lead",r.egg.d));
+    if(r.egg.chips){const c=el("div","chips");r.egg.chips.forEach(x=>c.append(chip(x)));b.append(c)}out.append(b);show();return}
+  if(r&&r.notTrash){notTrash(r);show();return}
+  if(r&&r.ambig){ambig(r);show();return}
+  if(r&&r.conf!=="guess"){render(r,r.conf,item);saveRecent(r.item);show();return}
+  if(r){render(r,"guess",item);show();return}
+  unknown(item);
+}
+function ambig(r){
+  out.innerHTML="";
+  out.append(el("p","item",`어떤 '${r.item}'이야?`));
+  out.append(el("p","lead","종류에 따라 버리는 곳이 달라. 하나 골라 줘."));
+  const c=el("div","chips");r.options.forEach(x=>c.append(chip(x)));out.append(c);
+}
+function notTrash(r){
+  out.innerHTML="";
+  out.append(el("p","item",`'${r.item}'은(는) 버리는 게 아니야 🙂`));
+  out.append(el("p","lead",r.pet?"혹시 이런 걸 찾는 거야?":"버릴 물건 이름을 써줘. 예: 컵라면 용기, 깨진 접시"));
+  if(r.pet){const c=el("div","chips");["강아지 똥","배변패드","고양이 모래","사료","반려동물 장난감"].forEach(x=>c.append(chip(x)));out.append(c)}
+}
+function show(){const t=out.getBoundingClientRect();if(t.top<0||t.top>innerHeight*.6)out.scrollIntoView({behavior:"smooth",block:"start"})}
+function unknown(item){
+  out.innerHTML="";
+  out.append(el("p","item",`'${item}'은(는) 아직 몰라`));
+  out.append(el("p","lead","물건 이름을 더 흔한 말로 바꿔서 쳐 봐. 예: '플라스틱 통', '유리병', '비닐 봉지'"));
+  const sg=suggest(item);
+  if(sg.length){out.append(el("p","label","혹시 이거야?"));const c=el("div","chips");sg.forEach(x=>c.append(chip(x)));out.append(c)}
+  out.append(el("p","warn","그래도 모르겠으면 사는 구청 홈페이지나 관리사무소에 물어보는 게 제일 정확해."));
+  show();
+}
+
+$("#f").addEventListener("submit",e=>{e.preventDefault();ask()});
+EXAMPLES.forEach(x=>$("#chips").append(chip(x)));
+drawRecent();
+$("#clearRecent").onclick=()=>{try{localStorage.removeItem("recent")}catch{}drawRecent()};
+Object.entries(BINS).forEach(([n,v])=>{const li=el("li"),i=el("i");i.style.setProperty("--c",`var(${v})`);li.append(i,document.createTextNode(n));$("#legend").append(li)});
+/* ---------- 소개 ↔ 앱 화면 전환 ---------- */
+render(miniAI("투명 페트병"),"example","",document.getElementById("demo"));
+function view(name){
+  const app=name==="app";
+  $("#intro").hidden=app; $("#app").hidden=!app;
+  window.scrollTo(0,0);
+}
+function route(){view(location.hash==="#app"?"app":"intro")}
+function go(h){try{if(location.hash==="#"+h){view(h);return}location.hash=h}catch{view(h)}}
+document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{go("app");setTimeout(()=>q.focus({preventScroll:true}),50)});
+$("#toIntro").onclick=()=>go("intro");
+window.addEventListener("hashchange",route);
+route();
+
+/* ---------- 앱처럼 쓰기: 오프라인 저장 + 홈 화면 추가 안내 (한 번만, 닫으면 다시 안 보임) ---------- */
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+(()=>{
+  const box=$("#install"),txt=$("#installText"),btn=$("#installBtn");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  let closed=false;try{closed=localStorage.getItem("installHint")==="closed"}catch{}
+  if(standalone||closed)return;
+  const close=()=>{box.hidden=true;try{localStorage.setItem("installHint","closed")}catch{}};
+  $("#installClose").onclick=close;
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&/safari/i.test(navigator.userAgent)&&!/crios|fxios|edgios/i.test(navigator.userAgent);
+  if(ios){txt.textContent="홈 화면에 추가하면 앱처럼 쓸 수 있어. 아래 공유 버튼 → '홈 화면에 추가'를 눌러 봐.";box.hidden=false;return}
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();
+    txt.textContent="홈 화면에 추가하면 앱처럼 바로 열려. 인터넷이 없어도 돼.";btn.hidden=false;box.hidden=false;
+    btn.onclick=async()=>{e.prompt();try{await e.userChoice}catch{}close()};
+  });
+})();
+</script>
+</body>
+</html>
