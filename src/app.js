@@ -60,6 +60,18 @@ function actions(r,query){
 }
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 const SRC={high:["꼬마 AI","--accent"],mid:["꼬마 AI · 아마 이거야","--pack"],guess:["꼬마 AI · 추측","--warn"],example:["예시","--line"]};
+// 안전 품목: 결과 위에 경고 (공식 안내의 요지만)
+const SAFETY=(()=>{
+  const gas="구멍을 뚫지 마. 남은 가스 때문에 폭발·중독 사고가 날 수 있어.";
+  const bat="종량제 봉투에 넣으면 수거차·선별장에서 불이 날 수 있어. 꼭 전용 수거함에 넣어.";
+  const med="변기나 하수구에 버리지 마. 물이 오염돼.";
+  const sharp="신문지로 단단히 싸고 겉에 표시해 줘. 수거하는 사람이 다칠 수 있어.";
+  return {"부탄가스·스프레이":gas,"가스 용기":gas,"건전지":bat,"보조배터리":bat,"단추형 전지":bat,"전자담배":bat,"무선 이어폰·헤드셋":bat,
+    "남은 약":med,"안약·연고":med,"주사기·바늘":"바늘은 뚜껑을 씌워 단단한 통에 모아. 그냥 버리면 수거하는 사람이 찔릴 수 있어.",
+    "형광등":"수은이 들어 있어. 깨지지 않게 전용 수거함에 넣어.","폐식용유":"하수구에 부으면 배관이 막히고 물이 오염돼.",
+    "소화기":"압력이 남아 있어서 종량제 봉투에 넣으면 위험해.","페인트·화학약품":"하수구에 버리지 마. 많이 남았으면 구청에 물어봐.",
+    "깨진 유리·유리컵":sharp,"깨진 유리병":sharp,"가위·칼":sharp};
+})();
 function render(r,src,query,o=out){
   o.innerHTML="";
   const parts=Array.isArray(r.parts)?r.parts:[];
@@ -72,6 +84,7 @@ function render(r,src,query,o=out){
   const v=el("p","verdict");v.append(el("span","arrow","→"));
   [...bins].forEach((b,i)=>{if(i)v.append(el("span","plus","+"));const t=el("span","v",b||"일반쓰레기");t.style.setProperty("--c",`var(${BINS[b]||"--general"})`);v.append(t)});
   o.append(v);
+  const warn=SAFETY[r.item]; if(warn&&src!=="example"){const a=el("p","alert");a.append(el("b",null,"⚠️ 안전 주의 "),document.createTextNode(warn));o.append(a)}
   if(src==="mid"||src==="guess"){const w=el("p","warn");w.append(el("b",null,"정확하지 않을 수 있어. "),document.createTextNode((r.note?r.note+" ":src==="mid"?`'${r.item}'(으)로 찾았어. 찾던 게 아니면 이름을 더 자세히 써줘. `:"목록에 없는 물건이라 이름만 보고 추측했어. ")+"확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐."));o.append(w)}
   const list=el("div","parts");
   parts.forEach(p=>{
@@ -99,7 +112,8 @@ function ask(){
   if(!item){q.focus();return}
   if(matchMedia("(pointer:coarse)").matches) q.blur();
   const r=miniAI(item);
-  if(r&&r.egg){out.innerHTML="";const b=el("div","egg");b.append(el("span","egg-e",r.egg.e),el("p","item",r.egg.t),el("p","lead",r.egg.d));out.append(b);show();return}
+  if(r&&r.egg){out.innerHTML="";const b=el("div","egg");b.append(el("span","egg-e a-"+(r.egg.a||"holy"),r.egg.e),el("p","item",r.egg.t),el("p","lead",r.egg.d));
+    if(r.egg.chips){const c=el("div","chips");r.egg.chips.forEach(x=>c.append(chip(x)));b.append(c)}out.append(b);show();return}
   if(r&&r.notTrash){notTrash(r);show();return}
   if(r&&r.ambig){ambig(r);show();return}
   if(r&&r.conf!=="guess"){render(r,r.conf,item);saveRecent(r.item);show();return}
@@ -147,3 +161,22 @@ document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{go("app");se
 $("#toIntro").onclick=()=>go("intro");
 window.addEventListener("hashchange",route);
 route();
+
+/* ---------- 앱처럼 쓰기: 오프라인 저장 + 홈 화면 추가 안내 (한 번만, 닫으면 다시 안 보임) ---------- */
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+(()=>{
+  const box=$("#install"),txt=$("#installText"),btn=$("#installBtn");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  let closed=false;try{closed=localStorage.getItem("installHint")==="closed"}catch{}
+  if(standalone||closed)return;
+  const close=()=>{box.hidden=true;try{localStorage.setItem("installHint","closed")}catch{}};
+  $("#installClose").onclick=close;
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&/safari/i.test(navigator.userAgent)&&!/crios|fxios|edgios/i.test(navigator.userAgent);
+  if(ios){txt.textContent="홈 화면에 추가하면 앱처럼 쓸 수 있어. 아래 공유 버튼 → '홈 화면에 추가'를 눌러 봐.";box.hidden=false;return}
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();
+    txt.textContent="홈 화면에 추가하면 앱처럼 바로 열려. 인터넷이 없어도 돼.";btn.hidden=false;box.hidden=false;
+    btn.onclick=async()=>{e.prompt();try{await e.userChoice}catch{}close()};
+  });
+})();

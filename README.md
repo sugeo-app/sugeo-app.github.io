@@ -11,7 +11,8 @@
 | `src/engine.js` | 꼬마 AI 판단 로직 (오타 교정, 꾸밈말, 되묻기, 쓰레기 아닌 말 등) |
 | `src/app.js` | 화면 동작 (검색, 결과 카드, 최근 기록, 소개 ↔ 검색 화면) |
 | `src/styles.css`, `src/index.template.html` | 화면 모양과 뼈대 |
-| `static/` | 그대로 복사되는 파일: 폰트(OFL), 공유 썸네일 `og.png` |
+| `static/` | 그대로 복사되는 파일: 폰트(OFL), 공유 썸네일 `og.png`, 앱 아이콘, `manifest.webmanifest`, `404.html` |
+| `src/sw.js` | 오프라인 저장(서비스워커). 빌드 때 파일 내용으로 버전이 정해져서, 새로 배포하면 자동으로 최신이 돼 |
 | `scripts/` | 빌드·폰트·썸네일 만드는 스크립트 |
 | `tests/cases/*.json` | 시험 문제 665개 (`["질문", "정답"]`) |
 | `tests/parity.mjs` | 구조 분리 전 파일(`tests/fixtures/`)과 답이 똑같은지 비교 |
@@ -21,7 +22,7 @@
 
 ```bash
 npm test             # 665문제 시험. 하나라도 틀리면 실패
-npm run test:parity  # 분리 전과 답이 똑같은지 (구조 분리 확인용)
+npm run test:parity  # P-1 구조 분리 확인용 (이후 이스터에그 등 의도된 변경은 다르게 나와)
 npm run build        # docs/ 에 사이트 만들기
 ```
 
@@ -36,7 +37,7 @@ npm run build        # docs/ 에 사이트 만들기
 ## 개인정보
 
 - 서버, 로그인, 통계 도구 없음. 밖으로 자동 요청을 보내지 않아 (폰트도 사이트 안에 있어)
-- 기기에만 저장: 최근 검색 6개(`recent`). 화면에서 지울 수 있어
+- 기기에만 저장: 최근 검색 6개(`recent`, 화면에서 지울 수 있어), 홈 화면 안내를 닫았는지(`installHint`), 오프라인용 사이트 파일(서비스워커 저장소)
 - 신고는 사용자가 직접 GitHub Issues 링크를 눌러야만 열려
 
 폰트: Noto Sans KR, Black Han Sans — SIL Open Font License 1.1 (`static/fonts/OFL.txt`)

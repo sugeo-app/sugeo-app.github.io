@@ -18,6 +18,10 @@
 <meta name="theme-color" content="#141a17" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%BB%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="fonts/noto-sans-kr-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="어디에 버려?">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
 {{STYLE}}</style>
 </head>
@@ -72,6 +76,12 @@
       <input type="search" id="q" placeholder="예: 치킨 뼈, 아이스팩" aria-label="버릴 물건 이름" enterkeyhint="search" autocomplete="off" maxlength="80">
       <button id="go" type="submit">찾기</button>
     </form>
+  </div>
+
+  <div class="install" id="install" hidden>
+    <p id="installText"></p>
+    <button type="button" class="btn2" id="installBtn" hidden>홈 화면에 추가</button>
+    <button type="button" class="x" id="installClose" aria-label="안내 닫기">×</button>
   </div>
 
   <div class="try">

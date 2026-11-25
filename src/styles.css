@@ -157,8 +157,27 @@ header{display:flex;flex-direction:column;gap:6px}
 .intro-grid{display:flex;flex-direction:column;gap:28px}
 @media (min-width:900px){.intro-grid{display:grid}}
 .egg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:8px 0}
-.egg-e{font-size:4.5rem;line-height:1;animation:holy 1s ease-out}
+.egg-e{font-size:4.5rem;line-height:1;display:inline-block}
+.a-holy{animation:holy 1s ease-out}
+.a-melt{animation:melt 1.6s ease-in-out;transform-origin:50% 100%}
+@keyframes melt{0%{transform:scaleY(1)}50%{transform:scaleY(.55) scaleX(1.25)}100%{transform:scaleY(1)}}
+.a-spin{animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.a-shake{animation:shake .7s ease-in-out 2}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.a-drop{animation:drop .9s cubic-bezier(.3,1.5,.6,1)}
+@keyframes drop{from{transform:translateY(-60px);opacity:0}}
+.a-bounce{animation:bnc 1s ease infinite}
+@keyframes bnc{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+/* 안전 경고 */
+.alert{margin:0;padding:12px 14px;border-radius:10px;border:1.5px solid var(--warn);background:color-mix(in srgb,var(--warn) 10%,var(--surface));font-size:.93rem;color:var(--fg)}
+.alert b{color:var(--warn)}
+/* 홈 화면 추가 안내 */
+.install{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.9rem}
+.install p{margin:0;flex:1;min-width:12em}
+.install .btn2{min-height:36px}
+.install .x{background:none;border:0;color:var(--muted);font-size:1.2rem;min-height:36px;padding:0 6px}
 @keyframes holy{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(6deg);opacity:1}100%{transform:scale(1)}}
-@media (prefers-reduced-motion:reduce){.egg-e{animation:none}}
+@media (prefers-reduced-motion:reduce){.egg-e{animation:none!important}}
 /* 폰 안전 영역 */
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}
