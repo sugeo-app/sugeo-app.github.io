@@ -211,12 +211,13 @@ header{display:flex;flex-direction:column;gap:6px}
 .topbar{gap:16px}
 .link.lang{font-weight:700;color:var(--accent);text-decoration:none;border:1.5px solid var(--line);border-radius:999px;padding:0 12px;min-height:32px}
 .link.lang:hover{border-color:var(--accent)}
+.link.lang.get{background:var(--accent);color:#fff;border-color:var(--accent)}
 .noen{margin:0;font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap intro" id="intro">
-  <div class="topbar"><button type="button" class="link lang" data-lang-toggle data-i18n="langBtn">English</button></div>
+  <div class="topbar"><button type="button" class="link lang" data-lang-toggle data-i18n="langBtn">English</button><button type="button" class="link lang get" data-install hidden data-i18n="getApp">앱 설치</button></div>
   <section class="intro-hero">
     <p class="eyebrow" data-i18n="eyebrow">K-Bin · 분리수거 도우미</p>
     <h1 data-i18n-html="introH1">헷갈리는 쓰레기,<br><em>3초면 끝.</em></h1>
@@ -252,7 +253,7 @@ header{display:flex;flex-direction:column;gap:6px}
 </div>
 
 <div class="wrap app" id="app" hidden>
-  <div class="topbar"><button type="button" class="link lang" data-lang-toggle data-i18n="langBtn">English</button><button type="button" class="link" id="toIntro" data-i18n="whatIsThis">이게 뭐야?</button></div>
+  <div class="topbar"><button type="button" class="link lang" data-lang-toggle data-i18n="langBtn">English</button><button type="button" class="link lang get" data-install hidden data-i18n="getApp">앱 설치</button><button type="button" class="link" id="toIntro" data-i18n="whatIsThis">이게 뭐야?</button></div>
   <div class="side">
   <header>
     <p class="eyebrow" data-i18n="eyebrow">K-Bin · 분리수거 도우미</p>
@@ -494,7 +495,7 @@ ko:{
   feat1:"<b>330개+</b><span>아는 물건</span>",feat2:"<b>부품별</b><span>나눠서 안내</span>",feat3:"<b>오프라인</b><span>인터넷 없어도 돼</span>",
   start:"시작하기",introFoot:"환경부 분리배출 기준이야. 동네마다 세부 규칙은 다를 수 있어.",
   whatIsThis:"이게 뭐야?",appH1:"이거 어디에 버려?",appLead:"헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게.",
-  placeholder:"예: 치킨 뼈, 아이스팩",qLabel:"버릴 물건 이름",find:"찾기",installBtn:"홈 화면에 추가",closeHint:"안내 닫기",
+  placeholder:"예: 치킨 뼈, 아이스팩",qLabel:"버릴 물건 이름",find:"찾기",installBtn:"홈 화면에 추가",getApp:"앱 설치",macSafariHint:"맨 위 메뉴바에서 파일 → 'Dock에 추가'를 누르면 앱처럼 설치돼.",chromeHint:"주소창 오른쪽의 설치 아이콘(모니터에 화살표)을 누르거나, 메뉴 ⋮ → '앱 설치' 또는 '홈 화면에 추가'를 눌러 줘.",inAppHint:"지금 앱(카톡 등) 안에서 열려 있어. 사파리나 크롬으로 열면 설치할 수 있어.",closeHint:"안내 닫기",
   popular:"많이 찾는 것",recent:"최근에 찾은 것",clearAll:"전체 지우기",
   emptyTitle:"여기에 버리는 법이 나와",emptyLead:"왼쪽에 물건 이름을 치거나 많이 찾는 것을 눌러 봐. 색깔은 이렇게 구분돼.",
   foot:"환경부·서울시 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어",
@@ -531,7 +532,7 @@ en:{
   feat1:"<b>330+</b><span>items known</span>",feat2:"<b>By part</b><span>step-by-step</span>",feat3:"<b>Offline</b><span>works without internet</span>",
   start:"Start",introFoot:"Based on Korean Ministry of Environment rules. Details can differ by neighborhood.",
   whatIsThis:"What is this?",appH1:"Where does this go?",appLead:"Type any confusing piece of trash and see how to throw it away.",
-  placeholder:"e.g. chicken bones, ice pack",qLabel:"What are you throwing away?",find:"Search",installBtn:"Add to home screen",closeHint:"Close",
+  placeholder:"e.g. chicken bones, ice pack",qLabel:"What are you throwing away?",find:"Search",installBtn:"Add to home screen",getApp:"Install app",macSafariHint:"In the menu bar, choose File → 'Add to Dock' to install it like an app.",chromeHint:"Click the install icon at the right of the address bar, or open the ⋮ menu → 'Install app' / 'Add to home screen'.",inAppHint:"You're inside another app's browser. Open this page in Safari or Chrome to install it.",closeHint:"Close",
   popular:"Popular",recent:"Recent searches",clearAll:"Clear all",
   emptyTitle:"Your answer shows up here",emptyLead:"Type an item on the left or tap a popular one. Bins use these colors.",
   foot:"Korean Ministry of Environment & Seoul rules · Works offline · Details can differ by neighborhood",
@@ -767,21 +768,27 @@ window.addEventListener("hashchange",route);
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 }
-let installMode="";
-function installText(){const x=$("#installText");if(installMode)x.textContent=t(installMode==="ios"?"iosHint":"androidHint")}
+let installMode="",deferred=null;
+function installText(){const x=$("#installText");if(installMode)x.textContent=t(installMode)}
 (()=>{
-  const box=$("#install"),btn=$("#installBtn");
+  const box=$("#install"),btn=$("#installBtn"),gets=document.querySelectorAll("[data-install]");
   const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  if(standalone)return;
+  gets.forEach(g=>g.hidden=false);
+  const ua=navigator.userAgent;
+  const inApp=/KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\//i.test(ua);
+  const ios=/iphone|ipad|ipod/i.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  const safari=/safari/i.test(ua)&&!/chrome|crios|fxios|edgios|android/i.test(ua);
+  const modeNow=()=>inApp?"inAppHint":ios?"iosHint":safari?"macSafariHint":deferred?"androidHint":"chromeHint";
+  const show=()=>{installMode=modeNow();installText();btn.hidden=!deferred;box.hidden=false};
   let closed=false;try{closed=localStorage.getItem("installHint")==="closed"}catch{}
-  if(standalone||closed)return;
-  const close=()=>{box.hidden=true;try{localStorage.setItem("installHint","closed")}catch{}};
-  $("#installClose").onclick=close;
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&/safari/i.test(navigator.userAgent)&&!/crios|fxios|edgios/i.test(navigator.userAgent);
-  if(ios){installMode="ios";installText();box.hidden=false;return}
-  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();
-    installMode="android";installText();btn.hidden=false;box.hidden=false;
-    btn.onclick=async()=>{e.prompt();try{await e.userChoice}catch{}close()};
-  });
+  $("#installClose").onclick=()=>{box.hidden=true;try{localStorage.setItem("installHint","closed")}catch{}};
+  const prompt=async()=>{const e=deferred;if(!e)return false;deferred=null;e.prompt();try{await e.userChoice}catch{}box.hidden=true;return true};
+  btn.onclick=prompt;
+  gets.forEach(g=>g.onclick=async()=>{if(await prompt())return;go("app");setTimeout(()=>{show();box.scrollIntoView({behavior:"smooth",block:"center"})},60)});
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(!closed)show()});
+  window.addEventListener("appinstalled",()=>{gets.forEach(g=>g.hidden=true);box.hidden=true});
+  if(ios&&safari&&!closed)show();
 })();
 
 applyLang();
