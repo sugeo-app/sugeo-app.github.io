@@ -8,20 +8,21 @@
 | 위치 | 내용 |
 |---|---|
 | `data/items.json` | 품목 데이터 (한 줄에 품목 하나: `name`, `aliases`, `parts[{name, bin, steps}]`, `tip`) |
+| `data/en.json` | 영어 번역. 한국어 품목 이름을 열쇠로 `name`, `aliases`(영어 검색어), `parts`(순서가 한국어와 같아야 함), `tip`. 없는 품목은 영어 화면에서 한국어로 보여 |
 | `src/engine.js` | 꼬마 AI 판단 로직 (오타 교정, 꾸밈말, 되묻기, 쓰레기 아닌 말 등) |
 | `src/app.js` | 화면 동작 (검색, 결과 카드, 최근 기록, 소개 ↔ 검색 화면) |
 | `src/styles.css`, `src/index.template.html` | 화면 모양과 뼈대 |
 | `static/` | 그대로 복사되는 파일: 폰트(OFL), 공유 썸네일 `og.png`, 앱 아이콘, `manifest.webmanifest`, `404.html` |
 | `src/sw.js` | 오프라인 저장(서비스워커). 빌드 때 파일 내용으로 버전이 정해져서, 새로 배포하면 자동으로 최신이 돼 |
 | `scripts/` | 빌드·폰트·썸네일 만드는 스크립트 |
-| `tests/cases/*.json` | 시험 문제 665개 (`["질문", "정답"]`) |
+| `tests/cases/*.json` | 시험 문제 778개 (한국어 674 + 영어 104, `["질문", "정답"]`) |
 | `tests/parity.mjs` | 구조 분리 전 파일(`tests/fixtures/`)과 답이 똑같은지 비교 |
 | `docs/` | **빌드 결과물 = 실제 사이트.** GitHub Pages가 이 폴더를 보여줘. 직접 고치지 말고 `npm run build`로 만들어 |
 
 ## 명령어 (Node 18 이상, 따로 설치할 패키지 없음)
 
 ```bash
-npm test             # 665문제 시험. 하나라도 틀리면 실패
+npm test             # 778문제 시험(영어 포함). 하나라도 틀리면 실패
 npm run test:parity  # P-1 구조 분리 확인용 (이후 이스터에그 등 의도된 변경은 다르게 나와)
 npm run build        # docs/ 에 사이트 만들기
 ```

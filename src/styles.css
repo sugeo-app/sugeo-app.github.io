@@ -181,3 +181,9 @@ header{display:flex;flex-direction:column;gap:6px}
 @media (prefers-reduced-motion:reduce){.egg-e{animation:none!important}}
 /* 폰 안전 영역 */
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}
+
+/* 언어 전환 버튼 */
+.topbar{gap:16px}
+.link.lang{font-weight:700;color:var(--accent);text-decoration:none;border:1.5px solid var(--line);border-radius:999px;padding:0 12px;min-height:32px}
+.link.lang:hover{border-color:var(--accent)}
+.noen{margin:0;font-size:.85rem;color:var(--muted)}

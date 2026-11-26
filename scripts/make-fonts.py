@@ -34,5 +34,5 @@ for w in (400, 500, 700):
     f = instancer.instantiateVariableFont(vf, {'wght': w})
     save(f, body_chars, f'{out}/noto-sans-kr-{w}.woff2')
 
-display = '이거 어디에 버려? 헷갈리는 쓰레기, 3초면 끝. 분리수거 도우미 0123456789'
+display = '이거 어디에 버려? 헷갈리는 쓰레기, 3초면 끝. 분리수거 도우미 ' + ''.join(chr(c) for c in range(0x20, 0x7F)) + '’'
 save(TTFont(os.path.join(src, 'BlackHanSans-Regular.ttf')), display, f'{out}/black-han-sans.woff2')

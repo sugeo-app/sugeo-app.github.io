@@ -1,0 +1,2281 @@
+{
+"투명 페트병": {
+"name": "Clear PET bottle",
+"aliases": [
+"pet bottle",
+"plastic bottle",
+"water bottle",
+"clear plastic bottle",
+"soda bottle",
+"coke bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty and rinse it",
+"Crush it, then put the cap back on"
+]
+},
+{
+"name": "Label",
+"steps": [
+"Peel it off and put it with plastic film"
+]
+}
+],
+"tip": "Many places collect clear PET bottles separately from colored plastic."
+},
+"플라스틱 용기": {
+"name": "Plastic container",
+"aliases": [
+"plastic container",
+"plastic tub",
+"plastic box"
+],
+"parts": [
+{
+"name": "Container",
+"steps": [
+"Empty and rinse it",
+"Remove stickers and other materials, then put it with plastics"
+]
+}
+],
+"tip": "If food won't wash off or it's made of mixed materials, it goes in general waste."
+},
+"색깔 있는 페트병": {
+"name": "Colored PET bottle",
+"aliases": [
+"colored pet bottle",
+"green bottle plastic",
+"sports drink bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty and rinse it",
+"Crush it"
+]
+},
+{
+"name": "Label",
+"steps": [
+"Peel it off and put it with plastic film"
+]
+}
+],
+"tip": ""
+},
+"배달 음식 용기": {
+"name": "Delivery food container",
+"aliases": [
+"delivery container",
+"takeout container",
+"food container",
+"takeaway box"
+],
+"parts": [
+{
+"name": "Container",
+"steps": [
+"Empty out leftover food",
+"Wash off grease with dish soap"
+]
+}
+],
+"tip": "If red sauce stains won't come off, put it in general waste."
+},
+"테이크아웃 플라스틱 컵": {
+"name": "Takeout plastic cup",
+"aliases": [
+"plastic cup",
+"iced coffee cup",
+"takeout cup",
+"cafe cup"
+],
+"parts": [
+{
+"name": "Cup & lid",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Straw",
+"steps": [
+"General waste bag"
+]
+},
+{
+"name": "Cup sleeve",
+"steps": [
+"Put with paper"
+]
+}
+],
+"tip": ""
+},
+"요구르트병": {
+"name": "Yogurt drink bottle",
+"aliases": [
+"yakult",
+"yogurt drink",
+"yoghurt bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Foil lid",
+"steps": [
+"Peel off, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"즉석밥 용기": {
+"name": "Instant rice tray",
+"aliases": [
+"instant rice",
+"hetbahn",
+"microwave rice"
+],
+"parts": [
+{
+"name": "Tray",
+"steps": [
+"Scrape off rice and rinse"
+]
+},
+{
+"name": "Lid film",
+"steps": [
+"Peel off, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"샴푸·세제 통": {
+"name": "Shampoo / detergent bottle",
+"aliases": [
+"shampoo bottle",
+"detergent bottle",
+"body wash bottle",
+"conditioner bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty and rinse it"
+]
+},
+{
+"name": "Pump",
+"steps": [
+"It has a metal spring, so general waste bag"
+]
+}
+],
+"tip": ""
+},
+"스티로폼": {
+"name": "Styrofoam",
+"aliases": [
+"styrofoam",
+"polystyrene",
+"foam box",
+"styrofoam box"
+],
+"parts": [
+{
+"name": "Styrofoam",
+"steps": [
+"Remove tape and shipping labels",
+"Only clean, white styrofoam goes out separately"
+]
+}
+],
+"tip": "Styrofoam with food on it or with color goes in general waste."
+},
+"컵라면 용기": {
+"name": "Cup noodle container",
+"aliases": [
+"cup noodle",
+"cup ramen",
+"instant noodle cup",
+"cup ramyeon"
+],
+"parts": [
+{
+"name": "Cup",
+"steps": [
+"Pour out the soup and rinse",
+"If it's paper, put it with paper"
+]
+},
+{
+"name": "Lid",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "If red soup stains won't come off, put it in general waste."
+},
+"칫솔": {
+"name": "Toothbrush",
+"aliases": [
+"toothbrush"
+],
+"parts": [
+{
+"name": "Toothbrush",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "The bristles and handle are different materials, so it can't be recycled."
+},
+"필기구": {
+"name": "Pens & pencils",
+"aliases": [
+"pen",
+"ballpoint pen",
+"mechanical pencil",
+"marker pen"
+],
+"parts": [
+{
+"name": "Pen",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"일회용 숟가락·포크": {
+"name": "Disposable spoon / fork",
+"aliases": [
+"plastic spoon",
+"plastic fork",
+"disposable cutlery",
+"plastic cutlery"
+],
+"parts": [
+{
+"name": "Cutlery",
+"steps": [
+"Too small to sort, so general waste bag"
+]
+}
+],
+"tip": "Small plastic items can't be sorted at recycling plants."
+},
+"빨대": {
+"name": "Straw",
+"aliases": [
+"straw",
+"plastic straw",
+"paper straw"
+],
+"parts": [
+{
+"name": "Straw",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Straws are too small to sort, so they go in general waste."
+},
+"과자·라면 봉지": {
+"name": "Snack / ramen wrapper",
+"aliases": [
+"chip bag",
+"snack bag",
+"ramen packet",
+"noodle packet",
+"crisp packet"
+],
+"parts": [
+{
+"name": "Wrapper",
+"steps": [
+"Shake out crumbs and rinse"
+]
+}
+],
+"tip": "Even if the inside is silver, it goes with plastic film."
+},
+"비닐봉지": {
+"name": "Plastic bag",
+"aliases": [
+"plastic bag",
+"shopping bag plastic",
+"delivery bag",
+"black plastic bag"
+],
+"parts": [
+{
+"name": "Bag",
+"steps": [
+"Shake out any dirt and put with plastic film"
+]
+}
+],
+"tip": "If food is stuck on it, it goes in general waste."
+},
+"뽁뽁이(에어캡)": {
+"name": "Bubble wrap",
+"aliases": [
+"bubble wrap",
+"air cap",
+"packing bubbles"
+],
+"parts": [
+{
+"name": "Bubble wrap",
+"steps": [
+"Remove tape and put with plastic film"
+]
+}
+],
+"tip": ""
+},
+"랩·지퍼백": {
+"name": "Plastic wrap / zip bag",
+"aliases": [
+"plastic wrap",
+"cling film",
+"zip bag",
+"ziploc",
+"sandwich bag"
+],
+"parts": [
+{
+"name": "Wrap / bag",
+"steps": [
+"If clean, put with plastic film"
+]
+}
+],
+"tip": "If it has food on it, it goes in general waste."
+},
+"택배 상자": {
+"name": "Delivery box",
+"aliases": [
+"cardboard box",
+"delivery box",
+"shipping box",
+"parcel box",
+"box",
+"coupang box"
+],
+"parts": [
+{
+"name": "Box",
+"steps": [
+"Remove tape and shipping labels",
+"Flatten it"
+]
+}
+],
+"tip": "Shipping labels have personal info, so tear them up or black them out and put them in general waste."
+},
+"신문·전단지": {
+"name": "Newspaper / flyers",
+"aliases": [
+"newspaper",
+"flyer",
+"leaflet",
+"junk mail"
+],
+"parts": [
+{
+"name": "Paper",
+"steps": [
+"Tie together and keep dry"
+]
+}
+],
+"tip": "Shiny plastic-coated flyers go in general waste."
+},
+"책·공책": {
+"name": "Books / notebooks",
+"aliases": [
+"book",
+"notebook",
+"textbook",
+"workbook",
+"magazine"
+],
+"parts": [
+{
+"name": "Pages",
+"steps": [
+"Tie together and put with paper"
+]
+},
+{
+"name": "Spiral / plastic cover",
+"steps": [
+"Remove and throw away separately"
+]
+}
+],
+"tip": ""
+},
+"종이컵": {
+"name": "Paper cup",
+"aliases": [
+"paper cup",
+"coffee paper cup"
+],
+"parts": [
+{
+"name": "Paper cup",
+"steps": [
+"Rinse and put in the paper carton / paper cup bin"
+]
+}
+],
+"tip": "If there's no separate bin, stack them and put them with paper."
+},
+"피자 박스": {
+"name": "Pizza box",
+"aliases": [
+"pizza box"
+],
+"parts": [
+{
+"name": "Box",
+"steps": [
+"Clean parts go with paper"
+]
+},
+{
+"name": "Greasy parts",
+"steps": [
+"Tear off, general waste bag"
+]
+},
+{
+"name": "Pizza saver (little table)",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"치킨 상자": {
+"name": "Fried chicken box",
+"aliases": [
+"chicken box",
+"fried chicken box"
+],
+"parts": [
+{
+"name": "Box",
+"steps": [
+"If not too greasy, put with paper"
+]
+},
+{
+"name": "Grease paper",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "If grease has soaked through, the whole box goes in general waste."
+},
+"휴지심": {
+"name": "Toilet paper roll",
+"aliases": [
+"toilet paper roll",
+"paper towel roll",
+"cardboard tube"
+],
+"parts": [
+{
+"name": "Roll",
+"steps": [
+"Flatten and put with paper"
+]
+}
+],
+"tip": ""
+},
+"영수증": {
+"name": "Receipt",
+"aliases": [
+"receipt",
+"card slip"
+],
+"parts": [
+{
+"name": "Receipt",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Receipts are coated thermal paper, so they can't be recycled with paper."
+},
+"휴지": {
+"name": "Tissue / toilet paper",
+"aliases": [
+"tissue",
+"toilet paper",
+"napkin",
+"paper towel",
+"kitchen towel"
+],
+"parts": [
+{
+"name": "Tissue",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "It dissolves in water, so it can't be recycled."
+},
+"물티슈": {
+"name": "Wet wipes",
+"aliases": [
+"wet wipes",
+"baby wipes",
+"wet tissue"
+],
+"parts": [
+{
+"name": "Wet wipe",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Wet wipes are made of plastic fibers. Never flush them."
+},
+"우유팩": {
+"name": "Milk carton",
+"aliases": [
+"milk carton",
+"juice carton",
+"paper carton"
+],
+"parts": [
+{
+"name": "Carton",
+"steps": [
+"Rinse",
+"Open it flat and let it dry",
+"Put in the paper carton bin"
+]
+}
+],
+"tip": "Some community centers trade collected cartons for toilet paper."
+},
+"멸균팩": {
+"name": "Aseptic carton (soy milk box)",
+"aliases": [
+"soy milk carton",
+"tetra pak",
+"aseptic carton",
+"juice box"
+],
+"parts": [
+{
+"name": "Carton",
+"steps": [
+"Remove the straw and rinse",
+"Open it flat and let it dry"
+]
+}
+],
+"tip": "It's still a paper carton even if the inside is foil. Don't mix it with normal paper."
+},
+"음료 캔": {
+"name": "Drink can",
+"aliases": [
+"can",
+"soda can",
+"beer can",
+"coke can",
+"aluminum can",
+"canned coffee"
+],
+"parts": [
+{
+"name": "Can",
+"steps": [
+"Empty and rinse it",
+"Crush it"
+]
+}
+],
+"tip": ""
+},
+"통조림 캔": {
+"name": "Food can (tuna, spam)",
+"aliases": [
+"tuna can",
+"tin can",
+"canned food",
+"spam can"
+],
+"parts": [
+{
+"name": "Can",
+"steps": [
+"Wipe off oil and rinse"
+]
+},
+{
+"name": "Metal lid",
+"steps": [
+"Fold it inward and put with the can as metal"
+]
+},
+{
+"name": "Plastic lid",
+"steps": [
+"Take it off and put with plastics"
+]
+}
+],
+"tip": "The lid edge is sharp, so fold it inward."
+},
+"부탄가스·스프레이": {
+"name": "Butane gas / aerosol can",
+"aliases": [
+"butane",
+"butane gas",
+"gas canister",
+"aerosol",
+"aerosol spray",
+"spray can",
+"hairspray",
+"bug spray"
+],
+"parts": [
+{
+"name": "Can",
+"steps": [
+"Use up all the gas",
+"Release any leftover gas outdoors or somewhere well ventilated, away from flames, by pressing the nozzle",
+"Once it stops hissing, put it with cans (do NOT puncture it)"
+]
+}
+],
+"tip": "Puncturing a can with gas left inside causes explosions and poisoning. The National Fire Agency says not to puncture it. If you can't empty it, ask your community center."
+},
+"알루미늄 호일": {
+"name": "Aluminum foil",
+"aliases": [
+"aluminum foil",
+"tin foil",
+"foil"
+],
+"parts": [
+{
+"name": "Foil",
+"steps": [
+"Only clean foil, scrunched into a ball, goes with metal"
+]
+}
+],
+"tip": "Foil with food on it goes in general waste."
+},
+"프라이팬·냄비": {
+"name": "Frying pan / pot",
+"aliases": [
+"frying pan",
+"pan",
+"pot",
+"kettle",
+"saucepan"
+],
+"parts": [
+{
+"name": "Body",
+"steps": [
+"Put with scrap metal"
+]
+},
+{
+"name": "Plastic handle",
+"steps": [
+"If it comes off, throw it away separately"
+]
+}
+],
+"tip": ""
+},
+"옷걸이": {
+"name": "Clothes hanger",
+"aliases": [
+"hanger",
+"clothes hanger",
+"wire hanger",
+"plastic hanger"
+],
+"parts": [
+{
+"name": "Hanger",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Seoul's guide says hangers of any material go in the general waste bag. Some districts take wire hangers as metal, and dry cleaners often reuse them."
+},
+"유리병": {
+"name": "Glass bottle",
+"aliases": [
+"glass bottle",
+"glass jar",
+"jam jar",
+"sauce bottle",
+"soju bottle",
+"beer bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty and rinse it"
+]
+},
+{
+"name": "Cap",
+"steps": [
+"Metal goes with metal, plastic goes with plastics"
+]
+}
+],
+"tip": "Take soju and beer bottles to a supermarket to get the deposit back."
+},
+"깨진 유리·유리컵": {
+"name": "Broken glass / drinking glass",
+"aliases": [
+"broken glass",
+"drinking glass",
+"glass cup",
+"wine glass",
+"broken cup",
+"glassware"
+],
+"parts": [
+{
+"name": "Glass",
+"steps": [
+"Wrap it in several layers of newspaper",
+"Write \"깨진 유리\" (broken glass) on it and put it in the general waste bag"
+]
+}
+],
+"tip": "Drinking glasses and glass dishes are a different kind of glass from bottles, so don't put them with glass bottles. If there's a lot, use a non-burnable waste sack (불연성 마대)."
+},
+"거울": {
+"name": "Mirror",
+"aliases": [
+"mirror"
+],
+"parts": [
+{
+"name": "Mirror",
+"steps": [
+"Wrap in newspaper and put in the general waste bag"
+]
+}
+],
+"tip": "Large mirrors need a bulky waste report."
+},
+"도자기·사기그릇": {
+"name": "Ceramics / porcelain dishes",
+"aliases": [
+"ceramic",
+"plate",
+"bowl",
+"mug",
+"porcelain",
+"broken plate",
+"broken bowl",
+"mug",
+"coffee mug"
+],
+"parts": [
+{
+"name": "Dish",
+"steps": [
+"If broken, wrap it in newspaper",
+"Non-burnable waste sack (불연성 마대) or general waste bag"
+]
+}
+],
+"tip": "Each district sells special non-burnable waste sacks."
+},
+"과일 껍질": {
+"name": "Fruit peels",
+"aliases": [
+"fruit peel",
+"banana peel",
+"apple peel",
+"orange peel",
+"watermelon rind",
+"banana",
+"apple",
+"tangerine"
+],
+"parts": [
+{
+"name": "Peel",
+"steps": [
+"Drain and put in food waste"
+]
+}
+],
+"tip": "Cut watermelon rind into small pieces so it can be collected."
+},
+"남은 음식": {
+"name": "Leftover food",
+"aliases": [
+"leftover food",
+"leftovers",
+"food waste",
+"rice",
+"kimchi",
+"side dishes"
+],
+"parts": [
+{
+"name": "Food",
+"steps": [
+"Pour off the soup and keep only the solids",
+"Squeeze out the water"
+]
+}
+],
+"tip": "Rinsing kimchi or stew once lowers the salt, which is better."
+},
+"빵·떡·면": {
+"name": "Bread / rice cake / noodles",
+"aliases": [
+"bread",
+"rice cake",
+"noodles"
+],
+"parts": [
+{
+"name": "Food",
+"steps": [
+"Take off the wrapper and put in food waste"
+]
+}
+],
+"tip": ""
+},
+"생선·고기": {
+"name": "Fish / meat",
+"aliases": [
+"fish",
+"meat",
+"raw meat",
+"fish guts",
+"pork fat"
+],
+"parts": [
+{
+"name": "Meat & guts",
+"steps": [
+"Drain and put in food waste"
+]
+},
+{
+"name": "Bones",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"뼈": {
+"name": "Bones",
+"aliases": [
+"bones",
+"chicken bones",
+"pork bones",
+"beef bones",
+"fish bones",
+"rib bones"
+],
+"parts": [
+{
+"name": "Bones",
+"steps": [
+"Remove the meat, then general waste bag"
+]
+}
+],
+"tip": "Anything too hard for animals to eat isn't food waste."
+},
+"치킨 먹고 남은 것": {
+"name": "Leftover fried chicken",
+"aliases": [
+"leftover chicken",
+"fried chicken leftovers",
+"chicken"
+],
+"parts": [
+{
+"name": "Meat & batter",
+"steps": [
+"Strip it off the bones"
+]
+},
+{
+"name": "Bones",
+"steps": [
+"General waste bag"
+]
+},
+{
+"name": "Box",
+"steps": [
+"If very greasy, general waste"
+]
+},
+{
+"name": "Sauce cup / radish container",
+"steps": [
+"Rinse and put with plastics"
+]
+}
+],
+"tip": "Don't pour the pickled radish juice down the drain; mix small amounts into food waste."
+},
+"계란 껍데기": {
+"name": "Eggshells",
+"aliases": [
+"eggshell",
+"egg shells"
+],
+"parts": [
+{
+"name": "Shells",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "They're too hard to count as food waste."
+},
+"조개·갑각류 껍데기": {
+"name": "Shells (clams, crabs)",
+"aliases": [
+"clam shells",
+"oyster shells",
+"seashells",
+"crab shells",
+"mussel shells"
+],
+"parts": [
+{
+"name": "Shells",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"양파·마늘 껍질, 파 뿌리": {
+"name": "Onion / garlic skins, green onion roots",
+"aliases": [
+"onion skin",
+"garlic skin",
+"green onion roots",
+"corn husk"
+],
+"parts": [
+{
+"name": "Skins & roots",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "They're too tough for food waste processing."
+},
+"딱딱한 씨·견과류 껍데기": {
+"name": "Hard pits / nut shells",
+"aliases": [
+"peach pit",
+"fruit pit",
+"nut shells",
+"walnut shells",
+"peanut shells",
+"avocado pit"
+],
+"parts": [
+{
+"name": "Pits & shells",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"티백·커피 찌꺼기": {
+"name": "Tea bags / coffee grounds",
+"aliases": [
+"tea bag",
+"coffee grounds",
+"used coffee"
+],
+"parts": [
+{
+"name": "Grounds",
+"steps": [
+"Drain, then general waste bag"
+]
+}
+],
+"tip": "Some districts accept these as food waste, so check yours."
+},
+"나무젓가락·꼬치": {
+"name": "Wooden chopsticks / skewers",
+"aliases": [
+"wooden chopsticks",
+"chopsticks",
+"skewer",
+"toothpick"
+],
+"parts": [
+{
+"name": "Wood",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"마스크": {
+"name": "Face mask",
+"aliases": [
+"mask",
+"face mask",
+"kf94"
+],
+"parts": [
+{
+"name": "Mask",
+"steps": [
+"Cut the ear straps, fold it, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"기저귀·생리대": {
+"name": "Diapers / sanitary pads",
+"aliases": [
+"diaper",
+"nappy",
+"sanitary pad",
+"pad"
+],
+"parts": [
+{
+"name": "Whole item",
+"steps": [
+"Roll it up, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"담배꽁초": {
+"name": "Cigarette butts",
+"aliases": [
+"cigarette butt",
+"cigarette"
+],
+"parts": [
+{
+"name": "Butt",
+"steps": [
+"Make sure it's fully out, then general waste bag"
+]
+}
+],
+"tip": ""
+},
+"고양이 모래": {
+"name": "Cat litter",
+"aliases": [
+"cat litter",
+"kitty litter",
+"tofu litter"
+],
+"parts": [
+{
+"name": "Litter",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Even tofu litter clogs toilets, so don't flush it."
+},
+"아이스팩": {
+"name": "Ice pack",
+"aliases": [
+"ice pack",
+"cold pack",
+"gel pack"
+],
+"parts": [
+{
+"name": "Gel ice pack",
+"steps": [
+"Don't cut it; put the whole thing in the general waste bag"
+]
+},
+{
+"name": "Water ice pack",
+"steps": [
+"Pour out the water and put with plastic film"
+]
+}
+],
+"tip": "Some community centers have bins that collect clean ice packs for reuse."
+},
+"백열전구": {
+"name": "Incandescent bulb",
+"aliases": [
+"incandescent bulb",
+"halogen bulb",
+"incandescent light"
+],
+"parts": [
+{
+"name": "Bulb",
+"steps": [
+"Wrap it so it won't break, general waste bag"
+]
+}
+],
+"tip": "Fluorescent and LED lights have their own collection bins."
+},
+"우산": {
+"name": "Umbrella",
+"aliases": [
+"umbrella",
+"broken umbrella"
+],
+"parts": [
+{
+"name": "Fabric",
+"steps": [
+"Cut it off the frame"
+]
+},
+{
+"name": "Frame & shaft",
+"steps": [
+"Put with scrap metal"
+]
+},
+{
+"name": "Handle",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "If it's hard to take apart, the whole thing can go in general waste."
+},
+"건전지": {
+"name": "Batteries",
+"aliases": [
+"battery",
+"batteries",
+"aa battery",
+"aaa battery",
+"dead batteries"
+],
+"parts": [
+{
+"name": "Batteries",
+"steps": [
+"Battery collection bin at your apartment or community center"
+]
+}
+],
+"tip": "Batteries in a general waste bag can start fires."
+},
+"보조배터리": {
+"name": "Power bank",
+"aliases": [
+"power bank",
+"portable charger",
+"lithium battery",
+"battery pack"
+],
+"parts": [
+{
+"name": "Power bank",
+"steps": [
+"Tape over the terminals",
+"Battery collection bin or community center"
+]
+}
+],
+"tip": "Lithium batteries catch fire when crushed. Never put them in general waste."
+},
+"형광등": {
+"name": "Fluorescent light",
+"aliases": [
+"fluorescent light",
+"fluorescent tube",
+"fluorescent lamp"
+],
+"parts": [
+{
+"name": "Tube",
+"steps": [
+"Keep it unbroken and put it in the fluorescent light bin at your apartment or community center"
+]
+}
+],
+"tip": "Fluorescent lights contain mercury. Broken ones go wrapped in newspaper in the general waste bag (a non-burnable sack if there are many)."
+},
+"LED 조명": {
+"name": "LED light",
+"aliases": [
+"led",
+"led bulb",
+"led light",
+"led tube"
+],
+"parts": [
+{
+"name": "LED light",
+"steps": [
+"If the fluorescent light bin has an LED section, use that",
+"If not, ask your community center whether they have an LED collection bin"
+]
+}
+],
+"tip": "Since 2023, LEDs must be recycled and are collected separately from fluorescent lights. Broken LEDs go in the general waste bag."
+},
+"남은 약": {
+"name": "Leftover medicine",
+"aliases": [
+"medicine",
+"pills",
+"leftover medicine",
+"expired medicine",
+"cold medicine",
+"syrup"
+],
+"parts": [
+{
+"name": "Pills & capsules",
+"steps": [
+"Keep them in their packaging",
+"Medicine collection bin at a pharmacy, public health center or community center"
+]
+},
+{
+"name": "Liquid medicine & ointment",
+"steps": [
+"Close the cap and put in the collection bin"
+]
+}
+],
+"tip": "In some areas you can write \"폐의약품\" (waste medicine) on an envelope and drop it in a mailbox (not liquids). Flushing medicine pollutes water."
+},
+"휴대폰·노트북": {
+"name": "Phone / laptop",
+"aliases": [
+"phone",
+"smartphone",
+"cell phone",
+"mobile phone",
+"laptop",
+"tablet",
+"ipad",
+"iphone"
+],
+"parts": [
+{
+"name": "Device",
+"steps": [
+"Factory reset to erase your data",
+"Community center or phone store collection bin, or free e-waste pickup"
+]
+}
+],
+"tip": ""
+},
+"소형 가전": {
+"name": "Small appliances",
+"aliases": [
+"small appliance",
+"charger",
+"earphones",
+"cable",
+"hair dryer",
+"fan",
+"rice cooker",
+"blender",
+"microwave",
+"vacuum cleaner",
+"electronics",
+"small electronics"
+],
+"parts": [
+{
+"name": "Appliance",
+"steps": [
+"Small appliance bin, or request free e-waste pickup (☎ 1599-0903)"
+]
+}
+],
+"tip": "If you collect 5 or more small items, you can request free pickup."
+},
+"대형 가전": {
+"name": "Large appliances",
+"aliases": [
+"fridge",
+"refrigerator",
+"washing machine",
+"tv",
+"television",
+"air conditioner"
+],
+"parts": [
+{
+"name": "Appliance",
+"steps": [
+"Request free e-waste home pickup (☎ 1599-0903)"
+]
+}
+],
+"tip": "Stores often take the old one when you buy a new one."
+},
+"가구": {
+"name": "Furniture",
+"aliases": [
+"furniture",
+"desk",
+"chair",
+"bed",
+"mattress",
+"sofa",
+"couch",
+"wardrobe",
+"drawers",
+"bookshelf",
+"table"
+],
+"parts": [
+{
+"name": "Furniture",
+"steps": [
+"Report it as bulky waste on your district office website or app",
+"Attach the sticker and put it out"
+]
+}
+],
+"tip": ""
+},
+"옷·신발·가방": {
+"name": "Clothes / shoes / bags",
+"aliases": [
+"clothes",
+"clothing",
+"old clothes",
+"shoes",
+"sneakers",
+"backpack",
+"jeans",
+"t-shirt",
+"jacket",
+"coat"
+],
+"parts": [
+{
+"name": "Clothes & shoes",
+"steps": [
+"If clean, put in a clothing collection bin"
+]
+}
+],
+"tip": "Wet or torn items go in general waste."
+},
+"자전거·킥보드": {
+"name": "Bicycle / scooter",
+"aliases": [
+"bicycle",
+"bike",
+"scooter",
+"kick scooter",
+"stroller"
+],
+"parts": [
+{
+"name": "Frame",
+"steps": [
+"Report as bulky waste"
+]
+}
+],
+"tip": "Remove the battery from electric scooters separately."
+},
+"텀블러·보온병": {
+"name": "Tumbler / thermos",
+"aliases": [
+"tumbler",
+"thermos",
+"water bottle steel",
+"stanley"
+],
+"parts": [
+{
+"name": "Body",
+"steps": [
+"Stainless steel goes with metal",
+"Plastic goes with plastics"
+]
+},
+{
+"name": "Lid",
+"steps": [
+"Take it off and put with plastics"
+]
+},
+{
+"name": "Rubber seal",
+"steps": [
+"Remove it, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"커피 캡슐": {
+"name": "Coffee capsule",
+"aliases": [
+"coffee capsule",
+"coffee pod",
+"nespresso",
+"dolce gusto"
+],
+"parts": [
+{
+"name": "Capsule",
+"steps": [
+"With the grounds inside, general waste bag"
+]
+}
+],
+"tip": "Some brand stores take back aluminum capsules."
+},
+"화장품 용기": {
+"name": "Cosmetic container",
+"aliases": [
+"cosmetic bottle",
+"lotion bottle",
+"toner bottle",
+"cream jar",
+"skincare bottle"
+],
+"parts": [
+{
+"name": "Container",
+"steps": [
+"Wipe out what's left",
+"If it's glass, put with glass bottles"
+]
+},
+{
+"name": "Pump / dropper",
+"steps": [
+"Take it off, general waste bag"
+]
+}
+],
+"tip": "If you can't clean out the contents, put it in general waste."
+},
+"치약 튜브": {
+"name": "Toothpaste tube",
+"aliases": [
+"toothpaste",
+"toothpaste tube"
+],
+"parts": [
+{
+"name": "Tube",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "If you cut it open and wash it clean, it can go with plastics."
+},
+"향수병": {
+"name": "Perfume bottle",
+"aliases": [
+"perfume",
+"perfume bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"If the sprayer won't come off, the whole thing goes in the general waste bag"
+]
+},
+{
+"name": "Glass body",
+"steps": [
+"If the sprayer comes off, rinse and put with glass bottles"
+]
+}
+],
+"tip": ""
+},
+"제습제": {
+"name": "Dehumidifier box",
+"aliases": [
+"dehumidifier",
+"moisture absorber",
+"damp rid"
+],
+"parts": [
+{
+"name": "Collected water",
+"steps": [
+"First check the label says it can go down the drain",
+"If so, pour it out slowly with plenty of running water"
+]
+},
+{
+"name": "Container",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Fabric & leftover beads",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Most are calcium chloride water, but products differ. If there's no label or you're not sure, ask your district office."
+},
+"종이 쇼핑백": {
+"name": "Paper shopping bag",
+"aliases": [
+"paper bag",
+"paper shopping bag"
+],
+"parts": [
+{
+"name": "Bag",
+"steps": [
+"Remove string handles and plastic coating"
+]
+}
+],
+"tip": "Shopping bags with a plastic coating on the outside go in general waste."
+},
+"아이스크림 막대": {
+"name": "Ice cream stick",
+"aliases": [
+"ice cream stick",
+"popsicle stick"
+],
+"parts": [
+{
+"name": "Stick",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"라이터": {
+"name": "Lighter",
+"aliases": [
+"lighter",
+"disposable lighter",
+"matches"
+],
+"parts": [
+{
+"name": "Lighter",
+"steps": [
+"Use up all the gas, then general waste bag"
+]
+}
+],
+"tip": "A lighter with gas left in it can start a fire."
+},
+"핫팩": {
+"name": "Hand warmer",
+"aliases": [
+"hand warmer",
+"heat pack",
+"hot pack"
+],
+"parts": [
+{
+"name": "Hand warmer",
+"steps": [
+"Once it's cold, general waste bag"
+]
+}
+],
+"tip": "Don't tear it open."
+},
+"이불·베개·쿠션": {
+"name": "Blanket / pillow / cushion",
+"aliases": [
+"blanket",
+"duvet",
+"pillow",
+"cushion",
+"comforter"
+],
+"parts": [
+{
+"name": "Item",
+"steps": [
+"If it fits, general waste bag"
+]
+},
+{
+"name": "Large items",
+"steps": [
+"If it doesn't fit, report as bulky waste"
+]
+}
+],
+"tip": "Many clothing bins don't accept blankets or pillows."
+},
+"걸레·수건": {
+"name": "Rags / towels",
+"aliases": [
+"towel",
+"rag",
+"old towel",
+"dishcloth"
+],
+"parts": [
+{
+"name": "Fabric",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "Animal shelters sometimes take clean towels."
+},
+"일회용 장갑": {
+"name": "Disposable gloves",
+"aliases": [
+"disposable gloves",
+"plastic gloves",
+"latex gloves",
+"nitrile gloves"
+],
+"parts": [
+{
+"name": "Gloves",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": "They usually have food on them, so they can't be recycled."
+},
+"폐식용유": {
+"name": "Used cooking oil",
+"aliases": [
+"cooking oil",
+"used oil",
+"frying oil",
+"oil"
+],
+"parts": [
+{
+"name": "Oil",
+"steps": [
+"Let it cool and pour it into a bottle",
+"Used cooking oil bin at your apartment or community center"
+]
+}
+],
+"tip": "For small amounts, soak it up with paper towels and use the general waste bag. Never pour it down the drain."
+},
+"소화기": {
+"name": "Fire extinguisher",
+"aliases": [
+"fire extinguisher"
+],
+"parts": [
+{
+"name": "Extinguisher",
+"steps": [
+"Ask your district office or community center about pickup",
+"Or return it to the seller or an extinguisher collection company"
+]
+}
+],
+"tip": "It's still under pressure, so putting it in a general waste bag is dangerous."
+},
+"우유": {
+"name": "Milk",
+"aliases": [
+"milk",
+"leftover milk",
+"spoiled milk",
+"expired milk"
+],
+"parts": [
+{
+"name": "Leftover milk",
+"steps": [
+"Small amounts: pour down the sink with water running",
+"Large amounts: soak into newspaper or paper towels, general waste bag"
+]
+},
+{
+"name": "Milk carton",
+"steps": [
+"Rinse, open flat and dry",
+"Paper carton bin"
+]
+}
+],
+"tip": "Milk pollutes water a lot, so don't pour a lot at once."
+},
+"남은 음료수": {
+"name": "Leftover drink",
+"aliases": [
+"soda",
+"juice",
+"cola",
+"soft drink",
+"leftover drink"
+],
+"parts": [
+{
+"name": "Drink",
+"steps": [
+"Pour what's left down the sink"
+]
+},
+{
+"name": "PET bottle",
+"steps": [
+"Rinse and crush; label goes with plastic film"
+]
+},
+{
+"name": "Can",
+"steps": [
+"Rinse and crush"
+]
+}
+],
+"tip": "Sticky leftovers attract bugs, so always rinse."
+},
+"남은 커피": {
+"name": "Leftover coffee",
+"aliases": [
+"coffee",
+"iced coffee",
+"americano",
+"latte",
+"leftover coffee"
+],
+"parts": [
+{
+"name": "Coffee",
+"steps": [
+"Pour ice and coffee down the sink"
+]
+},
+{
+"name": "Cup & lid",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Straw",
+"steps": [
+"General waste bag"
+]
+},
+{
+"name": "Cup sleeve",
+"steps": [
+"Put with paper"
+]
+}
+],
+"tip": "If it's a paper cup, rinse it and put it in the paper carton / paper cup bin."
+},
+"국물": {
+"name": "Soup / broth",
+"aliases": [
+"soup",
+"broth",
+"ramen soup",
+"stew broth"
+],
+"parts": [
+{
+"name": "Solids",
+"steps": [
+"Strain them out and put in food waste"
+]
+},
+{
+"name": "Broth",
+"steps": [
+"Wipe off oil with a paper towel first, then pour down with running water"
+]
+}
+],
+"tip": "Pouring oil straight down clogs the pipes."
+},
+"요거트·푸딩 컵": {
+"name": "Yogurt / pudding cup",
+"aliases": [
+"yogurt",
+"yogurt cup",
+"pudding cup"
+],
+"parts": [
+{
+"name": "Leftover yogurt",
+"steps": [
+"Food waste"
+]
+},
+{
+"name": "Cup",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Foil lid",
+"steps": [
+"Peel off, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"약통": {
+"name": "Pill bottle",
+"aliases": [
+"pill bottle",
+"medicine bottle",
+"empty pill bottle"
+],
+"parts": [
+{
+"name": "Leftover pills",
+"steps": [
+"Take them out and bring them to a pharmacy or public health center bin"
+]
+},
+{
+"name": "Empty bottle",
+"steps": [
+"Rinse and put with plastics"
+]
+},
+{
+"name": "Label / name sticker",
+"steps": [
+"Peel off anything with your name, general waste bag"
+]
+}
+],
+"tip": ""
+},
+"반려동물 똥": {
+"name": "Pet poop",
+"aliases": [
+"dog poop",
+"dog poo",
+"cat poop",
+"pet waste",
+"poop",
+"poo"
+],
+"parts": [
+{
+"name": "Poop",
+"steps": [
+"Wrap it in a poop bag or plastic bag and tie it",
+"General waste bag"
+]
+}
+],
+"tip": "Always pick it up on walks. Small amounts wrapped in toilet paper can be flushed, but never flush plastic bags."
+},
+"배변패드": {
+"name": "Pet pee pad",
+"aliases": [
+"pee pad",
+"puppy pad",
+"pet pad"
+],
+"parts": [
+{
+"name": "Pad",
+"steps": [
+"Roll it up, general waste bag"
+]
+}
+],
+"tip": "Wet pads are heavy, so tie the bag well so it doesn't burst."
+},
+"편의점 도시락": {
+"name": "Convenience store lunch box",
+"aliases": [
+"lunch box",
+"dosirak",
+"convenience store meal",
+"bento"
+],
+"parts": [
+{
+"name": "Leftover food",
+"steps": [
+"Food waste"
+]
+},
+{
+"name": "Tray & lid",
+"steps": [
+"Rinse and put with plastics"
+]
+}
+],
+"tip": "If sauce won't wash off, it goes in general waste."
+},
+"케이크": {
+"name": "Cake",
+"aliases": [
+"cake",
+"birthday cake",
+"cake box"
+],
+"parts": [
+{
+"name": "Leftover cake",
+"steps": [
+"Food waste"
+]
+},
+{
+"name": "Box",
+"steps": [
+"Put with paper"
+]
+},
+{
+"name": "Base & plastic knife",
+"steps": [
+"If covered in cream, general waste bag"
+]
+},
+{
+"name": "Clear cover",
+"steps": [
+"Rinse and put with plastics"
+]
+}
+],
+"tip": "Candles go in general waste."
+},
+"계란": {
+"name": "Eggs",
+"aliases": [
+"egg",
+"eggs",
+"rotten egg"
+],
+"parts": [
+{
+"name": "Contents",
+"steps": [
+"Food waste"
+]
+},
+{
+"name": "Shells",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"와인·드링크 병": {
+"name": "Wine / energy drink bottle",
+"aliases": [
+"wine bottle",
+"liquor bottle",
+"energy drink bottle",
+"bacchus bottle"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty and rinse it"
+]
+},
+{
+"name": "Cap",
+"steps": [
+"Metal caps go with metal"
+]
+}
+],
+"tip": "Wine corks go in general waste."
+},
+"무선 이어폰·헤드셋": {
+"name": "Wireless earbuds / headphones",
+"aliases": [
+"airpods",
+"earbuds",
+"wireless earbuds",
+"headphones",
+"headset"
+],
+"parts": [
+{
+"name": "Device",
+"steps": [
+"It has a battery, so use the small appliance bin"
+]
+}
+],
+"tip": "Never put it in a general waste bag. It can catch fire."
+},
+"컵홀더": {
+"name": "Cup sleeve",
+"aliases": [
+"cup sleeve",
+"coffee sleeve"
+],
+"parts": [
+{
+"name": "Sleeve",
+"steps": [
+"Put with paper"
+]
+}
+],
+"tip": ""
+},
+"컵 뚜껑": {
+"name": "Cup lid",
+"aliases": [
+"cup lid",
+"coffee lid",
+"drink lid"
+],
+"parts": [
+{
+"name": "Lid",
+"steps": [
+"Rinse and put with plastics"
+]
+}
+],
+"tip": "Paper lids go with paper."
+},
+"플라스틱 뚜껑": {
+"name": "Plastic cap",
+"aliases": [
+"plastic cap",
+"bottle cap",
+"plastic lid"
+],
+"parts": [
+{
+"name": "Cap",
+"steps": [
+"If clean, put with plastics"
+]
+}
+],
+"tip": "You can screw PET bottle caps back on and throw them out together."
+},
+"포토카드": {
+"name": "Photocard",
+"aliases": [
+"photocard",
+"photo card",
+"kpop photocard"
+],
+"parts": [
+{
+"name": "Card",
+"steps": [
+"It's coated, so general waste bag"
+]
+},
+{
+"name": "Clear sleeve",
+"steps": [
+"Put with plastic film"
+]
+}
+],
+"tip": ""
+},
+"깨진 유리병": {
+"name": "Broken glass bottle",
+"aliases": [
+"broken bottle",
+"broken glass bottle"
+],
+"parts": [
+{
+"name": "Glass",
+"steps": [
+"Wrap in newspaper and write \"깨진 유리\" (broken glass) on it",
+"General waste bag or non-burnable waste sack"
+]
+}
+],
+"tip": "Broken glass can hurt collectors, so don't put it with glass bottles."
+},
+"가위·칼": {
+"name": "Scissors / knives",
+"aliases": [
+"scissors",
+"knife",
+"kitchen knife",
+"box cutter"
+],
+"parts": [
+{
+"name": "Blade",
+"steps": [
+"Wrap in newspaper, write \"칼\" (knife) on it, put with scrap metal"
+]
+},
+{
+"name": "Plastic handle",
+"steps": [
+"If it comes off, throw it away separately"
+]
+}
+],
+"tip": "Always wrap it so collectors don't get hurt."
+},
+"주사기·바늘": {
+"name": "Syringes / needles",
+"aliases": [
+"syringe",
+"needle",
+"insulin needle",
+"lancet"
+],
+"parts": [
+{
+"name": "Needles",
+"steps": [
+"Cap them and collect them in a hard container like a PET bottle",
+"Bring them to a pharmacy or public health center"
+]
+}
+],
+"tip": "Loose needles can stab the people who collect trash."
+},
+"전자담배": {
+"name": "E-cigarette / vape",
+"aliases": [
+"vape",
+"e-cigarette",
+"iqos",
+"vape pen"
+],
+"parts": [
+{
+"name": "Device",
+"steps": [
+"It has a battery, so use the small appliance bin"
+]
+},
+{
+"name": "Used sticks / pods",
+"steps": [
+"General waste bag"
+]
+}
+],
+"tip": ""
+},
+"분무기·물조리개": {
+"name": "Spray bottle / watering can",
+"aliases": [
+"spray bottle",
+"trigger spray",
+"pump spray",
+"watering can",
+"cleaner spray"
+],
+"parts": [
+{
+"name": "Bottle",
+"steps": [
+"Empty, rinse and put with plastics"
+]
+},
+{
+"name": "Spray pump",
+"steps": [
+"It has a spring, so take it off and use the general waste bag"
+]
+}
+],
+"tip": "Aerosol cans that hiss when sprayed are disposed of differently."
+}
+}

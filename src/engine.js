@@ -7,15 +7,15 @@ const BINS={"플라스틱":"--plastic","비닐":"--vinyl","종이":"--paper","�
 
 // 재질 단어로 추측 (사전에 없을 때)
 const GUESS=[
-  [/배터리|건전지|형광등|충전|전자|전기|가전|폰|약/,"대형·특수",["따로 수거하는 품목일 수 있어","주민센터나 구청에 확인하기"]],
-  [/유리|글라스/,"유리병",["병이면 비우고 헹궈서 유리병으로","컵·그릇이면 신문지에 싸서 일반쓰레기로"]],
-  [/캔|알루미늄|철|스텐|스테인리스|금속|쇠|구리/,"캔·고철",["비우고 헹구기","고철로 배출"]],
-  [/비닐|봉지|봉투|랩|필름|포장지/,"비닐",["이물질 털고 비닐류로"]],
-  [/팩/,"종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]],
-  [/종이|박스|상자|책|노트|신문|카드/,"종이",["테이프·비닐 떼기","납작하게 묶어서 종이류로"]],
-  [/플라스틱|페트|용기|통|컵|뚜껑|트레이/,"플라스틱",["내용물 비우고 헹구기","플라스틱으로"]],
-  [/껍질|껍데기|뼈|씨|가시/,"일반쓰레기",["딱딱하면 일반쓰레기","부드러운 과일 껍질이면 음식물"]],
-  [/음식|반찬|과일|채소|야채|고기|생선|국물|소스/,"음식물",["물기 빼고 음식물로"]],
+  [/배터리|건전지|형광등|충전|전자|전기|가전|폰|약|batter|charger|electr|phone|medicine|pill/i,"대형·특수",["따로 수거하는 품목일 수 있어","주민센터나 구청에 확인하기"],["It may need a special collection bin","Check with your community center or district office"]],
+  [/유리|글라스|glass/i,"유리병",["병이면 비우고 헹궈서 유리병으로","컵·그릇이면 신문지에 싸서 일반쓰레기로"],["If it's a bottle, rinse and put with glass bottles","If it's a cup or dish, wrap in newspaper and use the general waste bag"]],
+  [/캔|알루미늄|철|스텐|스테인리스|금속|쇠|구리|\bcan\b|\btin\b|alumin|metal|steel|iron|copper/i,"캔·고철",["비우고 헹구기","고철로 배출"],["Empty and rinse it","Put with cans & metal"]],
+  [/비닐|봉지|봉투|랩|필름|포장지|\bbag\b|wrapper|film|packet|pouch/i,"비닐",["이물질 털고 비닐류로"],["Shake it clean and put with plastic film"]],
+  [/팩|carton/i,"종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"],["Rinse, open flat and dry","Paper carton bin"]],
+  [/종이|박스|상자|책|노트|신문|카드|paper|cardboard|\bbox\b|book|newspaper/i,"종이",["테이프·비닐 떼기","납작하게 묶어서 종이류로"],["Remove tape and plastic","Flatten, tie and put with paper"]],
+  [/플라스틱|페트|용기|통|컵|뚜껑|트레이|plastic|\bpet\b|container|\bcup\b|\blid\b|tray|tub/i,"플라스틱",["내용물 비우고 헹구기","플라스틱으로"],["Empty and rinse it","Put with plastics"]],
+  [/껍질|껍데기|뼈|씨|가시|shell|bone|\bpit\b|seed/i,"일반쓰레기",["딱딱하면 일반쓰레기","부드러운 과일 껍질이면 음식물"],["Hard parts go in the general waste bag","Soft fruit peels go in food waste"]],
+  [/음식|반찬|과일|채소|야채|고기|생선|국물|소스|food|fruit|vegetable|meat|fish|sauce/i,"음식물",["물기 빼고 음식물로"],["Drain and put in food waste"]],
 ];
 
 // "치킨뼈 어디에 버려?" 같은 말꼬리는 떼고 비교 (단, "고양이"의 '이'처럼 이름 끝 글자는 안 건드림)
@@ -33,28 +33,34 @@ const CHO="ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",JUNG="ㅏ�
 const jamo=s=>[...s].map(c=>{const k=c.charCodeAt(0)-0xAC00;if(k<0||k>11171)return c;return CHO[Math.floor(k/588)]+JUNG[Math.floor(k%588/28)]+(k%28?JONG[k%28]:"")}).join("");
 // "다 쓴 건전지", "고장난 이어폰" 같은 앞말은 떼고 찾기
 // "고양이 사료 캔"처럼 끝에 담는 그릇 이름이 붙으면 그걸 보고 판단
-const CONT={"캔":["캔·고철",["비우고 헹구기","찌그러뜨려서 캔류로"]],"봉지":["비닐",["털고 헹궈서 비닐류로"]],"봉투":["비닐",["비닐이면 비닐류, 종이면 종이류로"]],"상자":["종이",["테이프 떼고 펼쳐서 종이류로"]],"박스":["종이",["테이프 떼고 펼쳐서 종이류로"]],"팩":["종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]]};
+const CONT={"can":["캔·고철",["비우고 헹구기","찌그러뜨려서 캔류로"],["Empty and rinse it","Crush it and put with cans"]],"bag":["비닐",["털고 헹궈서 비닐류로"],["Shake out, rinse and put with plastic film"]],"box":["종이",["테이프 떼고 펼쳐서 종이류로"],["Remove tape, flatten and put with paper"]],"carton":["종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"],["Rinse, open flat and dry","Paper carton bin"]],"캔":["캔·고철",["비우고 헹구기","찌그러뜨려서 캔류로"]],"봉지":["비닐",["털고 헹궈서 비닐류로"]],"봉투":["비닐",["비닐이면 비닐류, 종이면 종이류로"]],"상자":["종이",["테이프 떼고 펼쳐서 종이류로"]],"박스":["종이",["테이프 떼고 펼쳐서 종이류로"]],"팩":["종이팩",["헹궈서 펼쳐 말리기","종이팩 수거함에"]]};
 const MATERIAL=/^(스티로폼|플라스틱|유리|종이|비닐|알루미늄|스텐|철)$/;
 // 자음·모음 기준 편집거리 (max를 넘으면 바로 포기)
 function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let prev=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){const cur=[i];let lo=i;for(let j=1;j<=b.length;j++){cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));lo=Math.min(lo,cur[j])}if(lo>max)return max+1;prev=cur}return prev[b.length]}
 // 버리는 물건이 아닌 말
-const NOT_TRASH=new Set(["사람","나","너","저","우리","엄마","아빠","부모님","할머니","할아버지","형","누나","오빠","언니","동생","친구","선생님","쌤","남친","여친","남자친구","여자친구","강아지","개","고양이","반려동물","햄스터","물고기","금붕어","토끼","학교","학원","집","숙제","시험","공부","사랑","돈","지구","하늘","시간","인생","미래","꿈","행복","스트레스","기분","월요일"]);
+const NOT_TRASH=new Set(["human","person","people","me","you","mom","mother","dad","father","parents","friend","teacher","dog","cat","pet","hamster","fish","school","love","money","life","stress","사람","나","너","저","우리","엄마","아빠","부모님","할머니","할아버지","형","누나","오빠","언니","동생","친구","선생님","쌤","남친","여친","남자친구","여자친구","강아지","개","고양이","반려동물","햄스터","물고기","금붕어","토끼","학교","학원","집","숙제","시험","공부","사랑","돈","지구","하늘","시간","인생","미래","꿈","행복","스트레스","기분","월요일"]);
 // 숨은 재미 (이스터에그)
 const EGG=(()=>{
-  const holy={e:"✝️",a:"holy",t:"사탄은 어느 수거함에도 안 들어가…",d:"십자가로 퇴치 완료! 이제 진짜 버릴 물건을 알려줘."};
-  const ex={e:"💔",a:"shake",t:"전 애인은 분리수거가 안 돼",d:"추억은 마음속 종량제 봉투에, 받은 선물은 재질별로 분리배출! 선물 이름을 쳐 봐."};
+  const holy={e:"✝️",a:"holy",t:"사탄은 어느 수거함에도 안 들어가…",d:"십자가로 퇴치 완료! 이제 진짜 버릴 물건을 알려줘.",en:{t:"Satan doesn't fit in any bin…",d:"Banished with a cross! Now tell me what you really want to throw away."}};
+  const ex={e:"💔",a:"shake",t:"전 애인은 분리수거가 안 돼",d:"추억은 마음속 종량제 봉투에, 받은 선물은 재질별로 분리배출! 선물 이름을 쳐 봐.",en:{t:"Exes can't be recycled",d:"Memories go in your heart's general waste bag. Gifts get sorted by material! Type the gift's name."}};
+  const mon={e:"🫠",a:"melt",t:"월요일은 수거 거부 품목이야",d:"대형폐기물 스티커를 붙여도 안 가져가… 금요일까지만 버텨 보자.",en:{t:"Mondays are not accepted for collection",d:"Not even with a bulky waste sticker… Hang in there till Friday."}};
+  const earth={e:"🌏",a:"spin",t:"지구는 버리는 게 아니라 지키는 거야",d:"분리수거 하나만 제대로 해도 지구가 조금 덜 아파. 버릴 물건을 알려줘!",en:{t:"Earth isn't for throwing away, it's for protecting",d:"Sorting just one thing right makes the planet hurt a little less. What are you throwing away?"}};
+  const hw={e:"📚",a:"drop",t:"숙제는 아직 버리면 안 돼…",d:"다 끝내고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!",en:{t:"You can't throw away homework yet…",d:"Finish it first, then I'll show you how to recycle it as paper. You got this!"}};
+  const trash={e:"🗑️",a:"bounce",t:"그래서… 어떤 쓰레기?",d:"이름만 알려주면 바로 찾아 줄게.",chips:["컵라면 용기","치킨 뼈","택배 상자"],en:{t:"So… what kind of trash?",d:"Just tell me what it is and I'll find it.",chips:["cup noodle","chicken bones","delivery box"]}};
   return {
     "사탄":holy,
-    "악마":{...holy,t:"악마는 분리수거 대상이 아니야",d:"십자가로 쫓아냈어. 버릴 물건 이름을 써 줘."},
-    "월요일":{e:"🫠",a:"melt",t:"월요일은 수거 거부 품목이야",d:"대형폐기물 스티커를 붙여도 안 가져가… 금요일까지만 버텨 보자."},
-    "지구":{e:"🌏",a:"spin",t:"지구는 버리는 게 아니라 지키는 거야",d:"분리수거 하나만 제대로 해도 지구가 조금 덜 아파. 버릴 물건을 알려줘!"},
+    "악마":{...holy,t:"악마는 분리수거 대상이 아니야",d:"십자가로 쫓아냈어. 버릴 물건 이름을 써 줘.",en:{t:"Devils can't be recycled",d:"Chased away with a cross. Type what you want to throw away."}},
+    "satan":holy,"devil":{...holy,en:{t:"Devils can't be recycled",d:"Chased away with a cross. Type what you want to throw away."}},
+    "월요일":mon,"monday":mon,"mondays":mon,
+    "지구":earth,"earth":earth,"planet":earth,
+    "ex":ex,"exboyfriend":ex,"exgirlfriend":ex,"myex":ex,
     "전남친":ex,"전여친":ex,"전남자친구":ex,"전여자친구":ex,"전애인":ex,
-    "숙제":{e:"📚",a:"drop",t:"숙제는 아직 버리면 안 돼…",d:"다 끝내고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!"},
-    "과제":{e:"📚",a:"drop",t:"과제는 아직 버리면 안 돼…",d:"제출하고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!"},
-    "쓰레기":{e:"🗑️",a:"bounce",t:"그래서… 어떤 쓰레기?",d:"이름만 알려주면 바로 찾아 줄게.",chips:["컵라면 용기","치킨 뼈","택배 상자"]},
+    "숙제":hw,"homework":hw,"assignment":hw,
+    "과제":{...hw,t:"과제는 아직 버리면 안 돼…",d:"제출하고 나면 그때 종이류로 버리는 법 알려줄게. 화이팅!"},
+    "쓰레기":trash,"trash":trash,"garbage":trash,"rubbish":trash,"waste":trash,
   };
 })();
-const PET=/^(강아지|개|고양이|반려동물|햄스터|물고기|금붕어|토끼)$/;
+const PET=/^(강아지|개|고양이|반려동물|햄스터|물고기|금붕어|토끼|dog|cat|pet|hamster|fish)$/;
 // 뜻이 여러 개인 말은 단정하지 말고 되묻기
 const AMBIG={
   "유리":["유리병","유리컵","깨진 유리","거울","글라스락"],
@@ -69,7 +75,7 @@ const AMBIG={
   "가전":["드라이기","전자레인지","냉장고","휴대폰","선풍기"],
   "전자제품":["충전기","드라이기","전자레인지","냉장고","휴대폰"],
   "전기제품":["충전기","드라이기","전자레인지","냉장고","휴대폰"],
-  "가스":["부탄가스","스프레이","캠핑가스","소화기"],
+  "가스":["부탄가스","에어로졸 스프레이","캠핑가스","소화기"],
   "통":["플라스틱 통","약통","샴푸통","분유캔","휴지통"],
   "뚜껑":["페트병 뚜껑","컵 뚜껑","금속 뚜껑","플라스틱 뚜껑"],
   "전구":["백열전구","LED 전구","형광등"],
@@ -77,14 +83,37 @@ const AMBIG={
   "씨":["복숭아 씨","과일 씨","호두 껍질"],
   "팩":["우유팩","아이스팩","마스크팩","두유팩"],
   "카드":["신용카드","포토카드","생일카드"],
+  "glass":["glass bottle","drinking glass","broken glass","mirror"],
+  "cup":["plastic cup","paper cup","drinking glass","mug"],
+  "battery":["batteries","power bank","phone","laptop"],
+  "bottle":["pet bottle","glass bottle","pill bottle","perfume bottle"],
+  "container":["delivery container","cup noodle","plastic container","styrofoam"],
+  "spray":["aerosol spray","spray bottle"],
+  "bag":["plastic bag","paper bag","backpack"],
+  "light":["incandescent bulb","fluorescent light","led light"],
+  "bulb":["incandescent bulb","fluorescent light","led light"],
+  "lightbulb":["incandescent bulb","fluorescent light","led light"],
+  "peel":["fruit peel","onion skin","eggshell"],
+  "shell":["eggshell","clam shells","nut shells"],
+  "lid":["plastic cap","cup lid","cup noodle"],
   "스프레이":["에어로졸 스프레이","분무기","세정제 스프레이"],
   "화분":["플라스틱 화분","도자기 화분","화분 흙","식물"],
 };
 const INDEX=DB.map(d=>({d,keys:d.n.map(n=>{const k=norm(n);return {k,j:jamo(k),w:n.split(/\s+/).map(norm)}})}));
+const ASCII=/^[\x00-\x7f]*$/;
+const hasSeq=(big,small)=>small.length>0&&big.some((_,i)=>small.every((x,j)=>big[i+j]===x));
+function simEn(q,k,qw,w){
+  let s=dice(q,k);
+  if(hasSeq(qw,w)) s=Math.max(s,.62+.38*k.length/q.length);
+  if(qw.length&&hasSeq(w,qw)) s=Math.max(s,.62+.38*q.length/k.length);
+  return s;
+}
 function rank(raw){
   const q=norm(raw), qj=jamo(q), list=[];
-  const tol=q.length<=2?1:2;
-  for(const e of INDEX){let best=0,key="";for(const {k,j,w} of e.keys){let s=sim(q,k);
+  const tol=q.length<=2?1:2, ascii=ASCII.test(q), qw=raw.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  for(const e of INDEX){let best=0,key="";for(const {k,j,w} of e.keys){
+    // 영어는 낱말 단위로만 포함 관계를 봐 ("spoon" 안의 "poo"가 걸리지 않게)
+    let s=ascii&&ASCII.test(k)?simEn(q,k,qw,w):sim(q,k);
     // 두 글자 이하는 딱 맞거나 낱말 단위로 맞을 때만 인정 ("다리"가 "다리미"로 가지 않게)
     if(q.length<=2&&s<.95&&!w.includes(q)&&!(k.startsWith(q)&&/^(통|병|용기|팩|곽|봉지|봉투|캔|박스|상자|컵|껍질|뚜껑|케이스|심|병뚜껑)$/.test(k.slice(q.length))))s=Math.min(s,.5);
     if(s<.72&&q.length>=2&&q[0]===k[0]&&Math.abs(q.length-k.length)<=1&&lev(qj,j,tol)<=tol)s=.72;if(s>best){best=s;key=k}}list.push({d:e.d,s:best,key})}
@@ -93,15 +122,18 @@ function rank(raw){
 // 앞에 붙는 꾸밈말 ("먹다 남은", "고장난" …) — 여러 개 붙어도 다 떼기
 const MODS=/^(다\s*쓴|다\s*먹은|다\s*마신|먹다\s*남은|먹고\s*남은|마시다\s*남은|먹던|마시던|쓰던|입던|안\s*쓰는|안\s*입는|못\s*입는|작아진|고장\s*난|망가진|부러진|찢어진|낡은|오래된|더러운|상한|썩은|쉰|식은|불은|퉁퉁\s*불은|곰팡이\s*핀|유통기한\s*지난|우리\s*집|헌\s+|빈\s+)\s*/;
 const TAIL=/\s*(남은\s*거|남은\s*것|버리는\s*법|버리는\s*방법)$/;
-const LEFT=/남은|먹다|마시다|상한|썩은|쉰|식은|불은|곰팡이|유통기한/;
+const LEFT=/남은|먹다|마시다|상한|썩은|쉰|식은|불은|곰팡이|유통기한|leftover|left over|half[- ]?eaten|spoiled|rotten|expired/i;
 // "빈", "다 쓴" 이 붙으면 내용물(남은 약·음료 등) 안내는 빼기
-const EMPTY=/(^|\s)(빈|다\s*쓴|다\s*먹은|다\s*마신|비운|깨끗한)(\s|$)/;
+const EMPTY=/(^|\s)(빈|다\s*쓴|다\s*먹은|다\s*마신|비운|깨끗한|empty|used\s+up)(\s|$)/i;
 function emptied(d,conf,orig){
   if(!EMPTY.test(orig))return {...d,conf};
   const keep=d.parts.filter(p=>!/남은|내용물|고인|국물|음료|^술$|^약$|알약|물약/.test(p.name||"")&&p.bin!=="싱크대"&&p.bin!=="음식물");
-  return keep.length&&keep.length<d.parts.length?{...d,item:keep.length===1&&keep[0].name?keep[0].name:"빈 "+d.item,parts:keep,conf}:{...d,conf};
+  return keep.length&&keep.length<d.parts.length?{...d,item:keep.length===1&&keep[0].name?keep[0].name:"빈 "+d.item,parts:keep,conf,src:d,focus:"empty"}:{...d,conf};
 }
-function stripMods(t){let p;do{p=t;t=t.replace(MODS,"").replace(TAIL,"").trim()}while(t!==p);return t}
+// 영어: "empty", "old", "how do I throw away …?" 같은 말도 떼기
+const MODS_EN=/^(empty|used\s+up|used|old|dead|half[- ]?eaten|leftover|left\s*over|spoiled|rotten|expired|my|a|an|the|some|how\s+(do|can|should)\s+i\s+(throw\s+away|dispose\s+of|recycle|get\s+rid\s+of)|how\s+to\s+(throw\s+away|dispose\s+of|recycle)|where\s+(do|should|can)\s+i\s+(throw|put)(\s+away)?|where\s+does|where\s+do)\s+/i;
+const TAIL_EN=/\s*(\?|go|goes|disposal|recycling|how\s+to\s+(throw\s+away|dispose|recycle)|in\s+korea)$/i;
+function stripMods(t){let p;do{p=t;t=t.replace(MODS,"").replace(TAIL,"").replace(MODS_EN,"").replace(TAIL_EN,"").trim()}while(t!==p);return t}
 // 남은 음식 얘기면 음식물·싱크대 쪽 답에 가산점
 function pick(q,leftover){const l=rank(q);if(leftover)l.forEach(x=>{if(x.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))x.s=Math.min(1,x.s+.12)});l.sort((a,b)=>b.s-a.s);return l[0]}
 function miniAI(text){
@@ -120,26 +152,27 @@ function miniAI(text){
     const t=pick(head,leftover);
     if(t&&t.s>=.7&&!t.key.includes(tail)&&!MATERIAL.test(t.key)){
       const part=t.d.parts.find(p=>{const n=p.name&&norm(p.name);return n&&(n===tail||(tail.length>=2&&n.includes(tail))||(n.length>=2&&tail.includes(n)))});
-      if(part) return {item:`${t.d.item} · ${part.name}`,parts:[part],tip:"",conf:t.s>=.8?"high":"mid"};
+      if(part) return {item:`${t.d.item} · ${part.name}`,parts:[part],tip:"",conf:t.s>=.8?"high":"mid",src:t.d,focus:"part"};
     }
   }
   // 2) 전체 문장으로 찾기, 3) 뒷부분 핵심어가 딱 맞으면 그걸로 ("유통기한 지난 약" → 약)
   let top=full;
-  for(let k=1;k<words.length;k++){const t=pick(words.slice(k).join(" "),leftover);if(t&&t.s>=.95&&(!top||t.s>top.s+.05))top=t}
-  if(top&&top.s>=.56&&top.s<.8&&!(leftover&&top.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))){
-    const near=rank(raw).filter(x=>x.d!==top.d&&x.s>=top.s-.03&&x.s>=.56);
+  for(let k=1;k<words.length;k++){const t=pick(words.slice(k).join(" "),leftover);if(t&&t.s>=.95&&(!top||(t.s>top.s+.05&&(!ASCII.test(raw)||top.s<.8))))top=t}
+  const MIN=ASCII.test(raw)?.7:.56;
+  if(top&&top.s>=MIN&&top.s<.8&&!(leftover&&top.d.parts.some(p=>p.bin==="음식물"||p.bin==="싱크대"))){
+    const near=rank(raw).filter(x=>x.d!==top.d&&x.s>=top.s-.03&&x.s>=MIN);
     const binsOf=x=>[...new Set(x.d.parts.map(p=>p.bin))].sort().join();
     if(near.length&&near.some(x=>binsOf(x)!==binsOf(top))) return {ambig:true,item:raw,options:[top,...near].slice(0,4).map(x=>x.d.item)};
   }
-  if(top&&top.s>=.56){
+  if(top&&top.s>=MIN){
     const conf=top.s>=.8?"high":"mid";
     if(last&&!top.key.includes(norm(last))&&!MATERIAL.test(top.key)&&CONT[last]&&top.s<.95)
-      return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
+      return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1],enSteps:CONT[last][2]}],tip:"",conf:"mid",raw:true,note:`끝에 붙은 '${last}'을 보고 판단했어.`,noteEn:`Judged by the last word "${last}".`};
     return emptied(top.d,conf,orig);
   }
   // 4) 끝말이 담는 그릇이면 그걸로 ("강아지 간식 봉지" → 비닐)
-  if(last&&CONT[last]) return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1]}],tip:"",conf:"mid",note:`끝에 붙은 '${last}'을 보고 판단했어.`};
-  for(const [re,bin,steps] of GUESS) if(re.test(raw)) return {item:raw,parts:[{name:"",bin,steps}],tip:"",conf:"guess"};
+  if(last&&CONT[last]) return {item:raw,parts:[{name:"",bin:CONT[last][0],steps:CONT[last][1],enSteps:CONT[last][2]}],tip:"",conf:"mid",raw:true,note:`끝에 붙은 '${last}'을 보고 판단했어.`,noteEn:`Judged by the last word "${last}".`};
+  for(const [re,bin,steps,enSteps] of GUESS) if(re.test(raw)) return {item:raw,parts:[{name:"",bin,steps,enSteps}],tip:"",conf:"guess",raw:true};
   return null;
 }
 function suggest(text){return rank(text.trim()).filter(x=>x.s>=.4).slice(0,3).map(x=>x.d.item)}
