@@ -1,6 +1,6 @@
 /* 서비스워커: 한 번 들어온 뒤로는 인터넷 없이도 열리게 사이트 파일을 저장해 둬.
    VERSION은 빌드할 때 파일 내용으로 정해져. 내용이 바뀌면 옛날 저장본은 지우고 새로 받아. */
-const VERSION = 'bcc561a05f';
+const VERSION = 'c1a60cb357';
 const CACHE = 'sugeo-' + VERSION;
 const FILES = ["./","fonts/black-han-sans.woff2","fonts/noto-sans-kr-400.woff2","fonts/noto-sans-kr-500.woff2","fonts/noto-sans-kr-700.woff2","icons/apple-touch-icon.png","icons/icon-192.png","icons/icon-512.png","icons/icon-maskable-512.png","manifest.webmanifest"];
 

@@ -4,7 +4,7 @@
 let LANG=(()=>{try{const v=localStorage.getItem("lang");if(v==="ko"||v==="en")return v}catch{}return /^ko/i.test(navigator.language||"ko")?"ko":"en"})();
 const T={
 ko:{
-  langBtn:"English",eyebrow:"분리수거 도우미",
+  langBtn:"English",eyebrow:"K-Bin · 분리수거 도우미",
   introH1:"헷갈리는 쓰레기,<br><em>3초면 끝.</em>",
   introLead:"치킨 뼈는 음식물일까? 아이스팩은? 버릴 물건 이름만 치면 어디에, 어떻게 버리는지 바로 알려줘.",
   howTitle:"이렇게 써",
@@ -19,7 +19,7 @@ ko:{
   popular:"많이 찾는 것",recent:"최근에 찾은 것",clearAll:"전체 지우기",
   emptyTitle:"여기에 버리는 법이 나와",emptyLead:"왼쪽에 물건 이름을 치거나 많이 찾는 것을 눌러 봐. 색깔은 이렇게 구분돼.",
   foot:"환경부·서울시 분리배출 기준 · 인터넷 없어도 돼 · 동네마다 세부 규칙은 다를 수 있어",
-  title:"이거 어디에 버려? · 분리수거 도우미",
+  title:"K-Bin · 이거 어디에 버려?",
   srcMid:"꼬마 AI · 아마 이거야",srcGuess:"꼬마 AI · 추측",safety:"⚠️ 안전 주의 ",tip:"알아두기 ",
   warnHead:"정확하지 않을 수 있어. ",warnMid:x=>`'${x}'(으)로 찾았어. 찾던 게 아니면 이름을 더 자세히 써줘. `,warnGuess:"목록에 없는 물건이라 이름만 보고 추측했어. ",
   warnTail:"확실하지 않으면 사는 구청 홈페이지나 관리사무소에서 확인해 봐.",noEn:"",
@@ -41,7 +41,7 @@ ko:{
   common:["치킨 뼈","컵라면 용기","깨진 유리컵","보조배터리","우유팩","영수증","계란 껍데기","남은 약","티백","마라탕 용기","페트병"],
 },
 en:{
-  langBtn:"한국어",eyebrow:"Korea recycling helper",
+  langBtn:"한국어",eyebrow:"K-Bin · Korea recycling helper",
   introH1:"Confusing trash?<br><em>Sorted in 3 seconds.</em>",
   introLead:"Are chicken bones food waste? What about ice packs? Type what you want to throw away and see where and how it goes in Korea.",
   howTitle:"How it works",
@@ -56,7 +56,7 @@ en:{
   popular:"Popular",recent:"Recent searches",clearAll:"Clear all",
   emptyTitle:"Your answer shows up here",emptyLead:"Type an item on the left or tap a popular one. Bins use these colors.",
   foot:"Korean Ministry of Environment & Seoul rules · Works offline · Details can differ by neighborhood",
-  title:"Where does this go? · Korea recycling helper",
+  title:"K-Bin · Where does this go?",
   srcMid:"Probably this",srcGuess:"Best guess",safety:"⚠️ Safety ",tip:"Good to know ",
   warnHead:"This may not be exact. ",warnMid:x=>`Showing "${x}". If that's not it, try a more specific name. `,warnGuess:"This item isn't in our list, so this is a guess from its name. ",
   warnTail:"If you're unsure, check your district office website or building manager.",noEn:"No English guide for this item yet, so it's shown in Korean.",

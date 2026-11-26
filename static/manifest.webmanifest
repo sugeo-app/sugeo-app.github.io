@@ -1,6 +1,6 @@
 {
-  "name": "이거 어디에 버려? · 분리수거 도우미",
-  "short_name": "어디에 버려?",
+  "name": "K-Bin",
+  "short_name": "K-Bin",
   "description": "헷갈리는 쓰레기, 이름만 치면 어떻게 버리는지 알려줄게.",
   "lang": "ko",
   "start_url": "./",
